@@ -11,7 +11,7 @@
 % images, table and colors
 \usepackage[dvipsnames]{xcolor}
 \usepackage{graphicx} 
-\graphicspath{ {../intern25_figures/}, {/figures/} } 
+\graphicspath{ {./figures/} } 
 \usepackage{tabularx, makecell}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -21,15 +21,6 @@
 % math support
 \usepackage{amsmath}
 \usepackage{amssymb,stackengine}
-\newcommand\varlesssim{\mathrel{\ensurestackMath{%
-  \stackengine{-.4ex}{<}{\rotatebox{-25}{$\sim$}}{U}{r}{F}{T}{S}}}}
-\newcommand\vargtrsim{\mathrel{\ensurestackMath{%
-  \stackengine{-.4ex}{>}{\rotatebox{25}{$\sim$}}{U}{l}{F}{T}{S}}}}
-
-% \newcommand\varlesssim{\mathrel{\ensurestackMath{%
-%   \stackengine{.2ex}{<}{\rotatebox{-25}{$\sim$}}{U}{r}{F}{T}{S}}}}
-% \newcommand\vargtrsim{\mathrel{\ensurestackMath{%
-%   \stackengine{.2ex}{>}{\rotatebox{25}{$\sim$}}{U}{l}{F}{T}{S}}}}
 
 % citations
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
@@ -185,13 +176,13 @@ Magnetohydrodynamic simulations suggest that jets, disk winds, and magnetospheri
 \subsection{Observational evidence of magnetospheric accretion}
 \label{sec:obs_evidence}
 
-% Observations of CTTSs have provided strong evidence for magnetospheric accretion, such as the presence of strong stellar magnetic fields, an inner cavity of a few stellar radii inside the magnetosphere, magnetic accretion columns filled with free falling plasma, and accretion shocks at the stellar surface. With the help of Zeeman Doppler Imaging, the large-scale magnetic fields reconstrcution of a few samples of CTTSs stars were performed \parencite[e.g., ][]{DonatiEtAl2007,NowackiEtAl2023,ZaireEtAl2024}, laying a more solid foundation for the scheme of magnetospheric accretion.
+Observations of CTTSs provide strong evidence for magnetospheric accretion, including the presence of strong stellar magnetic fields, an inner cavity of a few stellar radii within the magnetosphere, magnetic accretion columns filled with free-falling plasma, and accretion shocks at the stellar surface.
+
+The accretion shock produces emission in the ultraviolet, optical, and near-infrared wavelengths, as well as a modest amount of X-rays. These emissions serve as crucial diagnostics of the accretion region, allowing measurements of the accretion luminosity which, when combined with stellar mass and radius, provide estimates of accretion rates. Soft X-ray emission, unique to accreting stars, has also been detected from CTTSs and is likely produced in the post-shock region \parencite[e.g.,][]{KastnerEtAl2002}. Magnetospheric accretion flows can be identified by redshifted absorption features in specific spectral lines \parencite{MuzerolleEtAl2001}, while blueshifted forbidden emission lines have been linked to strong winds and mass outflows \parencite[e.g.,][]{Bally2016}.
 
 % Accretion disks are commonly observed in star formation regions, and their presence is often inferred from the emission of infrared radiation from the dust in the disk. The accretion rate can be estimated from the luminosity of the accretion shock, which is typically observed in the ultraviolet and optical wavelengths. The accretion rate can also be estimated from the emission lines of hydrogen and other elements, which are often broadened by the Doppler effect due to the motion of the accreting material. There also have been direct images of the protoplanetary disks, the leftover of accretion disks, around young stars, such as the one taken by the Atacama Large Millimeter/submillimeter Array (ALMA).
 
-
-
-% The assumption of magnetospheric accretion is that the stellar magnetic field must be strong enough to hold off the pressure of the accretion disk and disrupt the disk before it reaches the stellar surface. At the truncation radius, the magnetic pressure should be able to balance the gas ram pressure, i.e., $B^2/8\pi \simeq \frac{1}{2}\rho v^2$, where the relevant velocity is roughly the Keplerian velocity, $v = \sqrt{GM_\star/R_\mr{trunc}}$. The exact location of this truncation will also depend on accretion rate \parencite[See Eq.~2.2 in][for an example of the scaling relation]{BouvierEtAl2007}. This is in general in agreement with the measured magnetic field of CTTSs, which are typically in the range of a few hundred Gauss to a few kG \parencite{BouvierEtAl2007,AlencarEtAl2012}. The magnetic field strength can be estimated from the Zeeman effect, which is the splitting of spectral lines due to the presence of a magnetic field. The magnetic field strength can also be estimated from the polarization of the emission lines, which is caused by the alignment of the magnetic field with the emission region. 
+Magnetospheric accretion paradigm assumes that the stellar magnetic field is strong enough to counteract the pressure of the accretion disk and disrupt the disk before it reaches the stellar surface \parencite[e.g.,][]{Koenigl1991}. At the truncation radius $R_\mr{trunc}$, the magnetic pressure approximately balances the gas ram pressure,  i.e., $B^2/8\pi \simeq \frac{1}{2}\rho v^2$, where the relevant velocity is roughly the Keplerian velocity, $v = \sqrt{GM_\star/R_\mr{trunc}}$. The exact location of this truncation radius will also depend on the accretion rate \parencite[see Eq.~2.2 in][]{BouvierEtAl2007}. This framework generally aligns with the measured magnetic field strengths of CTTSs, which typically range from a few hundred Gauss to a few kiloGauss \parencite{BouvierEtAl2007,AlencarEtAl2012}.
 
 
 \section{Stellar evolution modeling}
@@ -428,10 +419,11 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 \subsection{The effect of different accretion rates}
 \label{sec:accretion_rate}
 
-\begin{outline}{gray}
-  \item evolution tracks of the models with different accretion rates
-  \item can try to implement time variation in the accretion rate
-\end{outline}
+% \begin{figure}
+%   \centering  
+%   \includegraphics[width=.5\textwidth,keepaspectratio]{comp_accrate.pdf}
+%   \caption{Comparisons of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $\mr{D/H} = 2.0\times 10^{-5}$.} \label{fig:comp_accrate}
+% \end{figure}
 
 \subsection{The effect of different chemical compositions}
 \label{sec:chemical_composition}
@@ -444,6 +436,11 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 \subsection{Comparison with Palla \& Stahler (1993)}
 \label{sec:comp_palla_stahler}
 
+% \begin{figure}
+%   \centering  
+%   \includegraphics[width=.5\textwidth,keepaspectratio]{birthline_acce5.pdf}
+%   \caption{Birthline of accreting stars, with an accretion rate of $10^{-5} M_\odot/\mr{yr}$.} \label{fig:birthline_acce5}
+% \end{figure}
 
 % \subsection{The effect of different initial stellar masses}
 % \label{sec:initial_mass}
