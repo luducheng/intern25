@@ -1,0 +1,536 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[rmargin=1.2in,lmargin=1.2in,tmargin=.8in,bmargin=.8in]{geometry}
+\usepackage{indentfirst}
+
+% fonts
+% \usepackage{mathptmx}
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+
+% images, table and colors
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx} 
+\graphicspath{ {../intern25_figures/} } 
+\usepackage{tabularx, makecell}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{enumitem}
+\usepackage[normalem]{ulem}
+
+% math support
+\usepackage{amsmath}
+\usepackage{amssymb,stackengine}
+\newcommand\varlesssim{\mathrel{\ensurestackMath{%
+  \stackengine{-.4ex}{<}{\rotatebox{-25}{$\sim$}}{U}{r}{F}{T}{S}}}}
+\newcommand\vargtrsim{\mathrel{\ensurestackMath{%
+  \stackengine{-.4ex}{>}{\rotatebox{25}{$\sim$}}{U}{l}{F}{T}{S}}}}
+
+% \newcommand\varlesssim{\mathrel{\ensurestackMath{%
+%   \stackengine{.2ex}{<}{\rotatebox{-25}{$\sim$}}{U}{r}{F}{T}{S}}}}
+% \newcommand\vargtrsim{\mathrel{\ensurestackMath{%
+%   \stackengine{.2ex}{>}{\rotatebox{25}{$\sim$}}{U}{l}{F}{T}{S}}}}
+
+% citations
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[citestyle=authoryear-icomp,bibstyle=authoryear,hyperref=true,
+  isbn=false,url=false,eprint=false, giveninits=true,
+  date=year,maxcitenames=2,uniquelist=minyear,sorting=nyt]{biblatex}
+\addbibresource{intern25_ref.bib}
+\input{asstex}
+
+%%%%% define your own command %%%%%
+\newcommand{\mr}{\mathrm}
+% derivatives
+\newcommand{\lfird}[2][]{\mathrm{d}#1/\mathrm{d}#2} 
+\newcommand{\fird}[2][]{\frac{\mathrm{d}#1}{\mathrm{d}#2}} 
+\newcommand{\secd}[2][]{\frac{\mathrm{d}^2#1}{\mathrm{d}#2^2}}
+\newcommand{\pfird}[2][]{\frac{\partial#1}{\partial#2}} 
+\newcommand{\pfirdat}[3][1]{\left(\frac{\partial#1}{\partial#2}\right)_{\!\!\!#3}} 
+\newcommand{\dd}[1]{\mathrm{d}#1}
+% vectors
+\newcommand{\bvec}[1]{\boldsymbol{#1}}
+
+
+% for outlines
+\newenvironment{outline}[1]{%
+  \begin{itemize}[label=\textbullet]%
+  \color{#1}%
+}{%
+  \end{itemize}%
+}
+
+% questions
+\newcommand{\draft}[1]{\textcolor{gray}{#1}}
+\newcommand{\qt}[1]{\textcolor{red}{#1}}
+
+\title{title}
+\author{Ducheng Lu}
+% \date{June 2024}
+
+\begin{document}
+
+\thispagestyle{empty}
+
+\vspace*{7em}
+\begin{center}
+  \rule{\textwidth}{2pt}
+  \vskip3em
+  \LARGE{Pre-main-sequence accretion of low-mass stars in the \texttt{Cesam2k20} code}\\
+  \vskip2em
+  \rule{\textwidth}{2pt}
+\end{center}
+\vfill
+\begin{minipage}[t]{0.49\textwidth}
+  \raggedright
+  \large
+  Student\\
+  Ducheng Lu\\[1em]
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+  \raggedleft
+  \large
+  Supervisors\\
+  Dr. Ludovic Petitedemange\\
+  Dr. João Pedro Cadilhe Marques\\
+  Dr. Louis Manchon\\
+  Dr. Charly Pinçon\\[1em]
+  June 2025
+\end{minipage}
+\vspace*{3em}
+
+
+\newpage
+% \vspace*{10em}
+{\hypersetup{hidelinks}\large
+\tableofcontents
+}
+\thispagestyle{empty}
+
+\newpage
+\thispagestyle{empty}
+\begin{abstract}
+\normalsize
+
+\textit{Context.} 
+
+\textit{Aim.} 
+
+\textit{Methods.} 
+
+\textit{Results.} 
+\end{abstract}
+
+\begin{abstract}
+\normalsize
+\textit{Contexte.} 
+
+\textit{Objectif.} 
+
+\textit{Méthodes.} 
+
+\textit{Résultats.} 
+\end{abstract}
+
+\newpage
+\pagenumbering{arabic} 
+\section{Introduction}
+\label{sec:intro}
+
+Stars form through the gravitational collapse of dense cores within molecular clouds. Initially, this collapse is isothermal, with temperature remaining nearly constant. As the density increases, the central region becomes increasingly opaque to radiation, inhibiting its escape from the core while still allowing it from the outer layers. This increase in opacity leads to an adiabatic collapse of the center, during which the temperature and pressure rise until a hydrostatic core, or a protostar, is formed. The protostar then accretes material from the surrounding cloud, a process that can continue for several million years.
+
+Once most of the surrounding material has been accreted, the protostar enters the pre-main-sequence (PMS) phase and becomes visible as a T Tauri star (TTS). TTSs are late-type PMS stars that serve as precursors to low-mass main-sequence stars. Classical T Tauri stars (CTTSs) are characterized by strong infrared (IR) emission from their optically thick accretion disks. As accretion declines due to the depletion of material in the inner disk, the IR emission weakens, and the stars are then observed as weak T Tauri stars (WTTSs). Young massive stars are also expected to undergo accretion during their early evolution and are observed as Herbig Ae/Be stars—hotter and more luminous than TTSs. However, the accretion processes for these higher-mass stars remain poorly understood.
+
+The earliest accretion stages remain observationally elusive, as protostars are deeply embedded in the surrounding dusty cloud, making it highly extincted in optical and near-IR wavelengths. Nonetheless, indirect indicators such as disks, outflows, and jets provide compelling evidence of ongoing accretion. Modeling these stages remains challenging due to the time-variable, non-linear nature of the process and the complexity of the underlying physics.
+
+When \textcite{HenyeyEtAl1955} and \textcite{Hayashi1961} first studied the early phases of stellar evolution, accretion was not taken into account. Instead, stars were assumed to begin their evolution as fully convective objects with very large radii and luminosities, contracting under their own gravity until a radiative core developed, eventually reaching the main sequence. These evolutionary paths are now known as the Hayashi and Henyey tracks. Since \textcite{Larson1969} introduced the concept of the formation of a hydrostatic core, followed by continued accretion from an infalling envelope of gas and dust, accretion has been recognized as a fundamental process in early stellar evolution, supported by both theoretical and observational studies.
+
+There has been growing interest in studying accretion in PMS stars, particularly because of its relevance to planetary formation. Accretion disks are the birthplaces of planets and other small bodies, making the study of accretion crucial for understanding the early evolution of planetary systems. Beyond this, accretion can significantly influence the internal structure and rotation of stars by supplying both mass and angular momentum. These structural and rotational changes can, in turn, affect the stellar dynamo mechanism responsible for amplifying magnetic fields in young stars \parencite[e.g.,][]{StelzerNeuhauser2001}.
+
+Accretion also impact long-term stellar evolution by setting the initial conditions for subsequent evolutionary stages and can leave lasting imprints. In addition, accretion can alter the surface chemical composition, especially if the accreted material differs in abundance from that of the protostar \parencite{KunitomoGuillot2021}. This has important implications for interpreting observed stellar abundances and for modeling chemical mixing processes.
+
+Finally, accretion history plays a critical role in understanding young stellar clusters. It can influence the shape of the initial mass function, contribute to the observed luminosity spread among cluster members, and affect the positioning of stars on theoretical isochrones \parencite{BaraffeEtAl2009,BaraffeEtAl2012,HosokawaEtAl2011}. Accurate modeling of accretion is therefore important for interpreting observed features of young clusters.
+
+In this project, we investigate the impact of accretion on stellar structure and evolution using the \texttt{Cesam2k20} version of the 1D stellar evolution code \textit{Code d'Évolution Stellaire Adaptatif et Modulaire} (\texttt{CESAM}) \parencite{Morel1997,MorelLebreton2008,MarquesEtAl2013}. Our goal is to implement accretion in \texttt{Cesam2k20}, which will allow us to examine its effects on stellar evolution and structure, and to compare the results with theoretical predictions and other stellar evolution models.
+
+This study focuses on the later stages of the accretion process, after the formation of a hydrostatic core. We restrict our analysis to low-mass stars, as accretion in high-mass stars remains less constrained and falls outside the scope of this work.
+
+A parallel branch of the original \texttt{CESAM} code, \textit{Code d'Évolution Planétaire Adaptatif et Modulaire} (\texttt{CEPAM}) \parencite{GuillotMorel1995}, has been developed for modeling planetary formation and evolution. A future unification of these two branches would provide a powerful framework for studying the coupled evolution of stars and their planetary systems.
+
+In the next section, we review the current understanding of pre-main-sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main-sequence evolution is modeled in stellar evolution codes. In Sec.\ref{sec:methods}, we begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. We then detail the implementation of accretion in the code. The results of our models are presented in Sec.\ref{sec:results}, where we explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
+
+\section{Pre-main-sequence accretion}
+\label{sec:background}
+
+In this section, we will review the current understanding of stellar accretion, including the mechanisms of magnetospheric accretion and the observational evidence for accretion in pre-main-sequence stars. 
+
+\subsection{Pre-main-sequence magnetospheric accretion}
+\label{sec:magnetospheric_accretion}
+
+Stellar magnetic fields play a crucial role in the accretion of pre-main-sequence stars, through the mechanism known as magnetospheric accretion \parencite[See, for example,][for a review]{HartmannEtAl2016}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.8\textwidth]{HartmannEtAl2016_magnetospheric_accretion.png}
+  \caption{Schematic illustration of magnetospheric accretion onto young low-mass stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. Accreting material is channeled along the magnetic field lines and impacts the stellar surface, forming an accretion shock. Jets and disk winds may also play a role in the star-disk interaction. The exact mechanisms for mass and angular momentum transport in the star-disk system remain uncertain. The figure is reproduced from Fig.~1 of \textcite{HartmannEtAl2016}.}
+  \label{fig:magnetospheric_accretion}
+\end{figure}
+
+Fig.~\ref{fig:magnetospheric_accretion} is a schematic illustration of magnetospheric accretion onto young ($1 \lesssim t \lesssim 10,\mr{Myr}$), low-mass ($\lesssim 1 M_\odot$) stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. The dust disk is truncated slightly farther out than the gas disk, as dust in the inner disk sublimates due to heating by the stellar radiation field. The inner edge of the dust disk is responsible for most of the observed near-IR excess. Material from the disk is funneled onto the star along the magnetic field lines, where it is heated to approximately $10^4,\mr{K}$, producing broad emission lines. The accretion flow is accelerated along the field lines, eventually reaching the stellar surface at nearly free-fall velocity. This process leads to the formation of an accretion shock at the stellar surface, where the gas is briefly halted and heated to very high temperatures, emitting X-rays. Most of these X-rays are absorbed and reradiated in the ultraviolet and optical continuum.
+
+Despite recent advances in the study of magnetospheric accretion, many aspects are still under debate. \textcite{Bouvier2014} summarizes several open issues regarding the physics of the magnetospheric accretion and ejection processes. One of the long-standing problems is the evolution of stellar rotation: while the angular momentum carried by accreting material should spin up the star, observations reveal that the rotation rates of PMS stars are lower than expected. This discrepancy suggests that some form of magnetic braking must be at work to regulate stellar spin \parencite[e.g.,][]{HerbstEtAl2007}.
+
+Magnetohydrodynamic simulations suggest that jets, disk winds, and magnetospheric ejections are involved in removing angular momentum during accretion \parencite[e.g.,][]{RomanovaEtAl2004,LiiEtAl2014,IrelandEtAl2020}. However, the relative importance of these mechanisms in shaping the angular momentum evolution remains under investigation\parencite[e.g.,][]{KunitomoEtAl2017}. Although the models presented in this work do not include magnetic fields or rotation, understanding the broader framework of magnetospheric accretion is essential for interpreting how accretion affects stellar structure. Including these physical processes for more realistic accretion modeling will be an important direction for future work.
+
+\subsection{Observational evidence of magnetospheric accretion}
+\label{sec:obs_evidence}
+
+% Observations of CTTSs have provided strong evidence for magnetospheric accretion, such as the presence of strong stellar magnetic fields, an inner cavity of a few stellar radii inside the magnetosphere, magnetic accretion columns filled with free falling plasma, and accretion shocks at the stellar surface. With the help of Zeeman Doppler Imaging, the large-scale magnetic fields reconstrcution of a few samples of CTTSs stars were performed \parencite[e.g., ][]{DonatiEtAl2007,NowackiEtAl2023,ZaireEtAl2024}, laying a more solid foundation for the scheme of magnetospheric accretion.
+
+% Accretion disks are commonly observed in star formation regions, and their presence is often inferred from the emission of infrared radiation from the dust in the disk. The accretion rate can be estimated from the luminosity of the accretion shock, which is typically observed in the ultraviolet and optical wavelengths. The accretion rate can also be estimated from the emission lines of hydrogen and other elements, which are often broadened by the Doppler effect due to the motion of the accreting material. There also have been direct images of the protoplanetary disks, the leftover of accretion disks, around young stars, such as the one taken by the Atacama Large Millimeter/submillimeter Array (ALMA).
+
+
+
+% The assumption of magnetospheric accretion is that the stellar magnetic field must be strong enough to hold off the pressure of the accretion disk and disrupt the disk before it reaches the stellar surface. At the truncation radius, the magnetic pressure should be able to balance the gas ram pressure, i.e., $B^2/8\pi \simeq \frac{1}{2}\rho v^2$, where the relevant velocity is roughly the Keplerian velocity, $v = \sqrt{GM_\star/R_\mr{trunc}}$. The exact location of this truncation will also depend on accretion rate \parencite[See Eq.~2.2 in][for an example of the scaling relation]{BouvierEtAl2007}. This is in general in agreement with the measured magnetic field of CTTSs, which are typically in the range of a few hundred Gauss to a few kG \parencite{BouvierEtAl2007,AlencarEtAl2012}. The magnetic field strength can be estimated from the Zeeman effect, which is the splitting of spectral lines due to the presence of a magnetic field. The magnetic field strength can also be estimated from the polarization of the emission lines, which is caused by the alignment of the magnetic field with the emission region. 
+
+
+\section{Stellar evolution modeling}
+\label{sec:stellar_evol}
+
+Stellar evolution modeling involves combining physical principles with numerical methods to simulate how stars change over time. This section first introduces the fundamental equations that describe stellar evolution and then turns the focus to the modeling of pre-main-sequence stars.
+
+\subsection{Stellar structure equations}
+\label{sec:stellar_evol_formulation}
+
+Modeling stellar evolution involves defining initial conditions and solving the differential equations that govern the physical processes inside a star, thereby predicting how stellar properties change over time. The primary factors determining a star's evolution are its mass and initial chemical composition. Once specified, these initial parameters are input into the stellar structure equations, which express the characteristic stellar properties (e.g., pressure $P$, temperature $T$, luminosity $L$, density $\rho$) as functions of position and time $(\vec{r}, t)$. By assuming spherical symmetry, the position can be reduced to the radial distance $r$ from the center, so physical quantities become functions of radius and time, i.e., $(r, t)$.
+
+During stellar evolution, the total stellar mass remains almost constant except in cases of significant mass loss. In contrast, the stellar radius may vary rapidly as the star goes into different stages. Therefore, it is more convenient to introduce a Lagrangian coordinate $m$ (defined as the total mass inside the sphere of radius $r$) instead of $r$. 
+
+In the mass coordinate, the system of 1D stellar structure equations can be written as \parencite[See, for example, ][]{KippenhahnEtAl2013}:
+\begin{subequations}\label{eq:star_struct}
+  \begin{align}
+    \pfird[p]{m} &= -\frac{G m}{4\pi r^2} + \frac{\Omega}{6 \pi r^2}, \label{eq:star_struct1}\\
+    \pfird[T]{m} &= \pfird[p]{m} \frac{T}{p} \nabla, \label{eq:star_struct2}\\
+    \pfird[r]{m} &= \frac{1}{4 \pi r^2 \rho}, \label{eq:star_struct3}\\
+    \pfird[l]{m} &= \epsilon_\mr{nuc}  + \epsilon_\nu + \epsilon_\mr{g} , \label{eq:star_struct4}\\
+    \pfird[X_i]{t} &= -\pfird[F_i]{m} + \Psi_i(P, T, \bvec{X}), 1\leq i \leq n_\mr{elem}. \label{eq:star_struct5}
+  \end{align}
+\end{subequations}
+where $G$ is the gravitational constant, $\nabla \equiv \partial \ln T/\partial \ln P$ is the temperature gradient, $\epsilon_\mr{nuc}$ is the rate of nuclear energy release, $\epsilon_\nu$ is energy loss rate due to neutrinos escaping from the star, $\epsilon_\mr{g}$ is the gravitational energy, $X_i$ is the abundance of the chemical element $i$, $F_i$ is the flux of the chemical element $i$ due to diffusion, $\bvec{X} \equiv \{X_i\}$ is the chemical composition vector, $\Psi_i$ is the rate of change of $X_i$ by thermonuclear reactions, and $n_\mr{elem}$ is the total number of chemical species considered. All quantities ($p, l, \rho, T, \epsilon, \epsilon_\nu$, etc.) are evaluated locally at each stellar layer.
+
+Eq.~\eqref{eq:star_struct1} describes the hydrostatic equilibrium and Eq.~\eqref{eq:star_struct3} describes the mass continuity. Eq.~\eqref{eq:star_struct4} and Eq.~\eqref{eq:star_struct2} describe the energy production and energy transport, respectively. These equations illustrate a close coupling between stellar structure and the process of energy production and transport. In most stars, energy is primarily transported by radiation and convection, and the value of $\nabla$ depends on the dominant mechanism of energy transport. Eq.~\eqref{eq:star_struct5} describes the evolution of the chemical composition of the star, which is governed by the nuclear reactions occurring in the star and the transport of chemical elements. This set of equations assumes spherical symmetry and does not account for magnetic fields, and rotation is included in the centrifugal term in Eq.~\eqref{eq:star_struct1}. These are common simplifications in 1D stellar models and are sufficient for many evolutionary studies.
+
+Stellar evolution is typically treated as a one-dimensional boundary value problem with initial conditions given by the initial mass and chemical composition of the star. The boundary conditions are set at the center and surface of the star. Spherical symmetry requires that the radius, luminosity, and chemical element fluxes vanish at the center of the star. Therefore, we impose:
+\begin{equation}
+  r(0, t) = 0,\ l(0, t) = 0,\ F_i(0, t) = 0, i = 1, \ldots, n_\mr{elem}.
+\end{equation}
+
+At the surface, the pressure and temperature are set to the values at the base of the stellar atmosphere:
+\begin{equation}
+  p(M_\star, t) = p_\mr{atm}(L_\star, R_\star, t),\ T(M_\star, t) = T_\mr{atm}(L_\star, R_\star, t),
+\end{equation}
+where $M_\star$, $L_\star$, and $R_\star$ are the stellar mass, luminosity, and radius, respectively. The values of \(p_\mr{atm}\) and \(T_\mr{atm}\) are derived from reconstruction of the stellar atmosphere, which typically uses empirical relations. As this project focuses on internal structure, we will not delve into the specifics of atmospheric modeling.
+
+With both central and surface boundary conditions specified, and the evolution equations defined in Lagrangian coordinates, the stellar structure problem becomes a well-posed initial-boundary value problem. This framework serves as the basis for numerical stellar evolution codes, which solve these equations to track the stellar evolution over time.
+
+The solutions to the stellar structure equations yield key observable properties of stars, mostly notably their luminosity $L$ and effective surface temperature $T_\mr{eff}$. These two parameters define a star's position on the Hertzsprung-Russell (HR) diagram, a fundamental tool in astrophysics to understand and visualize stellar evolution. The HR diagram helps to reveal distinct evolutionary stages such as the pre-main-sequence, main sequence, and giant branch, offering a simple way to compare models with observations.
+
+However, translating the underlying physics into stellar models is a complex task. In practice, stellar evolution codes can differ substantially in their model initialization methods. These differences can lead to notable variations during the early evolutionary stages, which will be discussed in the Sec.~\ref{sec:pms_evolution}. Additionally, variations in the formulations and physical assumptions adopted by these codes influence the predicted stellar properties, often resulting in discrepancies between models. Therefore, it is crucial to carefully consider the specific implementations and assumptions of each code when interpreting stellar evolution results. The details of our physical inputs will be discussed in Sec.~\ref{sec:cesam2k20}.
+
+\subsection{Pre-main-sequence evolution}
+\label{sec:pms_evolution}
+
+% The pioneering work of \textcite{Hayashi1961} first sheds light on the PMS evolution. The PMS evolution is modeled as an isotropic collapse of a "star" contain with a large radius, where the star evolves slowly and remains in hydrostatic equilibrium. The PMS phase is characterized by a rapid increase in luminosity and a decrease in effective temperature, leading to a contraction of the star towards the main sequence. The PMS evolution is divided into two phases: the Hayashi phase and the Henyey phase.
+
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Modeling the consequences of accretion}
+\label{sec:accretion_modeling}
+
+% As discussed in Sec.~\ref{sec:magnetospheric_accretion}, accretion is a highly complex process with many physical mechanisms at play. In the context of stellar evolution, some simplifications are necessary to make the problem tractable. In this section, we discuss how to model the consequences of accretion on stellar structure and evolution, including the treatment of gravitational energy, deuterium burning, and the distinction between hot and cold accretion.
+
+% \subsubsection{Gravitational energy}
+% \label{sec:grav_energy}
+
+% In a chemically homogeneous star, the Kippenhahn approximation can be used to calculate the energy product rate due gravitational contraction and expansion:
+% \begin{align}
+%   \epsilon_g = -T\fird[s]{t},\  T\fird[s]{t}\xrightarrow{Kipp} c_p\pfird[T]{t} - \frac{\delta}{\rho}\pfird[P]{t}.
+% \end{align}
+
+% As PMS stars are usually fully convective, the Kippenhahn approximation is applicable. 
+
+\subsubsection{Deuterium burning}
+\label{sec:deuterium_burning}
+
+\subsubsection{Hot and cold accretion}
+\label{sec:hot_cold_accretion}
+
+% The accreting materical is accelerated during its in-fall, which means that it can carry some kinetic energy when it reaches the stellar surface. This kinetic energy can be estimated as:
+% \begin{equation}
+%   L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}}{R_\star},
+% \end{equation}
+% where $\xi_\mr{add}$ is a dimensionless parameter that characterizes the fraction of the kinetic energy that is converted into thermal energy at the stellar surface. The value of $\xi_\mr{add}$ depends on the details of the accretion process, such as the geometry of the accretion flow, the presence of shocks, as well as rotation. It is imposed by energy conservation that $0 \leq \xi_\mr{add} \leq 1$. When radiation cooling is efficient, $\xi_\mr{add}$ has a small value. Following the analysis by \textcite{StahlerEtAl1980} of the radiative shock at the stellar surface, radiative transfer further constrains that $\xi_\mr{add} \leq 3/4$. Yet, in the case of a Keplerian disk, , leading to $\xi_\mr{add} \simeq 1$.
+
+\subsection{The stellar evolution code \texttt{Cesam2k20}}
+\label{sec:cesam2k20}
+
+We use the stellar evolution code \texttt{Cesam2k20} \parencite{MarquesEtAl2013,MorelLebreton2008,Morel1997} to model stellar evolution with accretion. \texttt{Cesam2k20} is a one-dimensional stellar evolution code that employs a spectral method to solve the stellar structure equations given in Eqns.~\eqref{eq:star_struct}. The following subsections describe its numerical implementation, including the choice of variables, the automatic grid-point allocation, the formulation of the structure equations, and the adopted input physics.
+
+\subsubsection{Lagrangian variables}
+\label{sec:cesam2k20_variables}
+
+The system of equations in Eqns.~\eqref{eq:star_struct} encapsulates the fundamental physics governing stellar structure and evolution. However, in numerical implementation, these equations are often reformulated to improve stability and convergence. One effective approach, discussed by \textcite{Morel1997}, is to use the set of variables introduced by \textcite{Eggleton1971},
+\begin{equation*}
+\left(\frac{m}{M_\odot}\right)^{2/3},\quad \left(\frac{r}{R_\odot}\right)^2,\quad \left(\frac{L_r}{L_\odot}\right)^{2/3}, \quad L_r \geq 0\footnote[1]{In cases where $L_r < 0$—which can occur during late evolutionary stages—the variable $L_r/L_\odot$ is used instead. Since this project focuses on the pre-main-sequence phase, where such cases do not arise, we adopt the Eggleton variables throughout.}.
+\end{equation*}
+This choice improves numerical precision and helps avoid singularities at the stellar center
+
+Additionally, because pressure and temperature can span several orders of magnitude in the stellar interior, it is numerically advantageous to work with their logarithms. Accordingly, the set of variables ultimately used in \texttt{Cesam2k20} is:
+\begin{equation}
+\xi = \ln P,\quad \eta = \ln T,\quad \zeta = \left(\frac{r}{R_\odot}\right)^2,\quad \lambda = \left(\frac{L_r}{L_\odot}\right)^{2/3},\quad \mu = \left(\frac{m}{M_\odot}\right)^{2/3}.
+\end{equation}
+
+\subsubsection{Automatic allocation of grid points}
+\label{sec:cesam2k20_grid}
+
+To resolve the large variations in physical quantities during stellar evolution, an adaptive grid is necessary. To achieve automatic allocation, \texttt{Cesam2k20} uses a strictly monotonic spacing function, $Q(\mu, t)$, to distribute grid points based on local physical conditions. Grid points are placed such that the difference in $Q(\mu, t)$ between adjacent points is equal to a time-dependent spacing constant $\psi(t)$ \parencite{Eggleton1971,PressEtAl1992,Morel1997}.
+
+Formally, at each time step $t$, the grid points $\mu_i,\ i = 1,\ldots,n$ are allocated such that:
+\begin{equation}
+  Q(\mu_{i+1}, t) - Q(\mu_i, t) = \psi(t),\quad i = 1, \ldots, n-1,
+\end{equation}
+where $\psi(t)$ is determined during the numerical integration. 
+
+The specific form of the spacing function $Q(\mu, t)$ used in \texttt{Cesam2k20} is:
+\begin{equation}
+  Q(\mu, t) = -\xi + 15\mu. \label{eq:cesam2k20_spacing_func}
+\end{equation}
+See \textcite{Morel1997,Manchon2021} for the rationale behind this choice. The dependence of $Q(\mu, t)$ on pressure ($\xi$) and mass ($\mu$) ensures finer resolution in regions of steep pressure and density gradients. In the core, where the pressure gradient is modest, resolution is primarily controlled by mass change; while in the outer envelope, where pressure varies rapidly, the grid is refined mostly based on pressure changes.
+
+To map physical coordinates onto the numerical grid, \texttt{Cesam2k20} defines an index function $q(\mu, t)$, which takes integer values from $1$ to $n$. The derivative of $Q$ with respect to this index gives:
+\begin{equation}
+  \left.\pfird[Q]{q}\right|_t = \left.\pfird[Q]{\mu}\right|_t\left.\pfird[\mu]{q}\right|_t = \theta(\mu, t)\left.\pfird[\mu]{q}\right|_t = \psi(t),
+\end{equation}
+where $\theta(\mu, t)$ is directly obtained from the analytic form of $Q(\mu, t)$ in Eq.~\eqref{eq:cesam2k20_spacing_func}.
+
+The introduction of $\psi(t)$ and $\theta(\mu, t)$ requires two additional equations for closure:
+\begin{equation}
+  \pfird[\mu]{q} = \frac{\psi}{\theta},\quad \pfird[\psi]{q} = 0.
+\end{equation}
+The first equation relates the mass coordinate to grid index, while the second enforces constant spacing in $Q$-space. This approach enables efficient resolution of the stellar structure, especially during rapid evolutionary phases.
+
+\subsubsection{Structure equations}
+\label{sec:cesam2k20_struct_eq}
+
+With the variables introduced in Secs.~\ref{sec:cesam2k20_variables} and \ref{sec:cesam2k20_grid}, the stellar structure equations can be expressed in a form more suitable for integration on an equidistant grid in the numerical index $q_i = 1, \ldots, n$. 
+
+The full set of structure and composition equations solved at each time step is:
+\begin{subequations} \label{eq:cesam2k20_struct_eq}
+  \begin{align}
+    0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta},\\
+    0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla,\\
+    0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta},\\
+    0 &= \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon  + \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta},\\
+    0 &= \pfird[\mu]{q} - \frac{\psi}{\theta},\\
+    0 &= \pfird[\psi]{q},\\
+    0 &= \pfird[X_i]{t} + \frac{2}{3 M_\odot\mu^{1/2}}\pfird[F_i]{\mu} - \Psi_i(\xi, \eta, \bvec{X}), 1\leq i \leq n_\mr{elem}.
+  \end{align}
+\end{subequations}
+
+These equations are solved simultaneously with boundary conditions-at the center:
+\begin{equation}
+  \zeta(1, t) = 0,\quad \lambda(1, t) =0, \quad \mu(1, t) = 0,
+\end{equation}
+and at the surface:
+\begin{equation}
+  \xi(n, t) = \xi_\mr{atm}(L_\star, R_\star, t),\quad \eta(n, t) = \eta_\mr{atm}(L_\star, R_\star, t),\quad \mu(n, t) = \mu_\mr{atm},
+\end{equation}
+along with constitutive relations (e.g., equations of state, opacity laws) to evolve the stellar model in time.
+
+\subsubsection{Input physics}
+\label{sec:cesam2k20_input_physics}
+
+The models are computed for 1D, single stars without rotation, magnetic fields, or diffusion. Mass loss is not considered in this project; the only mechanism that alters the stellar mass is accretion. The initial chemical composition follows the solar mixture of \textcite{AsplundEtAl2009}, as recommended by \textcite{SerenelliEtAl2009}, with the exception of the deuterium abundance, which is varied to explore its impact on accreting stars.
+
+Convection is modeled using mixing-length theory (MLT) \parencite{CoxGiuli1968a}, with no overshooting. We adopt the solar-calibrated value of the mixing-length parameter, $\alpha_\mr{MLT} = 1.64$, and apply the Schwarzschild criterion to determine convective boundaries.
+
+The equation of state (EoS) and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, $^{17}\mr{O}$.
+
+Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl1994} for plasma neutrinos and \textcite{Weigert1966} for photoneutrinos. The atmosphere is implemented via a Hopf $T(\tau)$ relation from \textcite{HubenyMihalas2015}, with a maximum optical depth of $\tau_{\max} = 20$.
+
+\begin{table}
+    \hfill
+    \begin{tabularx}{.8\textwidth}{|| c | c ||}
+        \cline{1-2}
+        Parameter Type & Description \\ \cline{1-2}\\[-1em]\cline{1-2}
+        Mass & accretion + no mass loss\\ \cline{1-2}
+        Chemical composition  & AGS09+S10\footnotemark[1]\\ \cline{1-2}
+        Convection & MLT\footnotemark[2] + No overshoot\\ \cline{1-2}
+        Diffusion & None \\ \cline{1-2}
+        EoS & OPAL2005\footnotemark[3] \\ \cline{1-2}
+        Opacity & OPAL and AF \footnotemark[4]\\ \cline{1-2}
+        Nuclear reaction & NACRE + LUNA\footnotemark[5]\\ \cline{1-2}
+        Atmosphere & Hopf\footnotemark[6], $\tau_{\max} = 20.0$\\ \cline{1-2}
+    \end{tabularx}
+    \caption{Summary of input parameters for Cesam2k20 models; refer to the text for more details.} \label{tab:input_physics}
+    % \caption{Input parameters for Cesam2k20 models. $^1$Solar mixture of \textcite{AsplundEtAl2009} following \textcite{SerenelliEtAl2009} recommendation. $^2$MLT: mixing-length theory \parencite{CoxGiuli1968a} $^3$OPAL2005:\textcite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}. $^4$AF: \textcite{FergusonEtAl2005} $^5$NACRE: \textcite{AikawaEtAl2006}; LUNA: \textcite{BrogginiEtAl2018}. $^6$: \textcite{HubenyMihalas2015}} \label{tab:input_physics}
+    \hfill
+\end{table}
+
+The input physics are summarized in Table \ref{tab:input_physics}. Building on this framework, we next describe the implementation of accretion in \texttt{Cesam2k20}.
+
+\subsection{Accretion in \texttt{Cesam2k20}}
+\label{sec:accretion_cesam2k20}
+
+% \begin{outline}{gray}
+%   \item examples of derivatives of the structure equations with respect to the variables
+%   \item the change in the energy equation
+% \end{outline}
+
+
+\subsubsection{Limiting the maximum change in gravitational energy}
+\label{sec:limiting_grav_energy}
+
+\subsubsection{Limiting the maximum change in mass}
+\label{sec:limiting_mass_change}
+
+% \subsection{? Heat from accretion (kinetic energy)}
+
+% \begin{outline}{gray}
+%   \item the second term in the energy equation, $\epsilon_\mr{add}$, is the kinetic energy of the accreting material
+%   \item probably don't have enough time to implement this, but can be done later
+% \end{outline}
+
+% uniform deposition of energy  in the convective zone:
+% \begin{equation}
+%   \epsilon_\mr{add}^\mr{(uniform)} = \frac{L_\mr{add}}{M_\mr{*}}  
+% \end{equation}
+
+% linear deposition of energy in the convective zone:
+% \begin{equation}
+%   \epsilon_\mr{add}^\mr{(linear)} = \frac{L_\mr{add}}{M_\mr{*}}\max\left[0, \frac{2}{m_\mr{ke}^2}\left(\frac{M_r}{M_*} - 1 + m_\mr{ke}\right)\right] 
+% \end{equation}
+
+\section{Results}
+\label{sec:results}
+
+\subsection{The toy problem}
+\label{sec:toy_problem}
+\begin{outline}{gray}
+  \item the toy problem of static models, without accretion but differe slightly in mass to emulate the effect of accretion
+  \item one with full convective stars and the other with radiative core
+  \item ? the profile of the gravitational energy and the heat from accretion
+  \item show the problem with this kind of approach necessicate the implementation of accretion in the actual evolution 
+  \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
+\end{outline}
+
+\subsection{The effect of different accretion rates}
+\label{sec:accretion_rate}
+
+\begin{outline}{gray}
+  \item evolution tracks of the models with different accretion rates
+  \item can try to implement time variation in the accretion rate
+\end{outline}
+
+\subsection{The effect of different chemical compositions}
+\label{sec:chemical_composition}
+
+\begin{outline}{gray}
+  \item compare accreting models with and without deuterium accreted in the outer layers
+  \item can try to vary the abundance of deuterium in the accreted material
+\end{outline}
+
+\subsection{Comparison with Palla \& Stahler (1993)}
+\label{sec:comp_palla_stahler}
+
+
+% \subsection{The effect of different initial stellar masses}
+% \label{sec:initial_mass}
+
+% \subsection{The effect of different heat injection models}
+% \label{sec:heat_injection}
+
+% \subsection{Comparison with \texttt{MESA}}
+% \label{sec:mesa_comparison}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+\begin{outline}{gray}
+  \item summarize the main findings of the project
+  \item discuss the limitations and prospects of this research
+  \item limitations of the current implementation
+  \begin{itemize}
+    \item the seed mass is $0.1 M_\odot$ can be smaller
+    \item angular momentum is not considered
+    \item variable accretion rate
+    \item numeircal treatment of convective-radiative boundary
+    \item hot/cold accretion
+  \end{itemize}
+\end{outline}
+
+% \newpage
+% to be done at the end
+% \begin{outline}{gray}
+%   \item replace pre-main-sequence with PMS 
+% \end{outline}
+% \section*{Acknowledgements}
+% \label{sec:acknowledgements}
+
+\newpage
+\printbibliography[heading=bibintoc, title={References}]
+
+\newpage
+\appendix
+\section{Appendix: The jacobian of the stellar structure equations}
+\label{sec:appendix_jacobian}
+% For simplicity, we will use the following notations:
+% \begin{equation*}
+%   \xi' \equiv \pfird[\xi]{q},\ \eta' \equiv \pfird[\eta]{q},\ \zeta' \equiv \pfird[\zeta]{q},\ \lambda' \equiv \pfird[\lambda]{q},\ \mu' \equiv \pfird[\mu]{q}
+% \end{equation*}
+
+% Derivatives of be(1) with respect to the variables are:
+% \begin{align}
+%   \text{be(1)}\quad0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\\
+%   \pfird[\text{(1)}]{\xi} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(-e^{-\xi}\frac{\psi}{\theta}+e^{-\xi}\pfird[(\psi/\theta)]{\xi}\right)\\
+%   \pfird[\text{(1)}]{\eta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\eta}\\
+%   \pfird[\text{(1)}]{\zeta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\zeta}\\
+%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(-2\frac{\mu^2}{\zeta^3}\right) + \frac{M_\odot}{4\pi R_\odot}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right) \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\\
+%   \pfird[\text{(1)}]{\lambda} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\lambda}\\
+%   \pfird[\text{(1)}]{\mu} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\mu}\\
+%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(2\frac{\mu}{\zeta^2}\right) + \frac{M_\odot}{4\pi R_\odot}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{1/2}}\right) \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\\
+%   &\pfird[\text{(1)}]{\xi'} = 1,\ \pfird[\text{(1)}]{\eta'} = 0,\ \pfird[\text{(1)}]{\zeta'} = 0,\ \pfird[\text{(1)}]{\lambda'} = 0,\ \pfird[\text{(1)}]{\mu'} = 0,\ \pfird[\text{(1)}]{\psi'} = 0
+% \end{align}
+
+% Derivatives of be(2) with respect to the variables are:
+% \begin{align}
+%   \text{be(2)}\quad0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla\\
+%   \pfird[\text{(2)}]{\xi} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(e^{-\xi}\nabla\pfird[(\psi/\theta)]{\xi}-e^{-\xi}\nabla\frac{\psi}{\theta} + e^{-\xi}\pfird[\nabla]{\xi}\frac{\psi}{\theta}\right)\\
+%   \pfird[\text{(2)}]{\eta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
+%   \nabla\pfird[(\psi/\theta)]{\eta}+\pfird[\nabla]{\eta}\frac{\psi}{\theta}\right)\\
+%   \pfird[\text{(2)}]{\zeta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
+%   \nabla\pfird[(\psi/\theta)]{\zeta}+\pfird[\nabla]{\zeta}\frac{\psi}{\theta}\right)\\
+%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(-2\frac{\mu^2}{\zeta^3}\right)+ \frac{M_\odot}{4\pi R_\odot}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right) \Omega^2\right]e^{-\xi}\nabla\frac{\psi}{\theta}\\
+%   \pfird[\text{(2)}]{\lambda} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
+%   \nabla\pfird[(\psi/\theta)]{\lambda}+\pfird[\nabla]{\lambda}\frac{\psi}{\theta}\right)\\
+%   \pfird[\text{(2)}]{\mu} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
+%   \nabla\pfird[(\psi/\theta)]{\mu}+\pfird[\nabla]{\mu}\frac{\psi}{\theta}\right)\\
+%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(2\frac{\mu}{\zeta^2}\right)+ \frac{M_\odot}{4\pi R_\odot}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{1/2}}\right) \Omega^2\right]e^{-\xi}\nabla\frac{\psi}{\theta}\\
+%   \pfird[\text{(2)}]{\psi} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\nabla\frac{1}{\theta}\\
+%   &\pfird[\text{(2)}]{\xi'} = 0,\ \pfird[\text{(2)}]{\eta'} = 1,\ \pfird[\text{(2)}]{\zeta'} = 0,\ \pfird[\text{(2)}]{\lambda'} = 0,\ \pfird[\text{(2)}]{\mu'} = 0,\ \pfird[\text{(2)}]{\psi'} = 0
+% \end{align}
+
+% Derivatives of be(3) with respect to the variables are:
+% \begin{align}
+%   \text{be(3)}\quad0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta}\\
+%   \pfird[\text{(3)}]{\xi} &= - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\left(\frac{\mu}{\zeta}\right)^{1/2}\left(\frac{1}{\rho}\pfird[(\psi/\theta)]{\xi} - \frac{1}{\rho^2}\pfird[\rho]{\xi}\frac{\psi}{\theta}\right)\\
+%   \pfird[\text{(3)}]{\eta} &= - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\left(\frac{\mu}{\zeta}\right)^{1/2}\left(\frac{1}{\rho}\pfird[(\psi/\theta)]{\eta} - \frac{1}{\rho^2}\pfird[\rho]{\eta}\frac{\psi}{\theta}\right)\\
+%   \pfird[\text{(3)}]{\zeta} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\pfird[(\psi/\theta)]{\zeta} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right)\frac{\psi}{\theta}\\
+%   \pfird[\text{(3)}]{\lambda} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\pfird[(\psi/\theta)]{\lambda}\\
+%   \pfird[\text{(3)}]{\mu} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\left(\frac{\mu}{\zeta}\right)^{1/2}\left(\frac{1}{\rho}\pfird[(\psi/\theta)]{\mu} - \frac{1}{\rho^2}\pfird[\rho]{\mu}\frac{\psi}{\theta}\right) - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{3/2}}\right)\frac{\psi}{\theta}\\
+%   \pfird[(3)]{\psi} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{1}{\theta}\\
+%   \pfird[(3)]{\xi'}& = 0,\ \pfird[(3)]{\eta'} = 0,\ \pfird[(3)]{\zeta'} = 1,\ \pfird[(3)]{\lambda'} = 0,\ \pfird[(3)]{\mu'} = 0,\ \pfird[(3)]{\psi'} = 0
+% \end{align}
+
+\end{document}
