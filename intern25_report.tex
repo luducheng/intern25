@@ -130,13 +130,13 @@
 
 Stars form through the gravitational collapse of dense cores within molecular clouds. The collapse is initially isothermal, with temperature remaining nearly constant. As the density increases, the central region becomes increasingly opaque to radiation, inhibiting its escape from the core while still allowing it from the outer layers. This increase in opacity leads to an adiabatic collapse of the center, during which the temperature and pressure rise until a hydrostatic core, or a protostar, is formed. The protostar then accretes material from the surrounding cloud, a process that can continue for several million years.
 
-Once most of the surrounding material has been accreted, the protostar enters the pre-main-sequence (PMS) phase and becomes visible as a T Tauri star (TTS). TTSs are cold PMS stars that serve as precursors to low-mass main-sequence stars of spectral types F, G, K, and M. Classical T Tauri stars (CTTSs) are characterized by strong infrared (IR) emission from their optically thick accretion disks. As accretion declines due to the depletion of material in the inner disk, the IR emission weakens, and the stars are then observed as weak T Tauri stars (WTTSs). Young massive stars are also expected to undergo accretion during their early evolution and are observed as Herbig Ae/Be stars—hotter and more luminous than TTSs. However, the accretion processes for these higher-mass stars remain poorly understood.
+Once most of the surrounding material has been accreted, the protostar enters the pre-main-sequence (PMS) phase and becomes visible as a T Tauri star (TTS). TTSs are cold PMS stars that serve as precursors to low-mass main-sequence stars of spectral types F, G, K, and M. Classical T Tauri stars (CTTSs) are characterized by strong infrared (IR) emission from their optically thick accretion disks. As accretion declines due to the depletion of material in the inner disk, the IR emission weakens, and the stars are then observed as weak T Tauri stars (WTTSs). Similarly, young massive stars are also expected to undergo accretion during their early evolution and are observed as Herbig Ae/Be stars—hotter and more luminous than TTSs. However, the accretion processes for these higher-mass stars remain poorly understood.
 
 The earliest accretion stages remain observationally elusive, as protostars are deeply embedded in the surrounding dusty cloud, making it highly extincted in optical and near-IR wavelengths. Nonetheless, indirect indicators such as disks, outflows, and jets provide compelling evidence of ongoing accretion. Modeling these stages remains challenging due to the time-variable, non-linear nature of the process and the complexity of the underlying physics.
 
 When \textcite{HenyeyEtAl1955} and \textcite{Hayashi1961} first studied the early phases of stellar evolution, accretion was not taken into account. Instead, stars were assumed to begin their evolution as fully convective objects with very large radii and luminosities, contracting under their own gravity until a radiative core developed, eventually reaching the main sequence. These evolutionary paths are now known as the Hayashi and Henyey tracks. Since \textcite{Larson1969} introduced the concept of the formation of a hydrostatic core, followed by continued accretion from an infalling envelope of gas and dust, accretion has been recognized as a fundamental process in early stellar evolution, supported by both theoretical and observational studies.
 
-There has been growing interest in studying accretion in PMS stars, particularly because of its relevance to planetary formation. Accretion disks are the birthplaces of planets and other small bodies, making the study of accretion crucial for understanding the early evolution of planetary systems. Beyond this, accretion can significantly influence the internal structure and rotation of stars by supplying both mass and angular momentum. These structural and rotational changes can, in turn, affect the stellar dynamo mechanism responsible for amplifying magnetic fields in young stars \parencite[e.g.,][]{StelzerNeuhauser2001}.
+There has been growing interest in studying accretion in PMS stars since the discovery of exoplanetary systems,particularly because of its relevance to planetary formation. Accretion disks are the birthplaces of planets and other small bodies, making the study of accretion crucial for understanding the early evolution of planetary systems. Beyond this, accretion can significantly influence the internal structure and rotation of stars by supplying both mass and angular momentum. In particular, accretion sets the initial distribution of angular momentum, which influences the star's rotational evolution and internal dynamics. These structural and rotational changes can, in turn, affect the stellar dynamo mechanism responsible for amplifying magnetic fields in young stars \parencite[e.g.,][]{StelzerNeuhauser2001}. 
 
 Accretion also impacts long-term stellar evolution by setting the initial conditions for subsequent evolutionary stages and can leave lasting imprints. Consequently, it can directly affect the determination of fundamental stellar parameters such as age, mass, and radius, which are crucial not only for stellar physics but also for fields like exoplanet characterization and galactic archaeology. In addition, accretion can alter the surface chemical composition, especially if the accreted material differs in abundance from that of the protostar \parencite{KunitomoGuillot2021}. This has important implications for interpreting observed stellar abundances and for modeling chemical mixing processes.
 
@@ -181,7 +181,6 @@ The accretion shock produces emission in the ultraviolet, optical, and near-infr
 % Accretion disks are commonly observed in star formation regions, and their presence is often inferred from the emission of infrared radiation from the dust in the disk. The accretion rate can be estimated from the luminosity of the accretion shock, which is typically observed in the ultraviolet and optical wavelengths. The accretion rate can also be estimated from the emission lines of hydrogen and other elements, which are often broadened by the Doppler effect due to the motion of the accreting material. There also have been direct images of the protoplanetary disks, the leftover of accretion disks, around young stars, such as the one taken by the Atacama Large Millimeter/submillimeter Array (ALMA).
 
 Magnetospheric accretion paradigm assumes that the stellar magnetic field is strong enough to counteract the pressure of the accretion disk and disrupt the disk before it reaches the stellar surface \parencite[e.g.,][]{Koenigl1991}. At the truncation radius $R_\mr{trunc}$, the magnetic pressure approximately balances the gas ram pressure,  i.e., $B^2/8\pi \simeq \frac{1}{2}\rho v^2$, where the relevant velocity is roughly the Keplerian velocity, $v = \sqrt{GM_\star/R_\mr{trunc}}$. The exact location of this truncation radius will also depend on the accretion rate \parencite[see Eq.~2.2 in][]{BouvierEtAl2007}. This framework generally aligns with the measured magnetic field strengths of CTTSs, which typically range from a few hundred Gauss to a few kiloGauss \parencite{BouvierEtAl2007,AlencarEtAl2012}.
-
 
 \section{Stellar evolution modeling}
 \label{sec:stellar_evol}
@@ -230,13 +229,27 @@ However, translating the underlying physics into stellar models is a complex tas
 \subsection{Pre-main-sequence evolution}
 \label{sec:pms_evolution}
 
-Classically, the modeling of PMS evolution starts with a fully-convective star with a large radius and luminosity. The star contracts and the huge amount of gravitational energy released during the contraction heats the stellar interior. This process continues until the central temperature of the star is high enough to start thermonuclear reactions, then contraction is slowed down and a radiative core develops. This evolutionary path first goes down a almost vertical line in the HR diagram, known as the Hayashi track, and then turns to a more horizontal line along the Henyey track. These classic pre-main-sequence evolutionary tracks for stellar models with masses between $1$ and $5,M_\odot$ are shown in Fig.~\ref{fig:hayashi_henyey_tracks}.
+\subsubsection{Pre-main-sequence evolution with constant mass}
+\label{sec:pms_const_mass}
+
+Classically, the modeling of PMS evolution starts with a fully-convective star with a large radius and luminosity. The star contracts and the huge amount of gravitational energy released during the contraction heats the stellar interior. This process continues until the central temperature of the star is high enough to start thermonuclear reactions, then contraction is slowed down and a radiative core develops. 
+
+The first part of the pre-main-sequence evolution is characterized by a rapid decrease in radius and luminosity, while the effective temperature remains nearly constant. This phase is known as the Hayashi track, named after \textcite{Hayashi1961}, who first described it. During this phase, the star is fully convective, and the energy transport is dominated by convection.  The Hayashi track defines the location of a fully convective star, of given mass and chemical composition, in the HR diagram. The location of the Hayashi track also depends on the modeling of convection, which is typically treated using mixing-length theory \parencite{BohmVitense1958}. They are usually on the far right of the HR diagram, with effective temperatures around $4000\,\mr{K}$. 
+
+This evolutionary path first goes down a almost vertical line in the HR diagram, known as the Hayashi track, and then turns to a more horizontal line along the Henyey track. These classic pre-main-sequence evolutionary tracks for \texttt{Cesam2k20}  models with masses between $1$ and $5,M_\odot$ are shown in Fig.~\ref{fig:hayashi_henyey_tracks}.
+
+\begin{outline}{gray}
+  \item mabye more details on the Hayashi and Henyey tracks
+\end{outline}
 
 \begin{figure}
   \centering
   \includegraphics[width=.8\textwidth]{classic_pms.pdf}
-  \caption{Classic pre-main-sequence evolutionary tracks for stellar models with masses between $1$ and $5,M_\odot$ in the HR diagram. Arrows indicate the direction of stellar evolution, with stellar masses labeled at the end of each track. The nearly vertical Hayashi track corresponds to fully convective contraction, while the more horizontal Henyey track marks the phase when contraction slows down and a radiative core develops.} \label{fig:hayashi_henyey_tracks}
+  \caption{Classic pre-main-sequence evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$ in the HR diagram. Arrows indicate the direction of stellar evolution, with stellar masses labeled at the end of each track. The nearly vertical Hayashi track corresponds to fully convective contraction, while the more horizontal Henyey track marks the phase when contraction slows down and a radiative core develops.} \label{fig:hayashi_henyey_tracks}
 \end{figure}
+
+\subsubsection{Pre-main-sequence evolution with accretion}
+\label{sec:pms_accretion}
 
 \section{Methods}
 \label{sec:methods}
@@ -259,6 +272,11 @@ Classically, the modeling of PMS evolution starts with a fully-convective star w
 \subsubsection{Deuterium burning}
 \label{sec:deuterium_burning}
 
+\begin{outline}{gray}
+  \item euqations for deuterium burning
+  \item formula for the estimation of luminosity due to deuterium burning
+\end{outline}
+
 \subsubsection{Hot and cold accretion}
 \label{sec:hot_cold_accretion}
 
@@ -271,7 +289,7 @@ Classically, the modeling of PMS evolution starts with a fully-convective star w
 \subsection{The stellar evolution code \texttt{Cesam2k20}}
 \label{sec:cesam2k20}
 
-We use the stellar evolution code \texttt{Cesam2k20} \parencite{MarquesEtAl2013,MorelLebreton2008,Morel1997} to model stellar evolution with accretion. \texttt{Cesam2k20} is a one-dimensional stellar evolution code that employs a spectral method to solve the stellar structure equations given in Eqns.~\eqref{eq:star_struct}. The following subsections describe its numerical implementation, including the choice of variables, the automatic grid-point allocation, the formulation of the structure equations, and the adopted input physics.
+We use the stellar evolution code \texttt{Cesam2k20} \parencite{MarquesEtAl2013,MorelLebreton2008,Morel1997} to model stellar evolution with accretion. \texttt{Cesam2k20} is an open-source, one-dimensional stellar evolution code (available at the \href{https://www.ias.u-psud.fr/cesam2k20/home.html}{Cesam2k20 website}) that employs a spectral method to solve the stellar structure equations given in Eqns.~\eqref{eq:star_struct}. To our knowledge, it is the only stellar evolution code that utilizes a spectral method, which offers the advantages of superconvergence and high numerical precision compared to the more commonly used finite-difference methods in stellar evolution modeling. The following subsections describe its numerical implementation, including the choice of variables, automatic grid-point allocation, the formulation of the structure equations, and the adopted input physics.
 
 \subsubsection{Lagrangian variables}
 \label{sec:cesam2k20_variables}
@@ -287,10 +305,10 @@ Additionally, because pressure and temperature can span several orders of magnit
 \xi = \ln P,\quad \eta = \ln T,\quad \zeta = \left(\frac{r}{R_\odot}\right)^2,\quad \lambda = \left(\frac{L_r}{L_\odot}\right)^{2/3},\quad \mu = \left(\frac{m}{M_\odot}\right)^{2/3}.
 \end{equation}
 
-\subsubsection{Automatic allocation of grid points}
+\subsubsection{Automatic location of grid points}
 \label{sec:cesam2k20_grid}
 
-To resolve the large variations in physical quantities during stellar evolution, an adaptive grid is necessary. To achieve automatic allocation, \texttt{Cesam2k20} uses a strictly monotonic spacing function, $Q(\mu, t)$, to distribute grid points based on local physical conditions. Grid points are placed such that the difference in $Q(\mu, t)$ between adjacent points is equal to a time-dependent spacing constant $\psi(t)$ \parencite{Eggleton1971,PressEtAl1992,Morel1997}.
+To resolve the large variations in physical quantities during stellar evolution, an adaptive grid is necessary. To achieve automatic allocation, \texttt{Cesam2k20} uses a strictly monotonic spacing function, $Q(\mu, t)$, to distribute grid points based on local physical conditions. Grid points are placed such that the difference in $Q(\mu, t)$ between adjacent points is equal to a time-dependent spacing function $\psi(t)$ \parencite{Eggleton1971,PressEtAl1992,Morel1997}.
 
 Formally, at each time step $t$, the grid points $\mu_i,\ i = 1,\ldots,n$ are allocated such that:
 \begin{equation}
@@ -298,13 +316,14 @@ Formally, at each time step $t$, the grid points $\mu_i,\ i = 1,\ldots,n$ are al
 \end{equation}
 where $\psi(t)$ is determined during the numerical integration. 
 
-The specific form of the spacing function $Q(\mu, t)$ used in \texttt{Cesam2k20} is:
+The default form of the spacing function $Q(\mu, t)$ used in \texttt{Cesam2k20} is:
 \begin{equation}
-  Q(\mu, t) = -\xi + 15\mu. \label{eq:cesam2k20_spacing_func}
+  % Q(\mu, t) = -\xi + 15\mu. \label{eq:cesam2k20_spacing_func}
+  Q(\mu, t) = (-1)\xi + (0)\eta + (0)\zeta + (0)\lambda + (15)\mu, \label{eq:cesam2k20_spacing_func}
 \end{equation}
-See \textcite{Morel1997,Manchon2021} for the rationale behind this choice. The dependence of $Q(\mu, t)$ on pressure ($\xi$) and mass ($\mu$) ensures finer resolution in regions of steep pressure and density gradients. In the core, where the pressure gradient is modest, resolution is primarily controlled by mass change; while in the outer envelope, where pressure varies rapidly, the grid is refined mostly based on pressure changes.
+where the values in parentheses serve as weights for each variable in the calculation of the distance between grid points. See \textcite{Morel1997,Manchon2021} for the rationale behind this choice. These coefficients can be adjusted in the numerical settings to achieve higher resolution in specific variables if desired. The dependence of $Q(\mu, t)$ on pressure ($\xi$) and mass ($\mu$) ensures finer resolution in regions of steep pressure and density gradients. In the core, where the pressure gradient is modest, resolution is primarily controlled by mass change; while in the outer envelope, where pressure varies rapidly, the grid is refined mostly based on pressure changes.
 
-To map physical coordinates onto the numerical grid, \texttt{Cesam2k20} defines an index function $q(\mu, t)$, which takes integer values from $1$ to $n$. The derivative of $Q$ with respect to this index gives:
+To map physical coordinates onto the numerical grid, \texttt{Cesam2k20} defines an index function $q(\mu, t)$ that takes integer values from $1$ to $n$ at the grid points. Values of physical variables at positions between grid points are obtained by interpolation on the grid. The derivative of $Q$ with respect to this index gives:
 \begin{equation}
   \left.\pfird[Q]{q}\right|_t = \left.\pfird[Q]{\mu}\right|_t\left.\pfird[\mu]{q}\right|_t = \theta(\mu, t)\left.\pfird[\mu]{q}\right|_t = \psi(t),
 \end{equation}
@@ -347,13 +366,13 @@ along with constitutive relations (e.g., equations of state, opacity laws) to ev
 \subsubsection{Input physics}
 \label{sec:cesam2k20_input_physics}
 
-The models are computed for 1D, single stars without rotation, magnetic fields, or diffusion. Mass loss is not considered in this project; the only mechanism that alters the stellar mass is accretion. The initial chemical composition follows the solar mixture of \textcite{AsplundEtAl2009}, as recommended by \textcite{SerenelliEtAl2009}, with the exception of the deuterium abundance, which is varied to explore its impact on accreting stars.
+Although \texttt{Cesam2k20} is capable of modeling rotation and diffusion, I keep the input physics simple at this stage to focus on the impact of accretion on stellar structure. The interactions of accretion with rotation and diffusion will be an important aspect in future work. The models are computed for 1D, single stars without rotation, magnetic fields, or diffusion. Mass loss is not considered; the only mechanism that alters the stellar mass is accretion. The initial chemical composition follows the solar mixture of \textcite{AsplundEtAl2009}, with meteoritic determination for non-volatile elements as recommended by \textcite{SerenelliEtAl2009}, with the exception of the deuterium abundance, which is varied to explore its impact on accreting stars.
 
-Convection is modeled using mixing-length theory (MLT) \parencite{CoxGiuli1968a}, with no overshooting. We adopt the solar-calibrated value of the mixing-length parameter, $\alpha_\mr{MLT} = 1.64$, and apply the Schwarzschild criterion to determine convective boundaries.
+Convection is modeled using the mixing-length theory (MLT) \parencite{CoxGiuli1968a}. It assumes that convective energy transport occurs via fluid elements moving from hotter to cooler regions over a characteristic distance-the mixing length—typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mathrm{MLT}$. We adopt a solar-calibrated value of $\alpha_\mathrm{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
 
 The equation of state (EoS) and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, $^{17}\mr{O}$.
 
-Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl1994} for plasma neutrinos and \textcite{Weigert1966} for photoneutrinos. The atmosphere is implemented via a Hopf $T(\tau)$ relation from \textcite{HubenyMihalas2015}, with a maximum optical depth of $\tau_{\max} = 20$.
+Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl1994} for plasma neutrinos and \textcite{Weigert1966} for photoneutrinos. The atmosphere is implemented using a Hopf $T(\tau)$ relation from \textcite{HubenyMihalas2015}, with the base of the atmosphere set at an optical depth of $\tau_{\max} = 20$, where the solution of the internal structure equations is matched to that of the atmosphere model.
 
 \begin{table}
     \hfill
@@ -440,6 +459,10 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 
 \subsection{Comparison with Palla \& Stahler (1993)}
 \label{sec:comp_palla_stahler}
+
+\begin{outline}{gray}
+  \item try to reproduce a similar plot of Palla \& Stahler (1992) mass-radius relation, or Fig 20.3 in Maeder book
+\end{outline}
 
 % \begin{figure}
 %   \centering  
