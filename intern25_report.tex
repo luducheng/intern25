@@ -25,7 +25,7 @@
 % citations
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 \usepackage[citestyle=authoryear-icomp,bibstyle=authoryear,hyperref=true,
-  isbn=false,url=false,eprint=false, giveninits=true,
+  isbn=false,url=false,eprint=false, giveninits=true, uniquename=init,
   date=year,maxcitenames=2,uniquelist=minyear,sorting=nyt]{biblatex}
 \addbibresource{intern25_ref.bib}
 \input{asstex}
@@ -180,7 +180,7 @@ The accretion shock produces emission in the ultraviolet, optical, and near-infr
 
 % Accretion disks are commonly observed in star formation regions, and their presence is often inferred from the emission of infrared radiation from the dust in the disk. The accretion rate can be estimated from the luminosity of the accretion shock, which is typically observed in the ultraviolet and optical wavelengths. The accretion rate can also be estimated from the emission lines of hydrogen and other elements, which are often broadened by the Doppler effect due to the motion of the accreting material. There also have been direct images of the protoplanetary disks, the leftover of accretion disks, around young stars, such as the one taken by the Atacama Large Millimeter/submillimeter Array (ALMA).
 
-Magnetospheric accretion paradigm assumes that the stellar magnetic field is strong enough to counteract the pressure of the accretion disk and disrupt the disk before it reaches the stellar surface \parencite[e.g.,][]{Koenigl1991}. At the truncation radius $R_\mr{trunc}$, the magnetic pressure approximately balances the gas ram pressure,  i.e., $B^2/8\pi \simeq \frac{1}{2}\rho v^2$, where the relevant velocity is roughly the Keplerian velocity, $v = \sqrt{GM_\star/R_\mr{trunc}}$. The exact location of this truncation radius will also depend on the accretion rate \parencite[see Eq.~2.2 in][]{BouvierEtAl2007}. This framework generally aligns with the measured magnetic field strengths of CTTSs, which typically range from a few hundred Gauss to a few kiloGauss \parencite{BouvierEtAl2007,AlencarEtAl2012}.
+Magnetospheric accretion paradigm assumes that the stellar magnetic field is strong enough to counteract the pressure of the accretion disk and disrupt the disk before it reaches the stellar surface \parencite[e.g.,][]{Koenigl1991}. At the truncation radius $R_\mr{trunc}$, the magnetic pressure approximately balances the gas ram pressure, i.e., $B^2/8\pi \simeq \frac{1}{2}\rho v^2$, where the relevant velocity is roughly the Keplerian velocity, $v = \sqrt{GM_\star/R_\mr{trunc}}$. The exact location of this truncation radius will also depend on the accretion rate \parencite[see Eq.~2.2 in][]{BouvierEtAl2007}. This framework generally aligns with the measured magnetic field strengths of CTTSs, which typically range from a few hundred Gauss to a few kiloGauss \parencite{BouvierEtAl2007,AlencarEtAl2012}. 
 
 \section{Stellar evolution modeling}
 \label{sec:stellar_evol}
@@ -190,24 +190,24 @@ Stellar evolution modeling involves combining physical principles with numerical
 \subsection{Stellar structure equations}
 \label{sec:stellar_evol_formulation}
 
-Modeling stellar evolution involves defining initial conditions and solving the differential equations that govern the physical processes inside a star, thereby predicting how stellar properties change over time. The primary factors determining a star's evolution are its mass and initial chemical composition. Once specified, these initial parameters are input into the stellar structure equations, which express the physical quantities as functions of position and time $(\vec{r}, t)$. By assuming spherical symmetry, the position can be reduced to the radial distance $r$ from the center, so physical quantities become functions of radius and time, i.e., $(r, t)$.
+Modeling stellar evolution involves defining initial conditions and solving the differential equations that govern the physical processes inside a star, thereby predicting how stellar properties change over time. The primary factors determining an isolated star's evolution are its mass and initial chemical composition. Once specified, these initial parameters are input into the stellar structure equations, which express the physical quantities as functions of position and time $(\vec{r}, t)$. By assuming spherical symmetry, the position can be reduced to the radial distance $r$ from the center, so physical quantities become functions of radius and time, i.e., $(r, t)$.
 
 Throughout most of stellar evolution, the total stellar mass remains almost constant except in cases of significant mass loss. In contrast, the stellar radius may vary rapidly as the star goes into different stages. Therefore, it is more convenient to introduce a Lagrangian coordinate $m$ (defined as the total mass inside the sphere of radius $r$) instead of $r$. 
 
 In the mass coordinate, the system of 1D stellar structure equations can be written as \parencite[See, for example, ][]{KippenhahnEtAl2013}:
 \begin{subequations}\label{eq:star_struct}
   \begin{align}
-    \pfird[p]{m} &= -\frac{G m}{4\pi r^2} + \frac{\Omega^2}{6 \pi r^2}, \label{eq:star_struct1}\\
-    % \pfird[p]{m} &= -\frac{G m}{4\pi r^2}, \label{eq:star_struct1}\\
+    % \pfird[p]{m} &= -\frac{G m}{4\pi r^2} + \frac{\Omega^2}{6 \pi r^2}, \label{eq:star_struct1}\\
+    \pfird[p]{m} &= -\frac{G m}{4\pi r^2}, \label{eq:star_struct1}\\
     \pfird[T]{m} &= \pfird[p]{m} \frac{T}{p} \nabla, \label{eq:star_struct2}\\
     \pfird[r]{m} &= \frac{1}{4 \pi r^2 \rho}, \label{eq:star_struct3}\\
     \pfird[l]{m} &= \epsilon_\mr{nuc}  - \epsilon_\nu + \epsilon_\mr{g} , \label{eq:star_struct4}\\
-    \pfird[X_i]{t} &= -\pfird[F_i]{m} + \Psi_i(P, T, \bvec{X}), 1\leq i \leq n_\mr{elem}. \label{eq:star_struct5}
+    \pfird[X_i]{t} &= -\pfird[F_i]{m} + \Psi_i(P, T, \bvec{X}), 1\leq i \leq n_\mr{elem}, \label{eq:star_struct5}
   \end{align}
 \end{subequations}
-where $G$ is the gravitational constant, $\nabla \equiv \partial \ln T/\partial \ln p$ is the temperature gradient, $\epsilon_\mr{nuc}$ is the rate of nuclear energy release, $\epsilon_\nu$ is energy loss rate due to neutrinos escaping from the star, $\epsilon_\mr{g}$ is the gravitational energy, $X_i$ is the abundance of the chemical element $i$, $F_i$ is the flux of the chemical element $i$ due to diffusion, $\bvec{X} \equiv \{X_i\}$ is the chemical composition vector, $\Psi_i$ is the rate of change of $X_i$ by thermonuclear reactions, and $n_\mr{elem}$ is the total number of chemical species considered. All quantities ($p, l, \rho, T, \epsilon, \epsilon_\nu$, etc.) are evaluated locally at each stellar layer.
+where $G$ is the gravitational constant, $\nabla \equiv \partial \ln T/\partial \ln p$ is the temperature gradient, and $\epsilon_\mr{nuc}$, $\epsilon_\nu$, and $\epsilon_\mr{g}$ are the rates of nuclear energy production, neutrino energy loss, and gravitational energy production, respectively, all expressed in units of power per unit mass. $X_i$ is the abundance of the chemical element $i$, $F_i$ is the flux of the chemical element $i$ due to diffusion, $\bvec{X} \equiv \{X_i\}$ is the chemical composition vector, $\Psi_i$ is the rate of change of $X_i$ by thermonuclear reactions, and $n_\mr{elem}$ is the total number of chemical species considered. All quantities ($p, l, \rho, T, \epsilon, \epsilon_\nu$, etc.) are evaluated locally at each stellar layer.
 
-Eq.~\eqref{eq:star_struct1} describes the hydrostatic equilibrium and Eq.~\eqref{eq:star_struct3} describes the mass continuity. Eq.~\eqref{eq:star_struct4} and Eq.~\eqref{eq:star_struct2} describe the energy production and energy transport, respectively. These equations illustrate a close coupling between stellar structure and the process of energy production and transport. In most stars, energy is primarily transported by radiation and convection, and the value of $\nabla$ depends on the dominant mechanism of energy transport. Eq.~\eqref{eq:star_struct5} describes the evolution of the chemical composition of the star, which is governed by the nuclear reactions occurring in the star and the transport of chemical elements. This set of equations assumes spherical symmetry and does not account for magnetic fields, and rotation is only included in the centrifugal term in Eq.~\eqref{eq:star_struct1}. These are common simplifications in 1D stellar models and are sufficient for many evolutionary studies.
+Eq.~\eqref{eq:star_struct1} describes the hydrostatic equilibrium and Eq.~\eqref{eq:star_struct3} describes the mass continuity. Eq.~\eqref{eq:star_struct4} and Eq.~\eqref{eq:star_struct2} describe the energy production and energy transport, respectively. These equations illustrate a close coupling between stellar structure and the process of energy production and transport. In most stars, energy is primarily transported by radiation and convection, and the value of $\nabla$ depends on the dominant mechanism of energy transport. Eq.~\eqref{eq:star_struct5} describes the evolution of the chemical composition of the star, which is governed by the nuclear reactions occurring in the star and the transport of chemical elements. This set of equations assumes spherical symmetry and does not account for magnetic fields nor rotation. These are common simplifications in 1D stellar models and are sufficient for many evolutionary studies.
 
 Stellar evolution is typically treated as a one-dimensional boundary value problem with initial conditions given by the initial mass and chemical composition of the star. The boundary conditions are set at the center and surface of the star. Spherical symmetry requires that the radius, luminosity, and chemical element fluxes vanish at the center of the star. Therefore, it is imposed that:
 \begin{equation}
@@ -224,7 +224,7 @@ With both central and surface boundary conditions specified, and the evolution e
 
 The solutions to the stellar structure equations yield key observable properties of stars, most notably their luminosity $L$ and effective surface temperature $T_\mr{eff}$. These two parameters define a star's position on the Hertzsprung-Russell (HR) diagram, a fundamental tool in astrophysics to understand and visualize stellar evolution. The HR diagram helps to reveal distinct evolutionary stages such as the pre-main-sequence, main sequence, and giant branch, offering a simple way to compare models with observations.
 
-However, translating the underlying physics into stellar models is a complex task. In practice, stellar evolution codes can differ substantially in their model initialization methods. These differences can lead to notable variations during the early evolutionary stages, which will be discussed in the Sec.~\ref{sec:pms_evolution}. Furthermore, differences in formulations, assumptions, and adopted physical ingredients, such as the equation of state (EoS) and opacities, can substantially influence the predicted stellar properties, often resulting in discrepancies between models. Therefore, it is essential to carefully consider the specific implementations and assumptions of each code when interpreting stellar evolution results. The details of our physical inputs will be discussed in Sec.~\ref{sec:cesam2k20}.
+However, translating the underlying physics into stellar models is a complex task. In practice, stellar evolution codes can differ substantially in their model initialization methods. These differences can lead to notable variations during the early evolutionary stages, which will be discussed in the Sec.~\ref{sec:pms_evolution}. Furthermore, differences in formulations, assumptions, and adopted physical ingredients, such as the equation of state (EoS) and opacities, can substantially influence the predicted stellar properties, often resulting in discrepancies between models. Therefore, it is essential to carefully consider the specific implementations and assumptions of each code when interpreting stellar evolution results. One of the goals of this project is to benchmark our accretion models against those implemented in other stellar evolution codes. The details of our physical inputs will be discussed in Sec.~\ref{sec:cesam2k20}. 
 
 \subsection{Pre-main-sequence evolution}
 \label{sec:pms_evolution}
@@ -232,21 +232,35 @@ However, translating the underlying physics into stellar models is a complex tas
 \subsubsection{Pre-main-sequence evolution with constant mass}
 \label{sec:pms_const_mass}
 
-Classically, the modeling of PMS evolution starts with a fully-convective star with a large radius and luminosity. The star contracts and the huge amount of gravitational energy released during the contraction heats the stellar interior. This process continues until the central temperature of the star is high enough to start thermonuclear reactions, then contraction is slowed down and a radiative core develops. 
+Classically, the modeling of PMS evolution begins with a fully convective star of large radius and luminosity. As the star contracts under gravity, the release of gravitational energy heats the stellar interior. This contraction continues until the central temperature becomes high enough to slow down the contraction and trigger the formation of a radiative core.
 
-The first part of the pre-main-sequence evolution is characterized by a rapid decrease in radius and luminosity, while the effective temperature remains nearly constant. This phase is known as the Hayashi track, named after \textcite{Hayashi1961}, who first described it. During this phase, the star is fully convective, and the energy transport is dominated by convection.  The Hayashi track defines the location of a fully convective star, of given mass and chemical composition, in the HR diagram. The location of the Hayashi track also depends on the modeling of convection, which is typically treated using mixing-length theory \parencite{BohmVitense1958}. They are usually on the far right of the HR diagram, with effective temperatures around $4000\,\mr{K}$. 
+The initial phase of PMS evolution is characterized by a rapid decrease in both radius and luminosity, while the effective temperature remains nearly constant. This phase, known as the Hayashi track \parencite{Hayashi1961}, defines the locus in the HR diagram of fully convective stars of a given mass and composition. Energy transport is dominated by convection during this phase. The precise location and slope of the Hayashi track is also sensitive to the treatment of convection, typically modeled using the mixing-length theory \parencite{CoxGiuli1968a}. As the star contracts, its density increases, which in turn increases the opacity of the stellar material. The resulting decrease in radiative efficiency causes a reduction in luminosity. The Hayashi tracks appear on the far right of the HR diagram and follow a steep, nearly vertical path.
 
-This evolutionary path first goes down a almost vertical line in the HR diagram, known as the Hayashi track, and then turns to a more horizontal line along the Henyey track. These classic pre-main-sequence evolutionary tracks for \texttt{Cesam2k20}  models with masses between $1$ and $5,M_\odot$ are shown in Fig.~\ref{fig:hayashi_henyey_tracks}.
+The Hayashi track terminates at a minimum luminosity, where the central temperature becomes high enough for hydrogen to be fully ionized. This leads to a substantial drop in opacity in the central regions, making radiative transport more efficient, and a radiative core forms. The star then evolves toward higher effective temperatures while its luminosity remains approximately constant. This marks the beginning of the second phase of PMS evolution, where the star follows a more horizontal path in the HR diagram, known as the Henyey track, first described by \textcite{HenyeyEtAl1955}. During this stage, the star evolves with a radiative core while maintaining a convective envelope.
 
-\begin{outline}{gray}
-  \item mabye more details on the Hayashi and Henyey tracks
-\end{outline}
+This classic two-phase PMS evolution—first descending the vertical Hayashi track, then moving leftwards on the more horizontal Henyey track—is illustrated in Fig.~\ref{fig:hayashi_henyey_tracks}, which shows evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$, assuming initial composition $X \simeq 0.73$, $Y \simeq 0.25$ (see Sec.\ref{sec:cesam2k20} for details of the input physics). Arrows indicate the direction of stellar evolution, with mass labels marking the ends of each track. The nearly vertical portion corresponds to fully convective contraction (Hayashi track), while the more horizontal portion marks the emergence of a radiative core (Henyey track)..
+
+During PMS evolution, gravitational contraction remains the primary energy source, as the central temperature has not yet reached the threshold for hydrogen fusion. However, light elements such as deuterium and lithium can be burned at relatively low temperatures \parencite{KippenhahnEtAl2013}.
+
+Deuterium burning is particularly important in PMS evolution, proceeding via the reaction:
+\begin{equation}
+  ^2\mr{H} + ^1\mr{H} \rightarrow ^3\mr{He} + \gamma,\quad \Delta E_\mr{D} = 5.5\,\mr{MeV},
+\end{equation}
+which ignites at temperature $T \sim 10^6,\mr{K}$. 
+
+Lithium burning, involving the dominant isotope $^7$Li, occurs via the reaction:
+\begin{equation}
+  ^7\mr{Li} + ^1\mr{H} \rightarrow ^4\mr{He} + ^4\mr{He} + \gamma,\quad \Delta E_\mr{Li} = 17.6\,\mr{MeV},
+\end{equation}
+which sets in at $T \sim 2.5 \times 10^6,\mr{K}$. Although lithium burning releases significantly more energy per reaction than deuterium burning, the former makes little contribution to the total energy production in PMS stars, as lithium is around $10^3$ less abundant than deuterium \parencite{GrevesseSauval1998}.
 
 \begin{figure}
   \centering
   \includegraphics[width=.8\textwidth]{classic_pms.pdf}
   \caption{Classic pre-main-sequence evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$ in the HR diagram. Arrows indicate the direction of stellar evolution, with stellar masses labeled at the end of each track. The nearly vertical Hayashi track corresponds to fully convective contraction, while the more horizontal Henyey track marks the phase when contraction slows down and a radiative core develops.} \label{fig:hayashi_henyey_tracks}
 \end{figure}
+
+The star is considered to have reached the main sequence once hydrogen fusion becomes the dominant source of energy production in the star.
 
 \subsubsection{Pre-main-sequence evolution with accretion}
 \label{sec:pms_accretion}
@@ -284,7 +298,7 @@ This evolutionary path first goes down a almost vertical line in the HR diagram,
 % \begin{equation}
 %   L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}}{R_\star},
 % \end{equation}
-% where $\xi_\mr{add}$ is a dimensionless parameter that characterizes the fraction of the kinetic energy that is converted into thermal energy at the stellar surface. The value of $\xi_\mr{add}$ depends on the details of the accretion process, such as the geometry of the accretion flow, the presence of shocks, as well as rotation. It is imposed by energy conservation that $0 \leq \xi_\mr{add} \leq 1$. When radiation cooling is efficient, $\xi_\mr{add}$ has a small value. Following the analysis by \textcite{StahlerEtAl1980} of the radiative shock at the stellar surface, radiative transfer further constrains that $\xi_\mr{add} \leq 3/4$. Yet, in the case of a Keplerian disk, , leading to $\xi_\mr{add} \simeq 1$.
+% where $\xi_\mr{add}$ is a dimensionless parameter that characterizes the fraction of the kinetic energy that is converted into thermal energy at the stellar surface. The value of $\xi_\mr{add}$ depends on the details of the accretion process, such as the geometry of the accretion flow, the presence of shocks, as well as rotation. It is imposed by energy conservation that $0 \leq \xi_\mr{add} \leq 1$. When radiation cooling is efficient, $\xi_\mr{add}$ has a small value. Following the analysis by \textcite{StahlerEtAl1980} of the radiative shock at the stellar surface, radiative transfer further constrains that $\xi_\mr{add} \leq 3/4$. Yet, in the case of a Keplerian disk, leading to $\xi_\mr{add} \simeq 1$.
 
 \subsection{The stellar evolution code \texttt{Cesam2k20}}
 \label{sec:cesam2k20}
@@ -402,7 +416,6 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 %   \item examples of derivatives of the structure equations with respect to the variables
 %   \item the change in the energy equation
 % \end{outline}
-
 
 \subsubsection{Limiting the maximum change in gravitational energy}
 \label{sec:limiting_grav_energy}
