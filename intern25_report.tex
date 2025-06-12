@@ -67,7 +67,7 @@
 \begin{center}
   \rule{\textwidth}{2pt}
   \vskip3em
-  \LARGE{Pre-main-sequence accretion of low-mass stars in the \texttt{Cesam2k20} code}\\
+  \LARGE{Pre-main sequence accretion of low-mass stars in the \texttt{Cesam2k20} code}\\
   \vskip2em
   \rule{\textwidth}{2pt}
 \end{center}
@@ -132,7 +132,7 @@ Stars form through the gravitational collapse of dense regions within molecular 
 
 Initially, the collapse is isothermal, as radiation efficiently maintains the thermal equilibrium of the system. As the density increases, the central region becomes increasingly opaque to radiation, inhibiting its escape from the core while still allowing it from the outer layers. This growing opacity leads to an adiabatic collapse of the center, during which the temperature and pressure rise until a hydrostatic core, or a protostar, is formed \parencite[e.g., ][]{StahlerPalla2004}. The protostar then accretes material from the surrounding cloud, a process that can continue for several million years.
 
-Once most of the surrounding material has been accreted, the protostar enters the pre-main-sequence (PMS) phase and becomes visible as a T Tauri star (TTS). TTSs are cold PMS stars that serve as precursors to low-mass main-sequence stars of spectral types F, G, K, and M. Classical T Tauri stars (CTTSs) are characterized by strong infrared (IR) emission from their optically thick accretion disks. As accretion declines due to the depletion of material in the inner disk, the IR emission weakens, and the stars are then observed as weak T Tauri stars (WTTSs). Similarly, young massive stars are also expected to undergo accretion during their early evolution and are observed as Herbig Ae/Be stars—hotter and more luminous than TTSs. However, the accretion processes for these higher-mass stars remain poorly understood.
+Once most of the surrounding material has been accreted, the protostar enters the pre-main sequence (PMS) phase and becomes visible as a T Tauri star (TTS). TTSs are cold PMS stars that serve as precursors to low-mass main-sequence stars of spectral types F, G, K, and M. Classical T Tauri stars (CTTSs) are characterized by strong infrared (IR) emission from their optically thick accretion disks. As accretion declines due to the depletion of material in the inner disk, the IR emission weakens, and the stars are then observed as weak T Tauri stars (WTTSs). Similarly, young massive stars are also expected to undergo accretion during their early evolution and are observed as Herbig Ae/Be stars—hotter and more luminous than TTSs. However, the accretion processes for these higher-mass stars remain poorly understood.
 
 The earliest accretion stages remain observationally elusive, as protostars are deeply embedded in the surrounding dusty cloud, making it highly extincted in optical and near-IR wavelengths. Nonetheless, indirect indicators such as disks, outflows, and jets provide compelling evidence of ongoing accretion. Modeling these stages remains challenging due to the time-variable, non-linear nature of the process and the complexity of the underlying physics.
 
@@ -150,14 +150,14 @@ This study focuses on the later stages of the accretion process, after the forma
 
 A parallel branch of the original \texttt{CESAM} code, \textit{Code d'Évolution Planétaire Adaptatif et Modulaire} (\texttt{CEPAM}) \parencite{GuillotMorel1995}, has been developed for modeling planetary formation and evolution. A future unification of these two branches would provide a powerful framework for studying the coupled evolution of stars and their planetary systems.
 
-In the next section, I review the current understanding of pre-main-sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main-sequence evolution is modeled in stellar evolution codes. In Sec.\ref{sec:methods}, I begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. I then detail the implementation of accretion in the code. The results of my models are presented in Sec.\ref{sec:results}, where I explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
+In the next section, I review the current understanding of pre-main sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main sequence evolution is modeled in stellar evolution codes. In Sec.\ref{sec:methods}, I begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. I then detail the implementation of accretion in the code. The results of my models are presented in Sec.\ref{sec:results}, where I explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
 
-\section{Pre-main-sequence accretion}
+\section{Pre-main sequence accretion}
 \label{sec:background}
 
-In this section, I will review the current understanding of stellar accretion, including the mechanisms of magnetospheric accretion and the observational evidence for accretion in pre-main-sequence stars. 
+In this section, I will review the current understanding of stellar accretion, including the mechanisms of magnetospheric accretion and the observational evidence for accretion in pre-main sequence stars. 
 
-\subsection{Pre-main-sequence magnetospheric accretion}
+\subsection{Pre-main sequence magnetospheric accretion}
 \label{sec:magnetospheric_accretion}
 
 \begin{figure}
@@ -167,7 +167,7 @@ In this section, I will review the current understanding of stellar accretion, i
   \label{fig:magnetospheric_accretion}
 \end{figure}
 
-Stellar magnetic fields play a crucial role in the accretion of pre-main-sequence stars, through the mechanism known as magnetospheric accretion \parencite[See, for example,][for a review]{HartmannEtAl2016}. Fig.~\ref{fig:magnetospheric_accretion} is a schematic illustration of magnetospheric accretion onto young ($1 \lesssim t \lesssim 10,\mr{Myr}$), low-mass ($\lesssim 1 M_\odot$) stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. The dust disk is truncated slightly farther out than the gas disk, as dust in the inner disk sublimates due to heating by the stellar radiation field. The inner edge of the dust disk is responsible for most of the observed near-IR excess. Material from the disk is funneled onto the star along the magnetic field lines, where it is heated to approximately $10^4\,\mr{K}$, producing broad emission lines. The accretion flow is accelerated along the field lines, eventually reaching the stellar surface at nearly free-fall velocity. This process leads to the formation of an accretion shock at the stellar surface, where the gas is briefly halted and heated to very high temperatures, emitting X-rays. Most of these X-rays are absorbed and reradiated in the ultraviolet and optical continuum.
+Stellar magnetic fields play a crucial role in the accretion of pre-main sequence stars, through the mechanism known as magnetospheric accretion \parencite[See, for example,][for a review]{HartmannEtAl2016}. Fig.~\ref{fig:magnetospheric_accretion} is a schematic illustration of magnetospheric accretion onto young ($1 \lesssim t \lesssim 10,\mr{Myr}$), low-mass ($\lesssim 1 M_\odot$) stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. The dust disk is truncated slightly farther out than the gas disk, as dust in the inner disk sublimates due to heating by the stellar radiation field. The inner edge of the dust disk is responsible for most of the observed near-IR excess. Material from the disk is funneled onto the star along the magnetic field lines, where it is heated to approximately $10^4\,\mr{K}$, producing broad emission lines. The accretion flow is accelerated along the field lines, eventually reaching the stellar surface at nearly free-fall velocity. This process leads to the formation of an accretion shock at the stellar surface, where the gas is briefly halted and heated to very high temperatures, emitting X-rays. Most of these X-rays are absorbed and reradiated in the ultraviolet and optical continuum.
 
 Despite recent advances in the study of magnetospheric accretion, many aspects are still under debate. \textcite{Bouvier2014} summarizes several open issues regarding the physics of the magnetospheric accretion and ejection processes. One of the long-standing problems is the evolution of stellar rotation: while the angular momentum carried by accreting material should spin up the star, observations reveal that the rotation rates of PMS stars are lower than expected. This discrepancy suggests that some form of magnetic braking must be at work to regulate stellar spin \parencite[e.g.,][]{HerbstEtAl2007}.
 
@@ -187,14 +187,14 @@ Magnetospheric accretion paradigm assumes that the stellar magnetic field is str
 \section{Stellar evolution modeling}
 \label{sec:stellar_evol}
 
-Stellar evolution modeling involves combining physical principles with numerical methods to simulate how stars change over time. This section first introduces the fundamental equations that describe stellar evolution and then turns the focus to the modeling of pre-main-sequence stars.
+Stellar evolution modeling involves combining physical principles with numerical methods to simulate how stars change over time. This section first introduces the fundamental equations that describe stellar evolution and then turns the focus to the modeling of pre-main sequence stars.
 
 \subsection{Stellar structure equations}
 \label{sec:stellar_evol_formulation}
 
 Modeling stellar evolution involves defining initial conditions and solving the differential equations that govern the physical processes inside a star, thereby predicting how stellar properties change over time. The primary factors determining an isolated star's evolution are its mass and initial chemical composition. Once specified, these initial parameters are input into the stellar structure equations, which express the physical quantities as functions of position and time $(\vec{r}, t)$. By assuming spherical symmetry, the position can be reduced to the radial distance $r$ from the center, so physical quantities become functions of radius and time, i.e., $(r, t)$.
 
-Throughout most of stellar evolution, the total stellar mass remains almost constant except in cases of significant mass loss. In contrast, the stellar radius may vary rapidly as the star goes into different stages. Therefore, it is more convenient to introduce a Lagrangian coordinate $m$ (defined as the total mass inside the sphere of radius $r$) instead of $r$. 
+Throughout most of stellar evolution, the total stellar mass remains nearly constant except in cases of significant mass loss. In contrast, the stellar radius can vary rapidly as the star passes through different stages. Because Lagrangian coordinates move with the fluid elements, it is more convenient to use the mass coordinate $m$, defined as the total mass enclosed within radius $r$, rather than the radius itself. This approach allows us to track the evolution of specific mass shells as they move and change, making it a more natural choice for describing properties such as energy production, chemical composition and angular momentum within the stellar interior. 
 
 In the mass coordinate, the system of 1D stellar structure equations can be written as \parencite[See, for example, ][]{KippenhahnEtAl2013}:
 \begin{subequations}\label{eq:star_struct}
@@ -224,14 +224,14 @@ where $M_\star$, $L_\star$, and $R_\star$ are the stellar mass, luminosity, and 
 
 With both central and surface boundary conditions specified, and the evolution equations defined in Lagrangian coordinates, the stellar structure problem becomes a well-posed initial-boundary value problem. This framework serves as the basis for numerical stellar evolution codes, which solve these equations to track the stellar evolution over time.
 
-The solutions to the stellar structure equations yield key observable properties of stars, most notably their luminosity $L$ and effective surface temperature $T_\mr{eff}$. These two parameters define a star's position on the Hertzsprung-Russell (HR) diagram, a fundamental tool in astrophysics to understand and visualize stellar evolution. The HR diagram helps to reveal distinct evolutionary stages such as the pre-main-sequence, main sequence, and giant branch, offering a simple way to compare models with observations.
+The solutions to the stellar structure equations yield key observable properties of stars, most notably their luminosity $L$ and effective surface temperature $T_\mr{eff}$. These two parameters define a star's position on the Hertzsprung-Russell (HR) diagram, a fundamental tool in astrophysics to understand and visualize stellar evolution. The HR diagram helps to reveal distinct evolutionary stages such as the pre-main sequence, main sequence, and giant branch, offering a simple way to compare models with observations.
 
 However, translating the underlying physics into stellar models is a complex task. In practice, stellar evolution codes can differ substantially in their model initialization methods. These differences can lead to notable variations during the early evolutionary stages, which will be discussed in the Sec.~\ref{sec:pms_evolution}. Furthermore, differences in formulations, assumptions, and adopted physical ingredients, such as the equation of state (EoS) and opacities, can substantially influence the predicted stellar properties, often resulting in discrepancies between models. Therefore, it is essential to carefully consider the specific implementations and assumptions of each code when interpreting stellar evolution results. One of the goals of this project is to benchmark our accretion models against those implemented in other stellar evolution codes. The details of our physical inputs will be discussed in Sec.~\ref{sec:cesam2k20}. 
 
-\subsection{Pre-main-sequence evolution}
+\subsection{Pre-main sequence evolution}
 \label{sec:pms_evolution}
 
-\subsubsection{Pre-main-sequence evolution with constant mass}
+\subsubsection{Pre-main sequence evolution with constant mass}
 \label{sec:pms_const_mass}
 
 Classically, the modeling of PMS evolution begins with a fully convective star of large radius and luminosity. As the star contracts under gravity, the release of gravitational energy heats the stellar interior. This contraction continues until the central temperature becomes high enough to slow down the contraction and trigger the formation of a radiative core.
@@ -256,15 +256,15 @@ Lithium burning, involving the dominant isotope $^7$Li, occurs via the reaction:
 \end{equation}
 which sets in at $T_c \sim 2.5 \times 10^6,\mr{K}$. Although lithium burning releases significantly more energy per reaction than deuterium burning, the former makes little contribution to the total energy production in PMS stars, as lithium is around $10^3$ less abundant than deuterium \parencite{GrevesseSauval1998}.
 
-\begin{figure}
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=.8\textwidth]{classic_pms.pdf}
-  \caption{Classic pre-main-sequence evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$ in the HR diagram. Arrows indicate the direction of stellar evolution, with stellar masses in solar masses labeled at the end of each track. The nearly vertical Hayashi track corresponds to fully convective contraction, while the more horizontal Henyey track marks the phase when contraction slows down and a radiative core develops.} \label{fig:hayashi_henyey_tracks}
+  \includegraphics[width=.75\textwidth]{classic_pms.pdf}
+  \caption{Classic pre-main sequence evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$ in the HR diagram. Arrows indicate the direction of stellar evolution, with stellar masses in solar masses labeled at the end of each track. The nearly vertical Hayashi track corresponds to fully convective contraction, while the more horizontal Henyey track marks the phase when contraction slows down and a radiative core develops.} \label{fig:hayashi_henyey_tracks}
 \end{figure}
 
 The star is considered to have reached the main sequence once hydrogen fusion becomes the dominant source of energy production, at a central temperature of $T_c \sim 10^7\,\mr{K}$. This beginning of main sequence evolution is referred to as the Zero-Age Main Sequence (ZAMS). From the ZAMS onward, the star's position in the HR diagram changes relatively slowly during the long phase of central hydrogen burning.
 
-\subsubsection{Pre-main-sequence evolution with accretion}
+\subsubsection{Pre-main sequence evolution with accretion}
 \label{sec:pms_accretion}
 
 The classic PMS evolution described above assumes that the star has already acquired its final mass at the beginning of contraction. However, as the observational evidence discussed in Sec.~\ref{sec:obs_evidence} indicates, many young stars continue to accrete material from their surrounding environment during the PMS phase. These stars experience a period of relaxation and thermal re-adjustment as they contract, before eventually settling onto a track that closely follows the constant-mass evolution \parencite{KippenhahnEtAl2013}.
@@ -274,6 +274,12 @@ One physical quantity of importance in this context is the mass accretion rate $
   L_\mr{acc} = \frac{GM_\star \dot{M}_\mr{acc}}{R_\star}\left(1 - \frac{R_\star}{R_\mr{trunc}}\right),
 \end{equation}
 assuming the material falls freely from the truncation radius $R_\mr{trunc}$ to the stellar surface at radius $R_\star$, \parencite[see review by][]{HartmannEtAl2016}. 
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=.85\textwidth]{StahlerPalla2004_fig4p9.png}
+  \caption{HR diagrams for four stellar associations. In panels (a)-(c), closed circles represent CTTSs, while open circles are WTTSs. In panel (d), the sample includes CTTSs, Herbig Ae/Be stars, and main sequence objects. The thin upper curves are the theoretical birthlines; the thick lower curves are the ZAMS. Reproduced from Fig.~4.9 of \textcite{StahlerPalla2004}.} \label{fig:obs_birthline} 
+\end{figure}
 
 Observational studies reveal a correlation between accretion rates and stellar mass, with more massive stars accreting at higher rates \parencite[e.g.,][]{MuzerolleEtAl2003,ManaraEtAl2017,RugelEtAl2018,LanzafameEtAl2023}. Models of viscous disk evolution predict a declining $\dot{M}_\mr{acc}$ with stellar age as the circumstellar disk becomes depleted \parencite[e.g.,][]{HartmannEtAl1998,GortiHollenbach2009}.  Despite this, the precise functional form of the mass and time dependence remains under debate. For this study, a constant accretion rate $\dot{M}_\mr{acc}$ is adopted for simplicity.
 
@@ -289,29 +295,23 @@ When the main accretion phase ends, the circumstellar disk has mostly been dissi
 
 Theoretical birthlines can be compared with observations of TTSs to evaluate models of PMS evolution. Moreover, the birthline provides insights into the environments in which stars are formed. In Fig.~\ref{fig:obs_birthline}, observations of four stellar associations with active star formation are plotted alongside the theoretical birthline and the ZAMS. Stars located below the birthline have recently dispersed their circumstellar envelopes, whereas younger, still-embedded stars cannot yet be placed on the HR diagram due to difficulties in measuring their effective temperatures.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=.8\textwidth]{StahlerPalla2004_fig4p9.png}
-  \caption{HR diagrams for four stellar associations. In panels (a)-(c), closed circles represent CTTSs, while open circles are WTTSs. In panel (d), the sample includes CTTSs, Herbig Ae/Be stars, and main sequence objects. The thin upper curves are the theoretical birthlines; the thick lower curves are the ZAMS. Reproduced from Fig.~4.9 of \textcite{StahlerPalla2004}.} \label{fig:obs_birthline} 
-\end{figure}
-
 \section{Methods}
 \label{sec:methods}
 
 \subsection{Modeling the consequences of accretion}
 \label{sec:accretion_modeling}
 
-% As discussed in Sec.~\ref{sec:magnetospheric_accretion}, accretion is a highly complex process with many physical mechanisms at play. In the context of stellar evolution, some simplifications are necessary to make the problem tractable. In this section, we discuss how to model the consequences of accretion on stellar structure and evolution, including the treatment of gravitational energy, deuterium burning, and the distinction between hot and cold accretion.
+As discussed in Sec.~\ref{sec:magnetospheric_accretion}, accretion is a highly complex process with many physical mechanisms at play. In the context of stellar evolution, some simplifications are necessary to make the problem tractable. In this section, we discuss how to model the consequences of accretion on stellar structure and evolution, including the treatment of gravitational energy, deuterium burning, and the distinction between hot and cold accretion.
 
-% \subsubsection{Gravitational energy}
-% \label{sec:grav_energy}
+\subsubsection{Gravitational energy}
+\label{sec:grav_energy}
 
-% In a chemically homogeneous star, the Kippenhahn approximation can be used to calculate the energy product rate due gravitational contraction and expansion:
-% \begin{align}
-%   \epsilon_g = -T\fird[s]{t},\  T\fird[s]{t}\xrightarrow{Kipp} c_p\pfird[T]{t} - \frac{\delta}{\rho}\pfird[P]{t}.
-% \end{align}
+In a chemically homogeneous star, the Kippenhahn approximation can be used to calculate the energy product rate due gravitational contraction and expansion:
+\begin{align}
+  \epsilon_g = -T\fird[s]{t},\  T\fird[s]{t}\xrightarrow{Kipp} c_p\pfird[T]{t} - \frac{\delta}{\rho}\pfird[P]{t}.
+\end{align}
 
-% As PMS stars are usually fully convective, the Kippenhahn approximation is applicable. 
+As PMS stars are usually fully convective, the Kippenhahn approximation is applicable. 
 
 \subsubsection{Deuterium burning}
 \label{sec:deuterium_burning}
@@ -340,13 +340,13 @@ We use the stellar evolution code \texttt{Cesam2k20} \parencite{MarquesEtAl2013,
 
 The system of equations in Eqns.~\eqref{eq:star_struct} encapsulates the fundamental physics governing stellar structure and evolution. However, in numerical implementation, these equations are often reformulated to improve stability and convergence. One effective approach, discussed by \textcite{Morel1997}, is to use the set of variables introduced by \textcite{Eggleton1971},
 \begin{equation*}
-\left(\frac{m}{M_\odot}\right)^{2/3},\quad \left(\frac{r}{R_\odot}\right)^2,\quad \left(\frac{L_r}{L_\odot}\right)^{2/3}, \quad L_r \geq 0\footnote[1]{In cases where $L_r < 0$—which can occur during late evolutionary stages—the variable $L_r/L_\odot$ is used instead. Since this project focuses on the pre-main-sequence phase, where such cases do not arise, we adopt the Eggleton variables throughout.}.
+\left(\frac{m}{M_\odot}\right)^{2/3},\quad \left(\frac{r}{R_\odot}\right)^2,\quad \left(\frac{l}{L_\odot}\right)^{2/3}, \quad l \geq 0
 \end{equation*}
-This choice improves numerical precision and helps avoid singularities at the stellar center
+This choice improves numerical precision and helps avoid singularities at the stellar center. In cases where $l < 0$—which can occur during late evolutionary stages—the variable $l/L_\odot$ is used instead. Since this project focuses on the pre-main sequence phase, where such cases do not arise, we adopt the Eggleton variables throughout.
 
 Additionally, because pressure and temperature can span several orders of magnitude in the stellar interior, it is numerically advantageous to work with their logarithms. Accordingly, the set of variables ultimately used in \texttt{Cesam2k20} is:
 \begin{equation}
-\xi = \ln P,\quad \eta = \ln T,\quad \zeta = \left(\frac{r}{R_\odot}\right)^2,\quad \lambda = \left(\frac{L_r}{L_\odot}\right)^{2/3},\quad \mu = \left(\frac{m}{M_\odot}\right)^{2/3}.
+\xi = \ln P,\quad \eta = \ln T,\quad \zeta = \left(\frac{r}{R_\odot}\right)^2,\quad \lambda = \left(\frac{l}{L_\odot}\right)^{2/3},\quad \mu = \left(\frac{m}{M_\odot}\right)^{2/3}.
 \end{equation}
 
 \subsubsection{Automatic location of grid points}
@@ -387,13 +387,13 @@ With the variables introduced in Secs.~\ref{sec:cesam2k20_variables} and \ref{se
 The full set of structure and composition equations solved at each time step is:
 \begin{subequations} \label{eq:cesam2k20_struct_eq}
   \begin{align}
-    0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta},\\
-    0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla,\\
-    0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta},\\
-    0 &= \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon  + \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta},\\
-    0 &= \pfird[\mu]{q} - \frac{\psi}{\theta},\\
-    0 &= \pfird[\psi]{q},\\
-    0 &= \pfird[X_i]{t} + \frac{2}{3 M_\odot\mu^{1/2}}\pfird[F_i]{\mu} - \Psi_i(\xi, \eta, \bvec{X}), 1\leq i \leq n_\mr{elem}.
+    0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}, \label{eq:cesam_struct1}\\
+    0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla, \label{eq:cesam_struct2}\\
+    0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta}, \label{eq:cesam_struct3}\\
+    0 &= \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon  + \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta}, \label{eq:cesam_struct4}\\
+    0 &= \pfird[\mu]{q} - \frac{\psi}{\theta}, \label{eq:cesam_struct5}\\
+    0 &= \pfird[\psi]{q}, \label{eq:cesam_struct6}\\
+    0 &= \pfird[X_i]{t} + \frac{2}{3 M_\odot\mu^{1/2}}\pfird[F_i]{\mu} - \Psi_i(\xi, \eta, \bvec{X}), 1\leq i \leq n_\mr{elem}. \label{eq:cesam_struct7}
   \end{align}
 \end{subequations}
 
@@ -439,6 +439,25 @@ Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl
 
 The input physics are summarized in Table \ref{tab:input_physics}. Building on this framework, I next describe the implementation of accretion in \texttt{Cesam2k20}.
 
+\subsubsection{PMS initial models}
+\label{sec:pms_initial_models}
+
+At time t = 0, to begin the computation, the values of pressure $P(m, 0)$, temperature $T(m, 0)$, radius $R(m, 0)$, luminosity $L(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
+
+This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior. In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
+\begin{equation}
+  \pfird[l]{m} = \epsilon_\mr{g} = -T\pfird[s]{t} = cT,
+\end{equation}
+where $c$ is a contraction constant, with units of $L_\odot\,M_\odot^{-1}\,\mr{K}^{-1}$, characteristic of a fully convective star in quasi-equilibrium. Varying the value of $c$ shifts the starting point of the star's evolution track in the HR diagram.
+
+The Iben method proceeds by constructing two PMS models, labeled \#1 and \#2, with the same mass $M_\star$, but slightly different contraction constants $c_1$ and $c_2$. These models should be close enough that the change in gravitational energy between them approximates the radiative energy loss over a time step $\Delta t$:
+\begin{equation}
+  \frac{L_1 + L_2}{2}\Delta t \sim \left(\frac{GM^2}{R_2} - \frac{GM^2}{R_1}\right),
+\end{equation}
+where $L_1$, $R_1$ and $L_2$, $R_2$ are the luminosities and radii of models \#1 and \#2, respectively \parencite[cf. Eq.~(13)][]{Morel1997}. Evolution can then proceed using model \#2 and time step $\Delta t$.
+
+In \texttt{Cesam2k20}, the user provides an input value $c_1 = c$, the Iben constant, and the code sets $c_2 = 1.1\,c_1$. The appropriate range of values for $c$ depends on the stellar mass. At fixed mass, a lower Iben constant leads to lower luminosity and a higher central temperature. For example, $c = 0.02$ yields $T_c \sim 10^5\,\mr{K}$, while smaller values such as $c = 0.005$ and $c = 0.00008$ correspond to $T_c \sim 5 \times 10^5\,\mr{K}$ and $10^6\,\mr{K}$, respectively. Although these values are similar in order of magnitude across different stellar masses, each mass range requires its own acceptable interval of $c$ values to ensure convergence to a valid PMS model.
+
 \subsection{Accretion in \texttt{Cesam2k20}}
 \label{sec:accretion_cesam2k20}
 
@@ -447,6 +466,21 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 %   \item the change in the energy equation
 % \end{outline}
 
+\subsubsection{From Lagrangian to Homologous variables}
+\label{sec:accretion_coords}
+
+The difficulty in implementing accretion in \texttt{Cesam2k20} lies in the fact that properties of the accreted material are not known a priori, so assumptions must be made about the properties to make this information available. 
+
+
+\subsubsection{Modifications to the structure equations}
+\label{sec:accretion_struct_eq}
+
+In \texttt{Cesam2k20}, the solution of the non-linear boundary problem is done by Newton-Raphson iterations, or known as the
+Henyey method \parencite{HenyeyEtAl1959} in context of stellar evolution \parencite{HenyeyEtAl1955}. The structure equations are solved iteratively, with the Jacobian matrix of the system of equations being updated at each iteration. The Jacobian matrix contains the partial derivatives of the structure equations with respect to the variables, which are used to guide the convergence of the solution.
+
+My main modification to the structure equations is in the energy equation, i.e., Eq.\eqref{eq:cesam_struct4}, and then of course, the relevant partial derivatives in the Jacobian matrix. 
+
+ 
 \subsubsection{Limiting the maximum change in gravitational energy}
 \label{sec:limiting_grav_energy}
 
@@ -483,14 +517,17 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
   \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
 \end{outline}
 
+\subsection{The effect of different initial models}
+\label{sec:initial_models}
+
 \subsection{The effect of different accretion rates}
 \label{sec:accretion_rate}
 
-% \begin{figure}
-%   \centering  
-%   \includegraphics[width=.5\textwidth,keepaspectratio]{comp_accrate.pdf}
-%   \caption{Comparisons of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $\mr{D/H} = 2.0\times 10^{-5}$.} \label{fig:comp_accrate}
-% \end{figure}
+\begin{figure}
+  \centering  
+  \includegraphics[width=.5\textwidth,keepaspectratio]{comp_accrate.pdf}
+  \caption{Comparisons of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $\mr{D/H} = 2.0\times 10^{-5}$.} \label{fig:comp_accrate}
+\end{figure}
 
 \subsection{The effect of different chemical compositions}
 \label{sec:chemical_composition}
@@ -507,11 +544,11 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
   \item try to reproduce a similar plot of Palla \& Stahler (1992) mass-radius relation, or Fig 20.3 in Maeder book
 \end{outline}
 
-% \begin{figure}
-%   \centering  
-%   \includegraphics[width=.5\textwidth,keepaspectratio]{birthline_acce5.pdf}
-%   \caption{Birthline of accreting stars, with an accretion rate of $10^{-5} M_\odot/\mr{yr}$.} \label{fig:birthline_acce5}
-% \end{figure}
+\begin{figure}
+  \centering  
+  \includegraphics[width=.5\textwidth,keepaspectratio]{birthline_acce5.pdf}
+  \caption{Birthline of accreting stars, with an accretion rate of $10^{-5} M_\odot/\mr{yr}$.} \label{fig:birthline_acce5}
+\end{figure}
 
 % \subsection{The effect of different initial stellar masses}
 % \label{sec:initial_mass}
@@ -541,7 +578,7 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 % \newpage
 % to be done at the end
 % \begin{outline}{gray}
-%   \item replace pre-main-sequence with PMS 
+%   \item replace pre-main sequence with PMS 
 % \end{outline}
 % \section*{Acknowledgements}
 % \label{sec:acknowledgements}
