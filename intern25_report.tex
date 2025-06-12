@@ -128,7 +128,9 @@
 \section{Introduction}
 \label{sec:intro}
 
-Stars form through the gravitational collapse of dense cores within molecular clouds. The collapse is initially isothermal, with temperature remaining nearly constant. As the density increases, the central region becomes increasingly opaque to radiation, inhibiting its escape from the core while still allowing it from the outer layers. This increase in opacity leads to an adiabatic collapse of the center, during which the temperature and pressure rise until a hydrostatic core, or a protostar, is formed. The protostar then accretes material from the surrounding cloud, a process that can continue for several million years.
+Stars form through the gravitational collapse of dense regions within molecular clouds. When the self-gravity of such a region overcomes the opposing pressure and magnetic support, collapse begins. This process is typically nonhomologous, with the central regions collapsing more rapidly than the outer ones.
+
+Initially, the collapse is isothermal, as radiation efficiently maintains the thermal equilibrium of the system. As the density increases, the central region becomes increasingly opaque to radiation, inhibiting its escape from the core while still allowing it from the outer layers. This growing opacity leads to an adiabatic collapse of the center, during which the temperature and pressure rise until a hydrostatic core, or a protostar, is formed \parencite[e.g., ][]{StahlerPalla2004}. The protostar then accretes material from the surrounding cloud, a process that can continue for several million years.
 
 Once most of the surrounding material has been accreted, the protostar enters the pre-main-sequence (PMS) phase and becomes visible as a T Tauri star (TTS). TTSs are cold PMS stars that serve as precursors to low-mass main-sequence stars of spectral types F, G, K, and M. Classical T Tauri stars (CTTSs) are characterized by strong infrared (IR) emission from their optically thick accretion disks. As accretion declines due to the depletion of material in the inner disk, the IR emission weakens, and the stars are then observed as weak T Tauri stars (WTTSs). Similarly, young massive stars are also expected to undergo accretion during their early evolution and are observed as Herbig Ae/Be stars—hotter and more luminous than TTSs. However, the accretion processes for these higher-mass stars remain poorly understood.
 
@@ -246,24 +248,52 @@ Deuterium burning is particularly important in PMS evolution, proceeding via the
 \begin{equation}
   ^2\mr{H} + ^1\mr{H} \rightarrow ^3\mr{He} + \gamma,\quad \Delta E_\mr{D} = 5.5\,\mr{MeV},
 \end{equation}
-which ignites at temperature $T \sim 10^6,\mr{K}$. 
+which ignites at central temperature of $T_c \sim 10^6,\mr{K}$. 
 
 Lithium burning, involving the dominant isotope $^7$Li, occurs via the reaction:
 \begin{equation}
   ^7\mr{Li} + ^1\mr{H} \rightarrow ^4\mr{He} + ^4\mr{He} + \gamma,\quad \Delta E_\mr{Li} = 17.6\,\mr{MeV},
 \end{equation}
-which sets in at $T \sim 2.5 \times 10^6,\mr{K}$. Although lithium burning releases significantly more energy per reaction than deuterium burning, the former makes little contribution to the total energy production in PMS stars, as lithium is around $10^3$ less abundant than deuterium \parencite{GrevesseSauval1998}.
+which sets in at $T_c \sim 2.5 \times 10^6,\mr{K}$. Although lithium burning releases significantly more energy per reaction than deuterium burning, the former makes little contribution to the total energy production in PMS stars, as lithium is around $10^3$ less abundant than deuterium \parencite{GrevesseSauval1998}.
 
 \begin{figure}
   \centering
   \includegraphics[width=.8\textwidth]{classic_pms.pdf}
-  \caption{Classic pre-main-sequence evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$ in the HR diagram. Arrows indicate the direction of stellar evolution, with stellar masses labeled at the end of each track. The nearly vertical Hayashi track corresponds to fully convective contraction, while the more horizontal Henyey track marks the phase when contraction slows down and a radiative core develops.} \label{fig:hayashi_henyey_tracks}
+  \caption{Classic pre-main-sequence evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$ in the HR diagram. Arrows indicate the direction of stellar evolution, with stellar masses in solar masses labeled at the end of each track. The nearly vertical Hayashi track corresponds to fully convective contraction, while the more horizontal Henyey track marks the phase when contraction slows down and a radiative core develops.} \label{fig:hayashi_henyey_tracks}
 \end{figure}
 
-The star is considered to have reached the main sequence once hydrogen fusion becomes the dominant source of energy production in the star.
+The star is considered to have reached the main sequence once hydrogen fusion becomes the dominant source of energy production, at a central temperature of $T_c \sim 10^7\,\mr{K}$. This beginning of main sequence evolution is referred to as the Zero-Age Main Sequence (ZAMS). From the ZAMS onward, the star's position in the HR diagram changes relatively slowly during the long phase of central hydrogen burning.
 
 \subsubsection{Pre-main-sequence evolution with accretion}
 \label{sec:pms_accretion}
+
+The classic PMS evolution described above assumes that the star has already acquired its final mass at the beginning of contraction. However, as the observational evidence discussed in Sec.~\ref{sec:obs_evidence} indicates, many young stars continue to accrete material from their surrounding environment during the PMS phase. These stars experience a period of relaxation and thermal re-adjustment as they contract, before eventually settling onto a track that closely follows the constant-mass evolution \parencite{KippenhahnEtAl2013}.
+
+One physical quantity of importance in this context is the mass accretion rate $\dot{M}_\mr{acc}$,  defined as the rate at which mass is transferred from the surrounding cloud to the protostar. Estimates of $\dot{M}_\mr{acc}$ are often uncertain by factors of a few, due to their sensitivity to stellar parameters and extinction. These values are typically calculated from the accretion luminosity $L_\mr{acc}$ via:
+\begin{equation}
+  L_\mr{acc} = \frac{GM_\star \dot{M}_\mr{acc}}{R_\star}\left(1 - \frac{R_\star}{R_\mr{trunc}}\right),
+\end{equation}
+assuming the material falls freely from the truncation radius $R_\mr{trunc}$ to the stellar surface at radius $R_\star$, \parencite[see review by][]{HartmannEtAl2016}. 
+
+Observational studies reveal a correlation between accretion rates and stellar mass, with more massive stars accreting at higher rates \parencite[e.g.,][]{MuzerolleEtAl2003,ManaraEtAl2017,RugelEtAl2018,LanzafameEtAl2023}. Models of viscous disk evolution predict a declining $\dot{M}_\mr{acc}$ with stellar age as the circumstellar disk becomes depleted \parencite[e.g.,][]{HartmannEtAl1998,GortiHollenbach2009}.  Despite this, the precise functional form of the mass and time dependence remains under debate. For this study, a constant accretion rate $\dot{M}_\mr{acc}$ is adopted for simplicity.
+
+Deuterium plays a more prominent role in accreting PMS stars than in non-accreting ones, as the accretion flow continuously supplies fresh deuterium. In contrast, non-accreting stars can deplete their initial deuterium rapidly. This deuterium contributes to energy generation through nuclear burning at a rate given by
+\begin{equation}
+\epsilon_\mr{D} = \left[\mr{D/H}\right]\epsilon_\mr{D,0} \left(\frac{\rho}{1,\mr{g,cm^{-3}}}\right) \left(-\frac{T}{1 \times 10^6,\mr{K}}\right)^{n_D},
+\end{equation}
+where $\epsilon_\mr{D,0} = 4.19 \times 10^7,\mr{erg,g^{-1},s^{-1}}$, $n_D = 11.8$, and $\left[\mr{D/H}\right]$ is the number density of deuterium relative to hydrogen in the environment \parencite[cf. Eq.~11.27 in][]{StahlerPalla2004}.
+
+The amount of deuterium in the accreted material can strongly influence PMS evolution. High deuterium abundance leads to significant stellar expansion during accretion, while low abundance results in a smaller size of the star throughout evolution toward the main sequence \parencite{KunitomoEtAl2017}.
+
+When the main accretion phase ends, the circumstellar disk has mostly been dissipated and become optically thin, allowing the star to appear as a visible object. The locus in the HR diagram where PMS stars of different masses first become visible is known as the birthline \parencite{Stahler1983}. Its position is sensitive to the star's accretion history, initial mass, and chemical composition.
+
+Theoretical birthlines can be compared with observations of TTSs to evaluate models of PMS evolution. Moreover, the birthline provides insights into the environments in which stars are formed. In Fig.~\ref{fig:obs_birthline}, observations of four stellar associations with active star formation are plotted alongside the theoretical birthline and the ZAMS. Stars located below the birthline have recently dispersed their circumstellar envelopes, whereas younger, still-embedded stars cannot yet be placed on the HR diagram due to difficulties in measuring their effective temperatures.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.8\textwidth]{StahlerPalla2004_fig4p9.png}
+  \caption{HR diagrams for four stellar associations. In panels (a)-(c), closed circles represent CTTSs, while open circles are WTTSs. In panel (d), the sample includes CTTSs, Herbig Ae/Be stars, and main sequence objects. The thin upper curves are the theoretical birthlines; the thick lower curves are the ZAMS. Reproduced from Fig.~4.9 of \textcite{StahlerPalla2004}.} \label{fig:obs_birthline} 
+\end{figure}
 
 \section{Methods}
 \label{sec:methods}
