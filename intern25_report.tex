@@ -25,7 +25,7 @@
 % citations
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 \usepackage[citestyle=authoryear-icomp,bibstyle=authoryear,hyperref=true,
-  isbn=false,url=false,eprint=false, giveninits=true, uniquename=init,
+  isbn=false,url=false,eprint=false, giveninits=true, uniquename=init, 
   date=year,maxcitenames=2,uniquelist=minyear,sorting=nyt]{biblatex}
 \addbibresource{intern25_ref.bib}
 \input{asstex}
@@ -204,10 +204,10 @@ In the mass coordinate, the system of 1D stellar structure equations can be writ
     \pfird[T]{m} &= \pfird[p]{m} \frac{T}{p} \nabla, \label{eq:star_struct2}\\
     \pfird[r]{m} &= \frac{1}{4 \pi r^2 \rho}, \label{eq:star_struct3}\\
     \pfird[l]{m} &= \epsilon_\mr{nuc}  - \epsilon_\nu + \epsilon_\mr{g} , \label{eq:star_struct4}\\
-    \pfird[X_i]{t} &= -\pfird[F_i]{m} + \Psi_i(P, T, \bvec{X}), 1\leq i \leq n_\mr{elem}, \label{eq:star_struct5}
+    \pfird[X_i]{t} &= -\pfird[F_i]{m} + \Psi_i(p, T, \bvec{X}), 1\leq i \leq n_\mr{elem}, \label{eq:star_struct5}
   \end{align}
 \end{subequations}
-where $G$ is the gravitational constant, $\nabla \equiv \partial \ln T/\partial \ln p$ is the temperature gradient, and $\epsilon_\mr{nuc}$, $\epsilon_\nu$, and $\epsilon_\mr{g}$ are the rates of nuclear energy production, neutrino energy loss, and gravitational energy production, respectively, all expressed in units of power per unit mass. $X_i$ is the abundance of the chemical element $i$, $F_i$ is the flux of the chemical element $i$ due to diffusion, $\bvec{X} \equiv \{X_i\}$ is the chemical composition vector, $\Psi_i$ is the rate of change of $X_i$ by thermonuclear reactions, and $n_\mr{elem}$ is the total number of chemical species considered. All quantities ($p, l, \rho, T, \epsilon, \epsilon_\nu$, etc.) are evaluated locally at each stellar layer.
+where $G$ is the gravitational constant, $\nabla \equiv \partial \ln T/\partial \ln p$ is the temperature gradient, $\rho$ is the density, and $\epsilon_\mr{nuc}$, $\epsilon_\nu$, and $\epsilon_\mr{g}$ are the rates of nuclear energy production, neutrino energy loss, and gravitational energy production, respectively, all expressed in units of power per unit mass. By definition, $\epsilon_\nu > 0$. $X_i$ is the abundance of the chemical element $i$, $F_i$ is the flux of the chemical element $i$ due to diffusion, $\bvec{X} \equiv \{X_i\}$ is the chemical composition vector, $\Psi_i$ is the rate of change of $X_i$ by thermonuclear reactions, and $n_\mr{elem}$ is the total number of chemical species considered. All quantities ($p, l, \rho, T, \epsilon, \epsilon_\nu$, etc.) are evaluated locally at each stellar layer.
 
 Eq.~\eqref{eq:star_struct1} describes the hydrostatic equilibrium and Eq.~\eqref{eq:star_struct3} describes the mass continuity. Eq.~\eqref{eq:star_struct4} and Eq.~\eqref{eq:star_struct2} describe the energy production and energy transport, respectively. These equations illustrate a close coupling between stellar structure and the process of energy production and transport. In most stars, energy is primarily transported by radiation and convection, and the value of $\nabla$ depends on the dominant mechanism of energy transport. Eq.~\eqref{eq:star_struct5} describes the evolution of the chemical composition of the star, which is governed by the nuclear reactions occurring in the star and the transport of chemical elements. This set of equations assumes spherical symmetry and does not account for magnetic fields nor rotation. These are common simplifications in 1D stellar models and are sufficient for many evolutionary studies.
 
@@ -298,37 +298,95 @@ Theoretical birthlines can be compared with observations of TTSs to evaluate mod
 \section{Methods}
 \label{sec:methods}
 
-\subsection{Modeling the consequences of accretion}
+\subsection{The consequences of accretion}
 \label{sec:accretion_modeling}
 
-As discussed in Sec.~\ref{sec:magnetospheric_accretion}, accretion is a highly complex process with many physical mechanisms at play. In the context of stellar evolution, some simplifications are necessary to make the problem tractable. In this section, we discuss how to model the consequences of accretion on stellar structure and evolution, including the treatment of gravitational energy, deuterium burning, and the distinction between hot and cold accretion.
+The most direct consequence of accretion onto a star is the increase in its mass. However, accretion also alters the stellar environment and affects the star's radiative output by delivering additional energy. It can also supply fresh deuterium, which contributes significantly to the star's energy budget through nuclear burning.
+
+As discussed in Sec.~\ref{sec:magnetospheric_accretion}, accretion is a highly complex process involving various physical mechanisms, such as angular momentum transport from the disk to the star, magnetic fields, and outflows like jets and winds. To make the problem tractable in the context of stellar evolution, some simplifications are necessary. In this section, I describe how the consequences of accretion are incorporated into stellar evolution models, focusing on the treatment of gravitational energy, deuterium from accreted material, and the regimes of hot and cold accretion.
+
+Before moving into more details, it is important to note that gravitational energy associated with accretion comes from two distinct sources:
+\begin{enumerate}
+  \item The gravitational energy released (or absorbed) by the star due to contraction or expansion during its evolution, and
+	\item The gravitational potential energy of the material as it falls onto the star, which is partly converted into the thermal energy of the accreted material before it reaches the stellar surface.
+\end{enumerate}
+
+The former affects the internal energy budget of the star itself, while the latter relates to how the infalling material delivers its energy upon impact, which depends on the nature of the accretion process (see Sec.~\ref{sec:hot_cold_accretion}).
 
 \subsubsection{Gravitational energy}
 \label{sec:grav_energy}
 
-In a chemically homogeneous star, the Kippenhahn approximation can be used to calculate the energy product rate due gravitational contraction and expansion:
+The gravitational energy released during the PMS phase contributes significantly to the stellar energy budget and must be properly accounted for in stellar evolution models. In this section, I describe how this energy is treated in the stellar structure equations, and in the following section, I discuss the specific treatment of gravitational energy associated with accreted material.
+
+The rate of gravitational energy release per unit mass is gievn by:
+\begin{equation}
+\epsilon_g = -T\left.\pfird[s]{t}\right|_m, \label{eq:grav_energy}
+\end{equation}
+where $s$ is the specific entropy.
+
+From the first law of thermodynamics, $\dd{q} = \dd{u} + p\dd{v}$, where $u$ is the specific internal energy and $v = 1/\rho$ is the specific volume, one can write:
+\begin{equation}
+  T\left.\pfird[s]{t}\right|_m = \pfird[q]{t} = \pfird[u]{t} + p\pfird[v]{t} = \pfird[u]{t} - \frac{p}{\rho^2}\pfird[\rho]{t}.
+\end{equation}
+
+In practice, the internal energy depends on the chemical composition and the equation of state, which complicates the calculation. However, for a chemically homogeneous star, we can use the Kippenhahn approximation \parencite{KippenhahnEtAl2013}, which instead expresses the entropy change as:
+\begin{equation}
+  T\left.\pfird[s]{t}\right|_m \simeq c_p\pfird[T]{t} - \frac{\delta}{\rho}\pfird[p]{t},
+\end{equation}
+where $c_p$ is the specific heat at constant pressure and $\delta = -\left(\partial \ln \rho / \partial \ln T\right)_p$. 
+
+Since PMS stars are generally fully convective, chemical mixing is highly efficient throughout the interior, which makes the Kippenhahn approximation appropriate in this context of this project.
+
+With this, Eq.~\eqref{eq:star_struct4} becomes:
+\begin{equation}
+  \pfird[l]{m} = \epsilon_\mr{nuc} - \epsilon_\nu - c_p\pfird[T]{t} + \frac{\delta}{\rho}\pfird[p]{t}. \label{eq:grav_energy_kipp}
+\end{equation}
+
+However, applying Eq.~\eqref{eq:grav_energy_kipp} to evolving stellar models with accretion presents a complication: the thermodynamic and chemical properties of the accreted material are not provided directly by the stellar model. Estimating these properties requires special treatment, which is addressed in the next two sections.
+
+\subsubsection{Cordinate transformation for accretion modeling}
+\label{sec:accretion_coords}
+
+To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mathrm{th} \simeq \Delta m, c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mathrm{acc} \simeq \Delta m / \dot{M}\mathrm{acc}$, is the time over which the mass is accreted. When $\tau\mathrm{th} \ll \tau_\mathrm{acc}$, the accreted material has time to thermally equilibrate with the stellar surface,  thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mathrm{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
+
+This assumption permits the use of fractional mass coordinates, defined as \parencite{SugimotoNomoto1975}
+\begin{equation}
+  q_m = \frac{m}{M_\star}.
+\end{equation}
+
+Switching from the Lagrangian mass coordinate $m$ to the fractional mass coordinate $q_m$ modifies the form of time derivatives in the structure equations. For a generic function $f(m,t)$, the total differential can be expressed both in terms of $m$ and $q_m$:
 \begin{align}
-  \epsilon_g = -T\fird[s]{t},\  T\fird[s]{t}\xrightarrow{Kipp} c_p\pfird[T]{t} - \frac{\delta}{\rho}\pfird[P]{t}.
+  \dd{f} &= \left.\pfird[f]{t}\right|_{q_m} \dd{t} + \left.\pfird[f]{q_m}\right|_t\dd{q_m}\\ 
+  &= \left.\pfird[f]{t}\right|_{q_m} \dd{t} + \left.\pfird[f]{q_m}\right|_t\left(\left.\pfird[q_m]{t}\right|_m \dd{t} + \left.\pfird[q_m]{m}\right|_t \dd{m}\right)\\
+  \dd{f} &= \left.\pfird[f]{t}\right|_m \dd{t} + \left.\pfird[f]{m}\right|_t \dd{m}
 \end{align}
 
-As PMS stars are usually fully convective, the Kippenhahn approximation is applicable. 
+Equating the two expressions yields:
+\begin{equation}
+  \left.\pfird[f]{t}\right|_m = \left.\pfird[f]{t}\right|_{q_m} + \left.\pfird[f]{q_m}\right|_t \left.\pfird[q_m]{t}\right|_m
+  % &\left.\pfird[f]{m}\right|_t = \left.\pfird[f]{q_m}\right|_t\left.\pfird[q_m]{m}\right|_t.
+\end{equation}
 
-\subsubsection{Deuterium burning}
+Using this, Eq.~\eqref{eq:grav_energy} can be rewritten in terms of $q_m$ as:
+\begin{equation}
+   \epsilon_g = -T \left.\pfird[s]{t}\right|_{q_m} - T \left.\pfird[s]{q_m}\right|_t\left.\pfird[q_m]{t}\right|_m.
+\end{equation}
+While the expressions for $\epsilon_g$ in Eq.~\eqref{eq:grav_energy} and its reformulation above are physically equivalent, the latter is more convenient when the time derivative at fixed mass coordinate is not readily available.
+
+\subsubsection{Deuterium from the accreted material}
 \label{sec:deuterium_burning}
 
-\begin{outline}{gray}
-  \item euqations for deuterium burning
-  \item formula for the estimation of luminosity due to deuterium burning
-\end{outline}
+The burning of deuterium can be very efficient once the temperature threshold is reached, depleting deuterium as fast as it is accreted from the surrounding material. Therefore, the amount of deuterium in the accreted material can significantly affect the evolution of PMS stars \parencite[e.g., ][]{KunitomoEtAl2017}.
+
 
 \subsubsection{Hot and cold accretion}
 \label{sec:hot_cold_accretion}
 
-% The accreting materical is accelerated during its in-fall, which means that it can carry some kinetic energy when it reaches the stellar surface. This kinetic energy can be estimated as:
-% \begin{equation}
-%   L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}}{R_\star},
-% \end{equation}
-% where $\xi_\mr{add}$ is a dimensionless parameter that characterizes the fraction of the kinetic energy that is converted into thermal energy at the stellar surface. The value of $\xi_\mr{add}$ depends on the details of the accretion process, such as the geometry of the accretion flow, the presence of shocks, as well as rotation. It is imposed by energy conservation that $0 \leq \xi_\mr{add} \leq 1$. When radiation cooling is efficient, $\xi_\mr{add}$ has a small value. Following the analysis by \textcite{StahlerEtAl1980} of the radiative shock at the stellar surface, radiative transfer further constrains that $\xi_\mr{add} \leq 3/4$. Yet, in the case of a Keplerian disk, leading to $\xi_\mr{add} \simeq 1$.
+The accreting materical is accelerated during its in-fall, which means that it can carry some kinetic energy when it reaches the stellar surface. This kinetic energy can be estimated as:
+\begin{equation}
+  L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}}{R_\star},
+\end{equation}
+where $\xi_\mr{add}$ is a dimensionless parameter that characterizes the fraction of the kinetic energy that is converted into thermal energy at the stellar surface. The value of $\xi_\mr{add}$ depends on the details of the accretion process, such as the geometry of the accretion flow, the presence of shocks, as well as rotation. It is imposed by energy conservation that $0 \leq \xi_\mr{add} \leq 1$. When radiation cooling is efficient, $\xi_\mr{add}$ has a small value. Following the analysis by \textcite{StahlerEtAl1980} of the radiative shock at the stellar surface, radiative transfer further constrains that $\xi_\mr{add} \leq 3/4$. Yet, in the case of a Keplerian disk, leading to $\xi_\mr{add} \simeq 1$.
 
 \subsection{The stellar evolution code \texttt{Cesam2k20}}
 \label{sec:cesam2k20}
@@ -442,9 +500,9 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 \subsubsection{PMS initial models}
 \label{sec:pms_initial_models}
 
-At time t = 0, to begin the computation, the values of pressure $P(m, 0)$, temperature $T(m, 0)$, radius $R(m, 0)$, luminosity $L(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
+At time $t = 0$, to begin the computation, the values of pressure $P(m, 0)$, temperature $T(m, 0)$, radius $R(m, 0)$, luminosity $L(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
 
-This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior. In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
+This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior, except in the thin superadiabatic layers near the surface (see Fig.\ref{fig:toy_problem_entropy} and the corresponding discussion for details). In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
 \begin{equation}
   \pfird[l]{m} = \epsilon_\mr{g} = -T\pfird[s]{t} = cT,
 \end{equation}
@@ -465,11 +523,6 @@ In \texttt{Cesam2k20}, the user provides an input value $c_1 = c$, the Iben cons
 %   \item examples of derivatives of the structure equations with respect to the variables
 %   \item the change in the energy equation
 % \end{outline}
-
-\subsubsection{From Lagrangian to Homologous variables}
-\label{sec:accretion_coords}
-
-The difficulty in implementing accretion in \texttt{Cesam2k20} lies in the fact that properties of the accreted material are not known a priori, so assumptions must be made about the properties to make this information available. 
 
 
 \subsubsection{Modifications to the structure equations}
@@ -516,6 +569,12 @@ My main modification to the structure equations is in the energy equation, i.e.,
   \item show the problem with this kind of approach necessicate the implementation of accretion in the actual evolution 
   \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
 \end{outline}
+
+\begin{figure}
+  \centering  
+  \includegraphics[width=\textwidth,keepaspectratio]{toy_problem_entropy.pdf}
+  \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.82\,M_\odot$ models.} \label{fig:toy_problem_entropy}
+\end{figure}
 
 \subsection{The effect of different initial models}
 \label{sec:initial_models}
