@@ -318,9 +318,9 @@ The former affects the internal energy budget of the star itself, while the latt
 
 The gravitational energy released during the PMS phase contributes significantly to the stellar energy budget and must be properly accounted for in stellar evolution models. In this section, I describe how this energy is treated in the stellar structure equations, and in the following section, I discuss the specific treatment of gravitational energy associated with accreted material.
 
-The rate of gravitational energy release per unit mass is gievn by:
+The rate of gravitational energy release per unit mass is given by:
 \begin{equation}
-\epsilon_g = -T\left.\pfird[s]{t}\right|_m, \label{eq:grav_energy}
+  \epsilon_g = -T\left.\pfird[s]{t}\right|_m, \label{eq:grav_energy}
 \end{equation}
 where $s$ is the specific entropy.
 
@@ -337,7 +337,7 @@ where $c_p$ is the specific heat at constant pressure and $\delta = -\left(\part
 
 Since PMS stars are generally fully convective, chemical mixing is highly efficient throughout the interior, which makes the Kippenhahn approximation appropriate in this context of this project.
 
-With this, Eq.~\eqref{eq:star_struct4} becomes:
+Substituting the Kippenhahn approximation into the energy conservation equation, Eq.~\eqref{eq:star_struct4} becomes:
 \begin{equation}
   \pfird[l]{m} = \epsilon_\mr{nuc} - \epsilon_\nu - c_p\pfird[T]{t} + \frac{\delta}{\rho}\pfird[p]{t}. \label{eq:grav_energy_kipp}
 \end{equation}
@@ -347,7 +347,7 @@ However, applying Eq.~\eqref{eq:grav_energy_kipp} to evolving stellar models wit
 \subsubsection{Coordinate transformation for accretion modeling}
 \label{sec:accretion_coords}
 
-To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mathrm{th} \simeq \Delta m, c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mathrm{acc} \simeq \Delta m / \dot{M}\mathrm{acc}$, is the time over which the mass is accreted. When $\tau\mathrm{th} \ll \tau_\mathrm{acc}$, the accreted material has time to thermally equilibrate with the stellar surface,  thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mathrm{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
+To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mr{th} \simeq \Delta m, c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mr{acc} \simeq \Delta m / \dot{M}\mr{acc}$, is the time over which the mass is accreted. When $\tau\mr{th} \ll \tau_\mr{acc}$, the accreted material has time to thermally equilibrate with the stellar surface, thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mr{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
 
 This assumption permits the use of fractional mass coordinates, defined as \parencite{SugimotoNomoto1975}
 \begin{equation}
@@ -411,9 +411,9 @@ Following the simplified treatment by \textcite{HartmannEtAl1998}, these conside
 \begin{equation}
   L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}}{R_\star},
 \end{equation}
-where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in \textcite[Eq.~(5)][]{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of accretion energy converted injected into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into angular momentum \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
+where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in \textcite[Eq.~(5)][]{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of accretion energy injected into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into angular momentum \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
 
-This heat injection can affect the evolution of accreting stars \parencite[e.g., ][]{KunitomoEtAl2017,AmardMatt2023}. However, for simplicity, heat injection during accretion is not included in this work. By neglecting this effect, I am effectively considering the case where $\xi_\mr{add} = 0$, which is a reasonable approximation for most PMS stars, as the majority of the accretion energy is expected to be radiated away before reaching the star \parencite{HartmannEtAl1998}.
+This heat injection can affect the evolution of accreting stars \parencite[e.g., ][]{KunitomoEtAl2017,AmardMatt2023}. A higher value of $\xi_\mathrm{add}$ causes the star to expand by adding thermal energy. However, for simplicity, heat injection during accretion is not included in this work. By neglecting this effect, I am effectively considering the case where $\xi_\mr{add} = 0$, which is a reasonable approximation for most PMS stars, as the majority of the accretion energy is expected to be radiated away before reaching the star \parencite{HartmannEtAl1998}.
 
 \subsection{The stellar evolution code \texttt{Cesam2k20}}
 \label{sec:cesam2k20}
@@ -492,6 +492,26 @@ and at the surface:
 \end{equation}
 along with constitutive relations (e.g., equations of state, opacity laws) to evolve the stellar model in time.
 
+\subsubsection{PMS initial models}
+\label{sec:pms_initial_models}
+
+At time $t = 0$, to begin the computation, the values of pressure $P(m, 0)$, temperature $T(m, 0)$, radius $R(m, 0)$, luminosity $L(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
+
+This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior, except in the thin superadiabatic layers near the surface (see Fig.\ref{fig:toy_problem_entropy} and the corresponding discussion for details). In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
+\begin{equation}
+  \pfird[l]{m} = \epsilon_\mr{g} = -T\pfird[s]{t} = cT,
+\end{equation}
+where $c$ is a contraction constant, with units of $L_\odot\,M_\odot^{-1}\,\mr{K}^{-1}$, characteristic of a fully convective star in quasi-equilibrium. Varying the value of $c$ shifts the starting point of the star's evolution track in the HR diagram.
+
+The Iben method proceeds by constructing two PMS models, labeled \#1 and \#2, with the same mass $M_\star$, but slightly different contraction constants $c_1$ and $c_2$. These models should be close enough that the change in gravitational energy between them approximates the radiative energy loss over a time step $\Delta t$:
+\begin{equation}
+  \frac{L_1 + L_2}{2}\Delta t \sim \left(\frac{GM^2}{R_2} - \frac{GM^2}{R_1}\right),
+\end{equation}
+where $L_1$, $R_1$ and $L_2$, $R_2$ are the luminosities and radii of models \#1 and \#2, respectively \parencite[cf. Eq.~(13)][]{Morel1997}. Evolution can then proceed using model \#2 and time step $\Delta t$.
+
+In \texttt{Cesam2k20}, the user provides an input value $c_1 = c$, the Iben constant, and the code sets $c_2 = 1.1\,c_1$. The appropriate range of values for $c$ depends on the stellar mass. At fixed mass, a lower Iben constant leads to lower luminosity and a higher central temperature. For example, $c = 0.02$ yields $T_c \sim 10^5\,\mr{K}$, while smaller values such as $c = 0.005$ and $c = 0.00008$ correspond to $T_c \sim 5 \times 10^5\,\mr{K}$ and $10^6\,\mr{K}$, respectively. Although these values are similar in order of magnitude across different stellar masses, each mass range requires its own acceptable interval of $c$ values to ensure convergence to a valid PMS model.
+
+
 \subsubsection{Input physics}
 \label{sec:cesam2k20_input_physics}
 
@@ -524,41 +544,22 @@ Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl
 
 The input physics are summarized in Table \ref{tab:input_physics}. Building on this framework, I next describe the implementation of accretion in \texttt{Cesam2k20}.
 
-\subsubsection{PMS initial models}
-\label{sec:pms_initial_models}
-
-At time $t = 0$, to begin the computation, the values of pressure $P(m, 0)$, temperature $T(m, 0)$, radius $R(m, 0)$, luminosity $L(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
-
-This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior, except in the thin superadiabatic layers near the surface (see Fig.\ref{fig:toy_problem_entropy} and the corresponding discussion for details). In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
-\begin{equation}
-  \pfird[l]{m} = \epsilon_\mr{g} = -T\pfird[s]{t} = cT,
-\end{equation}
-where $c$ is a contraction constant, with units of $L_\odot\,M_\odot^{-1}\,\mr{K}^{-1}$, characteristic of a fully convective star in quasi-equilibrium. Varying the value of $c$ shifts the starting point of the star's evolution track in the HR diagram.
-
-The Iben method proceeds by constructing two PMS models, labeled \#1 and \#2, with the same mass $M_\star$, but slightly different contraction constants $c_1$ and $c_2$. These models should be close enough that the change in gravitational energy between them approximates the radiative energy loss over a time step $\Delta t$:
-\begin{equation}
-  \frac{L_1 + L_2}{2}\Delta t \sim \left(\frac{GM^2}{R_2} - \frac{GM^2}{R_1}\right),
-\end{equation}
-where $L_1$, $R_1$ and $L_2$, $R_2$ are the luminosities and radii of models \#1 and \#2, respectively \parencite[cf. Eq.~(13)][]{Morel1997}. Evolution can then proceed using model \#2 and time step $\Delta t$.
-
-In \texttt{Cesam2k20}, the user provides an input value $c_1 = c$, the Iben constant, and the code sets $c_2 = 1.1\,c_1$. The appropriate range of values for $c$ depends on the stellar mass. At fixed mass, a lower Iben constant leads to lower luminosity and a higher central temperature. For example, $c = 0.02$ yields $T_c \sim 10^5\,\mr{K}$, while smaller values such as $c = 0.005$ and $c = 0.00008$ correspond to $T_c \sim 5 \times 10^5\,\mr{K}$ and $10^6\,\mr{K}$, respectively. Although these values are similar in order of magnitude across different stellar masses, each mass range requires its own acceptable interval of $c$ values to ensure convergence to a valid PMS model.
-
 \subsection{Accretion in \texttt{Cesam2k20}}
 \label{sec:accretion_cesam2k20}
 
-% \begin{outline}{gray}
-%   \item examples of derivatives of the structure equations with respect to the variables
-%   \item the change in the energy equation
-% \end{outline}
+Building on the general modeling of accretion described in Sec.\ref{sec:accretion_modeling} and the details of the stellar evolution code \texttt{Cesam2k20} in Sec.\ref{sec:cesam2k20}, this section outlines how key physical effects—particularly the treatment of gravitational energy and deuterium from accreted material—are implemented within the code.
+
+\subsubsection{Homologous coordinates for \texttt{Cesam2k20}}
+\label{sec:homologous_coord_cesam}
 
 
 \subsubsection{Modifications to the structure equations}
 \label{sec:accretion_struct_eq}
 
 In \texttt{Cesam2k20}, the solution of the non-linear boundary problem is done by Newton-Raphson iterations, or known as the
-Henyey method \parencite{HenyeyEtAl1959} in context of stellar evolution \parencite{HenyeyEtAl1955}. The structure equations are solved iteratively, with the Jacobian matrix of the system of equations being updated at each iteration. The Jacobian matrix contains the partial derivatives of the structure equations with respect to the variables, which are used to guide the convergence of the solution.
+Henyey method \parencite{HenyeyEtAl1959} in context of stellar evolution. The structure equations are solved iteratively, with the Jacobian matrix of the system of equations being updated at each iteration. The Jacobian matrix contains the partial derivatives of the structure equations with respect to the variables, which are used to guide the convergence of the solution.
 
-My main modification to the structure equations is in the energy equation, i.e., Eq.\eqref{eq:cesam_struct4}, and then of course, the relevant partial derivatives in the Jacobian matrix. 
+My main modification to the structure equations is in the energy equation, i.e., Eq.~\eqref{eq:cesam_struct4}, and then of course, the relevant partial derivatives in the Jacobian matrix. 
 
  
 \subsubsection{Limiting the maximum change in gravitational energy}
