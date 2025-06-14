@@ -138,7 +138,7 @@ The earliest accretion stages remain observationally elusive, as protostars are 
 
 When \textcite{HenyeyEtAl1955} and \textcite{Hayashi1961} first studied the early phases of stellar evolution, accretion was not taken into account. Instead, stars were assumed to begin their evolution as fully convective objects with very large radii and luminosities, contracting under their own gravity until a radiative core developed, eventually reaching the main sequence. These evolutionary paths are now known as the Hayashi and Henyey tracks. Since \textcite{Larson1969} introduced the concept of the formation of a hydrostatic core, followed by continued accretion from an infalling envelope of gas and dust, accretion has been recognized as a fundamental process in early stellar evolution, supported by both theoretical and observational studies.
 
-There has been growing interest in studying accretion in PMS stars since the discovery of exoplanetary systems,particularly because of its relevance to planetary formation. Accretion disks are the birthplaces of planets and other small bodies, making the study of accretion crucial for understanding the early evolution of planetary systems. Beyond this, accretion can significantly influence the internal structure and rotation of stars by supplying both mass and angular momentum. In particular, accretion sets the initial distribution of angular momentum, which influences the star's rotational evolution and internal dynamics. These structural and rotational changes can, in turn, affect the stellar dynamo mechanism responsible for amplifying magnetic fields in young stars \parencite[e.g.,][]{StelzerNeuhauser2001}. 
+There has been growing interest in studying accretion in PMS stars since the discovery of exoplanetary systems,particularly because of its relevance to planetary formation. Accretion disks are the birthplaces of planets and other small bodies, making the study of accretion crucial for understanding the early evolution of planetary systems. Beyond this, accretion can significantly influence the internal structure and rotation of stars by supplying mass, energy, and chemicals. In particular, accretion sets the initial distribution of angular momentum, which influences the star's rotational evolution and internal dynamics. These structural and rotational changes can, in turn, affect the stellar dynamo mechanism responsible for amplifying magnetic fields in young stars \parencite[e.g.,][]{StelzerNeuhauser2001}. 
 
 Accretion also impacts long-term stellar evolution by setting the initial conditions for subsequent evolutionary stages and can leave lasting imprints. Consequently, it can directly affect the determination of fundamental stellar parameters such as age, mass, and radius, which are crucial not only for stellar physics but also for fields like exoplanet characterization and galactic archaeology. In addition, accretion can alter the surface chemical composition, especially if the accreted material differs in abundance from that of the protostar \parencite{KunitomoGuillot2021}. This has important implications for interpreting observed stellar abundances and for modeling chemical mixing processes.
 
@@ -285,7 +285,7 @@ Observational studies reveal a correlation between accretion rates and stellar m
 
 Deuterium plays a more prominent role in accreting PMS stars than in non-accreting ones, as the accretion flow continuously supplies fresh deuterium. In contrast, non-accreting stars can deplete their initial deuterium rapidly. This deuterium contributes to energy generation through nuclear burning at a rate given by
 \begin{equation}
-\epsilon_\mr{D} = \left[\mr{D/H}\right]\epsilon_\mr{D,0} \left(\frac{\rho}{1,\mr{g,cm^{-3}}}\right) \left(-\frac{T}{1 \times 10^6,\mr{K}}\right)^{n_D},
+  \epsilon_\mr{D} = \left[\mr{D/H}\right]\epsilon_\mr{D,0} \left(\frac{\rho}{1,\mr{g,cm^{-3}}}\right) \left(\frac{T}{1 \times 10^6,\mr{K}}\right)^{n_D}, \label{eq:deuterium_energy_prod_rate}
 \end{equation}
 where $\epsilon_\mr{D,0} = 4.19 \times 10^7,\mr{erg,g^{-1},s^{-1}}$, $n_D = 11.8$, and $\left[\mr{D/H}\right]$ is the number density of deuterium relative to hydrogen in the environment \parencite[cf. Eq.~11.27 in][]{StahlerPalla2004}.
 
@@ -344,7 +344,7 @@ With this, Eq.~\eqref{eq:star_struct4} becomes:
 
 However, applying Eq.~\eqref{eq:grav_energy_kipp} to evolving stellar models with accretion presents a complication: the thermodynamic and chemical properties of the accreted material are not provided directly by the stellar model. Estimating these properties requires special treatment, which is addressed in the next two sections.
 
-\subsubsection{Cordinate transformation for accretion modeling}
+\subsubsection{Coordinate transformation for accretion modeling}
 \label{sec:accretion_coords}
 
 To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mathrm{th} \simeq \Delta m, c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mathrm{acc} \simeq \Delta m / \dot{M}\mathrm{acc}$, is the time over which the mass is accreted. When $\tau\mathrm{th} \ll \tau_\mathrm{acc}$, the accreted material has time to thermally equilibrate with the stellar surface,  thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mathrm{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
@@ -376,17 +376,44 @@ While the expressions for $\epsilon_g$ in Eq.~\eqref{eq:grav_energy} and its ref
 \subsubsection{Deuterium from the accreted material}
 \label{sec:deuterium_burning}
 
-The burning of deuterium can be very efficient once the temperature threshold is reached, depleting deuterium as fast as it is accreted from the surrounding material. Therefore, the amount of deuterium in the accreted material can significantly affect the evolution of PMS stars \parencite[e.g., ][]{KunitomoEtAl2017}.
+In contrast to the thermal properties, the chemical composition of the accreted material is not necessarily homologous to that of the stellar surface. In particular, the deuterium content of the accreted gas can differ significantly from that of the star. This difference arises because deuterium burning becomes extremely efficient once the central temperature exceeds a critical threshold. Since PMS stars are generally fully convective, efficient mixing ensures that the entire interior remains chemically homogeneous. As a result, deuterium can be depleted as fast as it is supplied, leaving the stellar interior nearly devoid of it, even while fresh deuterium continues to arrive from the surrounding environment.
 
+The amount of deuterium in the accreted material can significantly affect the evolution of PMS stars \parencite[e.g.,][]{KunitomoEtAl2017,AmardMatt2023}. Deuterium burning provides a substantial amount of energy that can halt or even reverse the star's contraction, thereby influencing both its radius and luminosity. In this sense, deuterium acts as a thermostat: because the nuclear energy generation rate $\epsilon_\mr{D}$ is highly sensitive to temperature (as seen in the exponent $n_\mr{D} = 11.8$ in Eq.~\eqref{eq:deuterium_energy_prod_rate}), a rise in central temperature dramatically increases $\epsilon_\mr{D}$, causing the star to expand. This expansion reduces the central temperature, which in turn suppresses the burning rate \parencite{StahlerPalla2004}—a self-regulating feedback mechanism.
+
+This thermostatic behavior can only be sustained if deuterium is replenished at a sufficient rate. At steady-state burning, the deuterium luminosity can be approximated as:
+\begin{equation}
+  L_\mr{D} \equiv \int_0^{M_\star} \epsilon_\mr{D}\dd{m} \simeq \dot{M}_\mr{acc} \delta,
+\end{equation}
+where $\delta$ is the energy available from deuterium per gram of accreted material:
+\begin{equation}
+  \delta = \frac{[\mr{D/H}]X\Delta E_\mr{D}}{m_\mr{H}}.
+\end{equation}
+Here, $X \sim 0.73$ is the hydrogen mass fraction, $\Delta E_\mr{D} = 5.5\,\mr{MeV}$ is the energy released per deuterium fusion reaction, and $m_\mr{H}$ is the mass of a hydrogen atom.
+
+The deuterium-to-hydrogen ratio, $[\mr{D/H}]$, in the accreted material is typically assumed to match that of the interstellar medium (ISM). However, its precise value remains uncertain. Observations of the local ISM suggest a wide range of values, from $0.98 \pm 0.38 \times 10^{-5}$ \parencite{HebrardEtAl2005} to at least $2.13 \pm 0.24 \times 10^{-5}$ \parencite{LinskyEtAl2006}. Moreover, $[\mr{D/H}]_\mr{ISM}$ is expected to evolve over time, since estimates of the primordial deuterium abundance, $[\mr{D/H}]_\mr{prim} \sim 2.5 \times 10^{-5}$, are higher than those observed in the local ISM \parencite[e.g.,][]{Prantzos2007}. As shown by \textcite{KunitomoGuillot2021}, the deuterium content in the accretion disk may also evolve over time due to the formation and growth of planetesimals, further complicating the picture.
+
+Due to these complications, in this study I do not account for the time evolution of $[\mr{D}/\mr{H}]$. Instead, I adopt a fixed value of $[\mr{D}/\mr{H}] = 2.0 \times 10^{-5}$ for the accreting models and explore variations in this parameter to assess its impact on the evolution of PMS stars.
 
 \subsubsection{Hot and cold accretion}
 \label{sec:hot_cold_accretion}
 
-The accreting materical is accelerated during its in-fall, which means that it can carry some kinetic energy when it reaches the stellar surface. This kinetic energy can be estimated as:
+As material accretes onto a PMS star, it brings gravitational potential energy and possibly some internal (thermal) energy. How much of this energy is deposited into the star depends strongly on the nature of the accretion process. Two main factors influence the efficiency of energy deposition:
+\begin{enumerate}
+  \item the geometry of the accretion flow (e.g., spherical or disk-like), and
+  \item the radiative losses at the accretion shock and the stellar surface.
+\end{enumerate}
+
+Regarding the accretion geometry, each unit mass of accreted gas carries a gravitational potential energy of $-GM_\star/R_\star$ and internal energy $\beta GM_\star/R_\star$. The factor $\beta$ characterizes the physical nature of the accretion flow. For example, for gravitationally bound material, $\beta \leq 1$, while for thin-disk accretion from the equatorial region, typical values are $\beta \leq 0.5$ \parencite{PrialnikLivio1985,HartmannEtAl1998}.
+
+The fractional surface area covered by accretion shock can influence the radiative efficiency, as the shocked region and the stellar photosphere have different radiative properties. Let $f_\mr{shock}$ denote the fraction of the stellar surface covered by the shock. The shocked area emits an accretion luminosity $L_\mr{acc} = 4\pi R_\star^2 f_\mr{shock} F_\mr{acc}$, where $F_\mr{acc}$ is the mean radiative flux over the accreting region. Meanwhile, the remaining stellar surface radiates at the star's intrinsic luminosity, $L_\mr{photo} = 4 \pi R_\star^2 (1 - f_\mr{shock}) T_\mr{eff}^4$. The total losses from the shock and the photosphere counteract the energy injection from the accreted material.
+
+Following the simplified treatment by \textcite{HartmannEtAl1998}, these considerations can be combined into an effective energy injection rate from the accreted material:
 \begin{equation}
   L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}}{R_\star},
 \end{equation}
-where $\xi_\mr{add}$ is a dimensionless parameter that characterizes the fraction of the kinetic energy that is converted into thermal energy at the stellar surface. The value of $\xi_\mr{add}$ depends on the details of the accretion process, such as the geometry of the accretion flow, the presence of shocks, as well as rotation. It is imposed by energy conservation that $0 \leq \xi_\mr{add} \leq 1$. When radiation cooling is efficient, $\xi_\mr{add}$ has a small value. Following the analysis by \textcite{StahlerEtAl1980} of the radiative shock at the stellar surface, radiative transfer further constrains that $\xi_\mr{add} \leq 3/4$. Yet, in the case of a Keplerian disk, leading to $\xi_\mr{add} \simeq 1$.
+where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in \textcite[Eq.~(5)][]{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of accretion energy converted injected into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into angular momentum \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
+
+This heat injection can affect the evolution of accreting stars \parencite[e.g., ][]{KunitomoEtAl2017,AmardMatt2023}. However, for simplicity, heat injection during accretion is not included in this work. By neglecting this effect, I am effectively considering the case where $\xi_\mr{add} = 0$, which is a reasonable approximation for most PMS stars, as the majority of the accretion energy is expected to be radiated away before reaching the star \parencite{HartmannEtAl1998}.
 
 \subsection{The stellar evolution code \texttt{Cesam2k20}}
 \label{sec:cesam2k20}
@@ -470,7 +497,7 @@ along with constitutive relations (e.g., equations of state, opacity laws) to ev
 
 Although \texttt{Cesam2k20} is capable of modeling rotation and diffusion, I keep the input physics simple at this stage to focus on the impact of accretion on stellar structure. The interactions of accretion with rotation and diffusion will be an important aspect in future work. The models are computed for 1D, single stars without rotation, magnetic fields, or diffusion. Mass loss is not considered; the only mechanism that alters the stellar mass is accretion. The initial chemical composition follows the solar mixture of \textcite{AsplundEtAl2009}, with meteoritic determination for non-volatile elements as recommended by \textcite{SerenelliEtAl2009}, with the exception of the deuterium abundance, which is varied to explore its impact on accreting stars.
 
-Convection is modeled using the mixing-length theory (MLT) \parencite{CoxGiuli1968a}. It assumes that convective energy transport occurs via fluid elements moving from hotter to cooler regions over a characteristic distance-the mixing length—typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mathrm{MLT}$. We adopt a solar-calibrated value of $\alpha_\mathrm{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
+Convection is modeled using the mixing-length theory (MLT) \parencite{CoxGiuli1968a}. It assumes that convective energy transport occurs via fluid elements moving from hotter to cooler regions over a characteristic distance-the mixing length—typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mr{MLT}$. We adopt a solar-calibrated value of $\alpha_\mr{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
 
 The equation of state (EoS) and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, $^{17}\mr{O}$.
 
@@ -584,7 +611,7 @@ My main modification to the structure equations is in the energy equation, i.e.,
 
 \begin{figure}
   \centering  
-  \includegraphics[width=.5\textwidth,keepaspectratio]{comp_accrate.pdf}
+  \includegraphics[width=.65\textwidth,keepaspectratio]{comp_accrate.pdf}
   \caption{Comparisons of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $\mr{D/H} = 2.0\times 10^{-5}$.} \label{fig:comp_accrate}
 \end{figure}
 
@@ -605,7 +632,7 @@ My main modification to the structure equations is in the energy equation, i.e.,
 
 \begin{figure}
   \centering  
-  \includegraphics[width=.5\textwidth,keepaspectratio]{birthline_acce5.pdf}
+  \includegraphics[width=.65\textwidth,keepaspectratio]{birthline_acce5.pdf}
   \caption{Birthline of accreting stars, with an accretion rate of $10^{-5} M_\odot/\mr{yr}$.} \label{fig:birthline_acce5}
 \end{figure}
 
