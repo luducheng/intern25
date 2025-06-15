@@ -718,13 +718,16 @@ I've discussed before that the primary modifications introduced in this work con
 
 \begin{figure}
   \centering
-  \includegraphics[width=.55\textwidth,keepaspectratio]{acce5_mp1m1_acc.pdf}
-  \includegraphics[width=.44\textwidth,keepaspectratio]{KunitomoEtAl2017_fig1.png}
-  \caption{Left panel: Radius (left axis) and mass (right axis) evolution of an accreting model. Right panel: Fig.~1 from \textcite{KunitomoEtAl2017}; the axes are in the same units as in the left panel. The model starts from a seed mass of $0.1\,M_\odot$ with an Iben constant of $c_\mr{iben} = 5\times10^{-5}$, and accretes up to $1 M_\odot$. It is computed with a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$ and an accretion rate of $10^{-5}\,M_\odot/\mr{yr}$. Radius is shown in red and mass in green. The five evolution phases are labeled as: (I) the contraction phase; (II) deuterium-burning phase; (III) second contraction phase until the end of accretion; (IV) swelling phase; and (V) main sequence. See text for more a detailed description of each phase.}
-  \label{fig:mass_radius_evol}
+  \includegraphics[width=\textwidth,keepaspectratio]{m1_cmp_acc.pdf}
+  \caption{Radius evolution (left panel) and HR diagram (right panel) of accreting and non-accreting stellar models. The accreting model is shown with solid red lines, and the non-accreting model with dashed black lines. The accreting model is the same as the one in Fig.~\ref{fig:mass_radius_evol}. The red points indicate the end of accretion.}
+  \label{fig:comp_accrete_non_accrete}
 \end{figure}
 
-Fig.~\ref{fig:mass_radius_evol} shows the evolution of the radius and mass of an accreting model. The model starts from a seed mass of $0.1\,M_\odot$ with an Iben constant of $c_\mr{iben} = 5\times10^{-5}$, and accretes up to $1\,M_\odot$ at a rate of $10^{-5}\,M_\odot/\mr{yr}$. It is computed with a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$. Following the classification of \textcite{KunitomoEtAl2017}, I mark five evolutionary phases:
+The radius evolution and HR diagram of the accreting model are compared with those of a non-accreting model in Fig.~\ref{fig:comp_accrete_non_accrete}. The evolutionary tracks of accreting and classic models diverge significantly during the early stages. The accreting model starts from a lower mass, which leads to a smaller radius, and it undergoes phases of expansion and contraction. In contrast, the non-accreting model contracts continuously until it reaches the main sequence.
+
+The expansion seen in the accreting model is driven by the energy released from burning deuterium contained in the newly accreted material, which is absent in the non-accreting case. When accretion ends, the accreting models converges with the track of the non-accreting one, as shown in the right panel of Fig.~\ref{fig:comp_accrete_non_accrete}. In this model, the accretion phase appears to leave little lasting effect on the subsequent evolution. However, this might be due to the relatively large seed mass of $M_\mr{seed} = 0.1\,M_\odot$ adopted here. Previous studies using a lower seed mass $M_\mr{seed} = 0.01\,M_\odot$, such as \textcite{KunitomoEtAl2017} and \textcite{AmardMatt2023}, the post-accretion evolution can deviate from that of non-accreting stars.
+
+To better understand the evolution before reaching main sequence, Fig.~\ref{fig:mass_radius_evol} shows the evolution of the radius and mass of an accreting model. The model starts from a seed mass of $0.1\,M_\odot$ with an Iben constant of $c_\mr{iben} = 5\times10^{-5}$, and accretes up to $1\,M_\odot$ at a rate of $10^{-5}\,M_\odot/\mr{yr}$. It is computed with a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$. Following the classification of \textcite{KunitomoEtAl2017}, I mark five evolutionary phases:
 \begin{itemize}
   \item (I) the contraction phase, where the star contracts and heats up as it accretes mass;
   \item (II) the deuterium-burning phase, where the star reaches a central temperature of $\sim 10^6\,\mr{K}$ and starts burning deuterium, leading to a rapid expansion;
@@ -733,18 +736,17 @@ Fig.~\ref{fig:mass_radius_evol} shows the evolution of the radius and mass of an
   \item (V) the main sequence, where hydrogen burning begins and the star settles into a long-term stable evolution.
 \end{itemize}
 
-Although I adopt this naming convention, the behavior of my model differs notably in phase (IV). Unlike the swelling seen in Fig.~1 of \textcite{KunitomoEtAl2017}, my model shows no expansion during this phase. This difference arises because my initial model has a much larger radius, as the seed mass is $0.1\,M_\odot$ instead of their $0.01\,M_\odot$, which results in a higher initial entropy. Since the star is already relatively bloated, the entropy redistribution during phase (IV) is insufficient to drive further swelling.
-
-Despite this, the deuterium-burning phase (II) exhibits a comparable degree of expansion: in \textcite{KunitomoEtAl2017}, the radius increases from $\sim 0.6$ to $\sim 0.8\,R_\odot$ (a factor of 1.3), while my model expands from $\sim 1.7$ to $\sim 2.4\,R_\odot$, (a factor of 1.4). Similarly, the subsequent contraction (III) reduces the radius in both models to a value slightly above that prior to the deuterium burning phase.
-
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth,keepaspectratio]{m1_cmp_acc.pdf}
-  \caption{Radius evolution (left panel) and HR diagram (right panel) of accreting and non-accreting stellar models. The accreting model is shown as solid red lines, and the non-accreting model as dashed black lines. The accreting model is same as in Fig.~\ref{fig:mass_radius_evol}}
-  \label{fig:comp_accrete_non_accrete}
+  \includegraphics[width=.55\textwidth,keepaspectratio]{acce5_mp1m1_acc.pdf}
+  \includegraphics[width=.44\textwidth,keepaspectratio]{KunitomoEtAl2017_fig1.png}
+  \caption{Left panel: Radius (left axis) and mass (right axis) evolution of an accreting model. Right panel: Fig.~1 from \textcite{KunitomoEtAl2017}; the axes are in the same units as in the left panel. The model starts from a seed mass of $0.1\,M_\odot$ with an Iben constant of $c_\mr{iben} = 5\times10^{-5}$, and accretes up to $1 M_\odot$. It is computed with a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$ and an accretion rate of $10^{-5}\,M_\odot/\mr{yr}$. Radius is shown in red and mass in green. The five evolution phases are labeled as: (I) the contraction phase; (II) deuterium-burning phase; (III) second contraction phase until the end of accretion; (IV) swelling phase; and (V) main sequence. See text for more a detailed description of each phase.}
+  \label{fig:mass_radius_evol}
 \end{figure}
 
-The radius evolution and HR diagram of the accreting model are compared with those of a non-accreting model in Fig.~\ref{fig:comp_accrete_non_accrete}.  
+Although I adopt this naming convention, the behavior of my model differs notably in phase (IV). Unlike the swelling seen in Fig.~1 of \textcite{KunitomoEtAl2017}, my model shows no expansion during this phase. This difference arises because my initial model has a much larger radius, as the seed mass is $0.1\,M_\odot$ instead of their $0.01\,M_\odot$, which results in a higher initial entropy. Since the star is already relatively bloated, the entropy redistribution during phase (IV) is insufficient to drive further swelling.
+
+Nonetheless, the deuterium-burning phase (II) exhibits a comparable degree of expansion: in \textcite{KunitomoEtAl2017}, the radius increases from $\sim 0.6$ to $\sim 0.8\,R_\odot$ (a factor of 1.3), while my model expands from $\sim 1.7$ to $\sim 2.4\,R_\odot$, (a factor of 1.4). Similarly, the subsequent contraction (III) reduces the radius in both models to a value slightly above that prior to the deuterium burning phase.
 
 \subsection{Dependence on the Iben constant}
 \label{sec:initial_models}
