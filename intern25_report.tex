@@ -482,8 +482,10 @@ With the variables introduced in Secs.~\ref{sec:cesam2k20_variables} and \ref{se
 The full set of structure and composition equations solved at each time step is:
 \begin{subequations} \label{eq:cesam2k20_struct_eq}
   \begin{align}
-    0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}, \label{eq:cesam_struct1}\\
-    0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla, \label{eq:cesam_struct2}\\
+    % 0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}, \label{eq:cesam_struct1}\\
+    % 0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla, \label{eq:cesam_struct2}\\
+    0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2\right]e^{-\xi}\frac{\psi}{\theta}, \label{eq:cesam_struct1}\\
+    0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla, \label{eq:cesam_struct2}\\
     0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta}, \label{eq:cesam_struct3}\\
     0 &= \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon  - \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta}, \label{eq:cesam_struct4}\\
     0 &= \pfird[\mu]{q} - \frac{\psi}{\theta}, \label{eq:cesam_struct5}\\
@@ -588,7 +590,7 @@ To map thermodynamic quantities from the previous to the current model, a table 
 \subsubsection{Modifications to the structure equations}
 \label{sec:accretion_struct_eq}
 
-In \texttt{Cesam2k20}, the nonlinear boundary value problem is solved using the Newton-Raphson method. In the context of stellar evolution modeling, this approach is commonly known as the Henyey method \parencite{HenyeyEtAl1959}. The structure equations are solved iteratively, with the Jacobian matrix of the system in Eqns.~\eqref{eq:cesam_struct1}-\eqref{eq:cesam_struct7} updated at each iteration. This matrix contains the partial derivatives of the structure equations with respect to the variables $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$. These derivatives guide the solution toward convergence.
+In \texttt{Cesam2k20}, the nonlinear boundary value problem is solved using the Newton-Raphson method. In the context of stellar evolution modeling, this approach is commonly known as the Henyey method \parencite{HenyeyEtAl1959}. The structure equations are solved iteratively, with the Jacobian matrix of the system in Eqns.~\eqref{eq:cesam_struct1}-\eqref{eq:cesam_struct7} updated at each iteration. This matrix contains the partial derivatives of the structure equations with respect to the variables $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$, which guide the solution toward convergence. Following the standard Henyey scheme, each time step is split into two substeps: first, the chemical composition is updated while the structural variables ($\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$) are held fixed;; second, the structure is recomputed to restore quasi-static equilibrium with the updated composition. I focus here on the modifications introduced in the quasi-static equilibrium step, and discuss changes to the treatment of chemical evolution in the next section.
 
 The principal modifications introduced in this work concern the energy equation, Eq.~\eqref{eq:cesam_struct4}, specifically the gravitational energy generation term, $\epsilon_\mr{g}$. This term is revised to include the gravitational energy contributed by accreted material. Consequently, the corresponding partial derivatives in the Jacobian matrix are recalculated to account for this change.
 
@@ -611,14 +613,17 @@ The next step is to compute the partial derivatives of the gravitational energy 
 
 Using Eqns.~\eqref{eq:cesam_struct1} and \eqref{eq:cesam_struct2}, one can write: 
 \begin{align}
-  \left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\nabla,\\
-  \left.\pfird[p]{\mu}\right|_t &= \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right],
+  % \left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\nabla,\\
+  % \left.\pfird[p]{\mu}\right|_t &= \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right],
+  \left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2\right]e^{-\xi}\nabla,\\
+  \left.\pfird[p]{\mu}\right|_t &= -\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2,
 \end{align}
 which shows that $\left(\partial T/\partial \mu\right)_t$ depends on $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$, while $\left(\partial p/\partial \mu\right)_t$ depends only on $\zeta$ and $\mu$.
 
 Then, 
 \begin{equation}
-  \pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t = e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(-e^{-\xi}\nabla + e^{-\xi}\pfird[\nabla]{\xi}\right),
+  % \pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t = e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(-e^{-\xi}\nabla + e^{-\xi}\pfird[\nabla]{\xi}\right),
+  \pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t = e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2\right]\left(-e^{-\xi}\nabla + e^{-\xi}\pfird[\nabla]{\xi}\right),
 \end{equation}
 and 
 \begin{equation}
@@ -631,10 +636,11 @@ Canceling the null terms, the full expression for the derivative of $T(\partial 
   &\quad-\frac{2}{3}\dot{M}_\mr{acc}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\xi}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left(\frac{1}{\delta}\pfird[\delta]{\xi} - \frac{1}{\rho}\pfird[\rho]{\xi}\right)\left.\pfird[p]{\mu}\right|_t\right\}
 \end{align}
 
-Partial derivatives with respect to the other variables are derived similarly, completing the necessary modifications to the structure equations.
+Partial derivatives with respect to the other variables are derived similarly, completing the necessary modifications to the structure equations. 
 
 \subsubsection{Adding deuterium to the accreted material}
 \label{sec:accretion_deuterium}
+
 
 \subsubsection{Numerical constraints in accretion}
 \label{sec:numerical_constraints}
@@ -765,9 +771,22 @@ Partial derivatives with respect to the other variables are derived similarly, c
 \renewcommand{\theequation}{A.\arabic{equation}}
 \setcounter{equation}{0}
 
-For simplicity, we will use the following notations:
+First, I recall the full form of the structure equations in \texttt{Cesam2k20}, including the rotational terms that were omitted in Eq.~\eqref{eq:cesam_struct1} in the main text, since rotation is not considered in this work. However, the partial derivatives used in the Newton-Raphson iterations are computed with the rotational terms included, in order to facilitate future extensions of the accretion models that incorporate rotation. The full system of structure equations is given by:
+\begin{subequations} \label{eq:cesam2k20_struct_eq_full}
+  \begin{align}
+    0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}, \label{eq:cesam_struct1_full}\\
+    0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla, \label{eq:cesam_struct2_full}\\
+    0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta}, \label{eq:cesam_struct3_full}\\
+    0 &= \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon  - \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta}, \label{eq:cesam_struct4_full}\\
+    0 &= \pfird[\mu]{q} - \frac{\psi}{\theta}, \label{eq:cesam_struct5_full}\\
+    0 &= \pfird[\psi]{q}, \label{eq:cesam_struct6_full}\\
+    0 &= \pfird[X_i]{t} + \frac{2}{3 M_\odot\mu^{1/2}}\pfird[F_i]{\mu} - \Psi_i(\xi, \eta, \bvec{X}), 1\leq i \leq n_\mr{elem}. \label{eq:cesam_struct7_full}
+  \end{align}
+\end{subequations}
+
+For simplicity, I will adopt the following notations:
 \begin{equation}
-  \xi' \equiv \pfird[\xi]{q},\ \eta' \equiv \pfird[\eta]{q},\ \zeta' \equiv \pfird[\zeta]{q},\ \lambda' \equiv \pfird[\lambda]{q},\ \mu' \equiv \pfird[\mu]{q}
+  \xi' \equiv \pfird[\xi]{q},\ \eta' \equiv \pfird[\eta]{q},\ \zeta' \equiv \pfird[\zeta]{q},\ \lambda' \equiv \pfird[\lambda]{q},\ \mu' \equiv \pfird[\mu]{q}.
 \end{equation}
 
 % Derivatives of be(1) with respect to the variables are:
