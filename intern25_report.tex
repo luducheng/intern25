@@ -381,7 +381,7 @@ Using this, Eq.~\eqref{eq:grav_energy} can be rewritten in terms of $q_m$ as:
 \begin{equation}
    \epsilon_\mr{g} = -T \left.\pfird[s]{t}\right|_{q_m} - T \left.\pfird[s]{q_m}\right|_t\left.\pfird[q_m]{t}\right|_m.
 \end{equation}
-While the expressions for $\epsilon_\mr{g}$ in Eq.~\eqref{eq:grav_energy} and its reformulation above are physically equivalent, the latter is more convenient when the time derivative at fixed mass coordinate is not readily available.
+While the expressions for $\epsilon_\mr{g}$ in Eq.~\eqref{eq:grav_energy} and its reformulation above are mathematically equivalent, the latter is more convenient when the time derivative at fixed mass coordinate is not readily available.
 
 \subsubsection{Deuterium from the accreted material}
 \label{sec:deuterium_burning}
@@ -424,6 +424,16 @@ Following the simplified treatment by \textcite{HartmannEtAl1998}, these conside
 where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in Eq.~(5) of \textcite{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of accretion energy injected into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into angular momentum \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
 
 This heat injection can affect the evolution of accreting stars \parencite[e.g., ][]{KunitomoEtAl2017,AmardMatt2023}. A higher value of $\xi_\mathrm{add}$ causes the star to expand by adding thermal energy. However, for simplicity, heat injection during accretion is not included in this work. By neglecting this effect, I am effectively considering the case where $\xi_\mr{add} = 0$, which is a reasonable approximation for most PMS stars, as the majority of the accretion energy is expected to be radiated away before reaching the star \parencite{HartmannEtAl1998}.
+
+% uniform deposition of energy  in the convective zone:
+% \begin{equation}
+%   \epsilon_\mr{add}^\mr{(uniform)} = \frac{L_\mr{add}}{M_\mr{*}}  
+% \end{equation}
+
+% linear deposition of energy in the convective zone:
+% \begin{equation}
+%   \epsilon_\mr{add}^\mr{(linear)} = \frac{L_\mr{add}}{M_\mr{*}}\max\left[0, \frac{2}{m_\mr{ke}^2}\left(\frac{M_r}{M_*} - 1 + m_\mr{ke}\right)\right] 
+% \end{equation}
 
 \subsection{The stellar evolution code \texttt{Cesam2k20}}
 \label{sec:cesam2k20}
@@ -528,7 +538,7 @@ In this project, I focus on the evolution of the second hydrostatic core, whose 
 \subsubsection{Input physics}
 \label{sec:cesam2k20_input_physics}
 
-Although \texttt{Cesam2k20} is capable of modeling rotation and diffusion, I keep the input physics simple at this stage to focus on the impact of accretion on stellar structure. The interactions of accretion with rotation and diffusion will be an important aspect in future work. The models are computed for 1D, single stars without rotation, magnetic fields, or diffusion. Mass loss is not considered; the only mechanism that alters the stellar mass is accretion. The initial chemical composition follows the solar mixture of \textcite{AsplundEtAl2009}, with meteoritic determination for non-volatile elements as recommended by \textcite{SerenelliEtAl2009}, with the exception of the deuterium abundance, which is varied to explore its impact on accreting stars.
+Although \texttt{Cesam2k20} is capable of modeling rotation and diffusion, I keep the input physics simple at this stage to focus on the impact of accretion on stellar structure. The interactions of accretion with rotation and diffusion will be an important aspect in future work. The models are computed for 1D, single stars without rotation, magnetic fields, or diffusion. Mass loss is not considered; the only mechanism that alters the stellar mass is accretion. The initial chemical composition follows the solar mixture of \textcite{AsplundEtAl2009}, with meteoritic determination for non-volatile elements as recommended by \textcite{SerenelliEtAl2009}. The isotopic ratios follow the solar composition by \textcite{AsplundEtAl2021}, except for the deuterium abundance, which is varied to explore its impact on accreting stars.
 
 Convection is modeled using the mixing-length theory (MLT) \parencite{CoxGiuli1968a}. It assumes that convective energy transport occurs via fluid elements moving from hotter to cooler regions over a characteristic distance-the mixing length—typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mr{MLT}$. We adopt a solar-calibrated value of $\alpha_\mr{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
 
@@ -585,12 +595,20 @@ The relation between the two coordinates, $\left(\partial q_m/\partial m\right)_
 \end{equation}
 These expressions will be useful later for computing the structure equation Eq.~\eqref{eq:cesam_struct4} and its partial derivatives in the next section.
 
-To map thermodynamic quantities from the previous to the current model, a table of physical variables as functions of $\mu_x = \mu \left(\frac{M_\odot}{M_1}\right)^{2/3}$ is constructed at the previous time step. At the current time step, for each grid point $\mu$, the corresponding homologous coordinate $\mu_x = \mu \left(\frac{M_\odot}{M_2}\right)^{2/3}$ is computed, and the thermodynamic properties are obtained by interpolating values stored in the table at this $\mu_x$. This procedure assumes that thermal properties remain identical at fixed $\mu_x$ between time steps, so the accreted material inherits the thermodynamic state of the surface layers from the previous model. The rest of the computation proceeds using the set of Eggleton variables defined in Eq.~\eqref{eq:cesam2k20_variables}.
+To map thermodynamic quantities from the previous to the current model, a table of physical variables as functions of $\mu_x = \mu \left(\frac{M_\odot}{M_1}\right)^{2/3}$ is constructed at the previous time step. At the current time step, for each grid point $\mu$, the corresponding homologous coordinate $\mu_x = \mu \left(\frac{M_\odot}{M_2}\right)^{2/3}$ is computed, and the thermodynamic properties are obtained by interpolating values stored in the table at this $\mu_x$. 
+
+This mapping is illustrated in Fig.~\ref{fig:mapping_coordinates}, which shows how mass shells at the same $\mu$ correspond to different $\mu_x$ values as the total stellar mass increases from $M_1$ to $M_2$. This procedure assumes that thermal properties remain identical at fixed $\mu_x$ between time steps, so the accreted material inherits the thermodynamic state of the surface layers from the previous model. The rest of the computation proceeds using the set of Eggleton variables defined in Eq.~\eqref{eq:cesam2k20_variables}.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.7\textwidth]{mapping_coordinates.pdf}
+  \caption{Scheme of the mapping between homologous coordinates $\mu_x$ and Lagrangian coordinates $\mu$ in \texttt{Cesam2k20}. Mass shells at the same $\mu$ correspond to different $\mu_x$ values as the total stellar mass increases from $M_1$ to $M_2$. The two vertical black dashed lines mark $M_1$ and $M_2$. The gray shaded region highlights the newly accreted material whose thermodynamic properties can be retrieved via this mapping. The difference in total mass between the two models is exaggerated for clarity.} \label{fig:mapping_coordinates}
+\end{figure}
 
 \subsubsection{Modifications to the structure equations}
 \label{sec:accretion_struct_eq}
 
-In \texttt{Cesam2k20}, the nonlinear boundary value problem is solved using the Newton-Raphson method. In the context of stellar evolution modeling, this approach is commonly known as the Henyey method \parencite{HenyeyEtAl1959}. The structure equations are solved iteratively, with the Jacobian matrix of the system in Eqns.~\eqref{eq:cesam_struct1}-\eqref{eq:cesam_struct7} updated at each iteration. This matrix contains the partial derivatives of the structure equations with respect to the variables $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$, which guide the solution toward convergence. Following the standard Henyey scheme, each time step is split into two substeps: first, the chemical composition is updated while the structural variables ($\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$) are held fixed;; second, the structure is recomputed to restore quasi-static equilibrium with the updated composition. I focus here on the modifications introduced in the quasi-static equilibrium step, and discuss changes to the treatment of chemical evolution in the next section.
+In \texttt{Cesam2k20}, the nonlinear boundary value problem is solved using the Newton-Raphson method. In the context of stellar evolution modeling, this approach is commonly known as the Henyey method \parencite{HenyeyEtAl1959}. The structure equations are solved iteratively, with the Jacobian matrix of the system in Eqns.~\eqref{eq:cesam_struct1}-\eqref{eq:cesam_struct7} updated at each iteration. This matrix contains the partial derivatives of the structure equations with respect to the variables $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$, which guide the solution toward convergence. Following the standard Henyey scheme, each time step is split into two substeps: first, the chemical composition is updated while the structural variables ($\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$) are held fixed; second, the structure is recomputed to restore quasi-static equilibrium with the updated composition. I focus here on the modifications introduced in the quasi-static equilibrium step, and discuss changes to the treatment of chemical evolution in the next section.
 
 The principal modifications introduced in this work concern the energy equation, Eq.~\eqref{eq:cesam_struct4}, specifically the gravitational energy generation term, $\epsilon_\mr{g}$. This term is revised to include the gravitational energy contributed by accreted material. Consequently, the corresponding partial derivatives in the Jacobian matrix are recalculated to account for this change.
 
@@ -641,9 +659,18 @@ Partial derivatives with respect to the other variables are derived similarly, c
 \subsubsection{Adding deuterium to the accreted material}
 \label{sec:accretion_deuterium}
 
+As with thermodynamic properties, the chemical composition of the accreted material must be specified. However, because the accreted composition can differ significantly from that of the star (see Sec.~\ref{sec:deuterium_burning}), the homologous assumption used for thermodynamic quantities does not apply. Instead, the accreted material is treated as a separate layer with its own composition.
 
-\subsubsection{Numerical constraints in accretion}
-\label{sec:numerical_constraints}
+The chemical composition is stored as a function of mass coordinate at each time step, and chemical transport is computed at the beginning of the next time step. During this computation, composition values at desired locations are obtained by interpolating the tables; when outside the range, the last stored point, i.e., the surface composition is used.
+
+To account for a different composition in the accreted material, at the start of each time step I patch the chemical composition table from the previous step (defined up to mass $M_1$) to the new total mass $M_2$, assigning the additional layers the initial model's composition. This assumes that the initial model has the same composition as its accretion disk, which is generally valid since no thermonuclear reactions have occurred during the formation of the second hydrostatic core. For deuterium, a new free parameter $[\mr{D/H}]$ is introduced to vary its abundance, and the effects are presented in Sec.~\ref{sec:deuterium_abundance}.
+
+% \subsubsection{Numerical constraints in accretion}
+% \label{sec:numerical_constraints}
+
+% To compute stellar evolution efficiently without compromising accuracy, some constraints must be imposed on the numerical scheme. Some examples of these constraints in \texttt{Cesam2k20} involve limiting the maximum change in gravitational energy, chemical composition, central temperature, central density, effective temperature, etc. Accretion brings a huge amount of mass and energy into the system, which can lead to numerical instabilities if not properly managed. To ensure stability, some constraints must be imposed. Additionally, the usual crtierion for convergence in \texttt{Cesam2k20} may not be sufficient to ensure convergence in the presence of accretion.
+
+% The change in mass, energy, and composition due to accretion must be carefully controlled to avoid introducing instabilities into the simulation. This is achieved by imposing strict limits on the maximum allowed changes in these quantities during each time step. For example, the maximum change in mass is limited to a small fraction of the total stellar mass, while the changes in energy and composition are similarly constrained.
 
 % \subsubsection{Limiting the change in gravitational energy}
 % \label{sec:limiting_grav_energy}
@@ -651,41 +678,27 @@ Partial derivatives with respect to the other variables are derived similarly, c
 % \subsubsection{Limiting the change in mass}
 % \label{sec:limiting_mass_change}
 
-% \subsection{? Heat from accretion (kinetic energy)}
-
-% \begin{outline}{gray}
-%   \item the second term in the energy equation, $\epsilon_\mr{add}$, is the kinetic energy of the accreting material
-%   \item probably don't have enough time to implement this, but can be done later
-% \end{outline}
-
-% uniform deposition of energy  in the convective zone:
-% \begin{equation}
-%   \epsilon_\mr{add}^\mr{(uniform)} = \frac{L_\mr{add}}{M_\mr{*}}  
-% \end{equation}
-
-% linear deposition of energy in the convective zone:
-% \begin{equation}
-%   \epsilon_\mr{add}^\mr{(linear)} = \frac{L_\mr{add}}{M_\mr{*}}\max\left[0, \frac{2}{m_\mr{ke}^2}\left(\frac{M_r}{M_*} - 1 + m_\mr{ke}\right)\right] 
-% \end{equation}
-
 \section{Results}
 \label{sec:results}
-
 \subsection{The toy problem}
 \label{sec:toy_problem}
-\begin{outline}{gray}
-  \item the toy problem of static models, without accretion but differe slightly in mass to emulate the effect of accretion
-  \item one with full convective stars and the other with radiative core
-  \item ? the profile of the gravitational energy and the heat from accretion
-  \item show the problem with this kind of approach necessicate the implementation of accretion in the actual evolution 
-  \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
-\end{outline}
+% \begin{outline}{gray}
+%   \item the toy problem of static models, without accretion but differe slightly in mass to emulate the effect of accretion
+%   \item one with full convective stars and the other with radiative core
+%   \item ? the profile of the gravitational energy and the heat from accretion
+%   \item show the problem with this kind of approach necessicate the implementation of accretion in the actual evolution 
+%   \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
+% \end{outline}
+
+Before plunging into the results of the accreting models, I first present a toy problem that illustrates the limitations of static models in capturing the effects of accretion and therefore necessitate the implementation of accretion in the actual evolution. This toy problem consists of two pairs of static stellar models. The first pair consists of two fully convective models, while the second pair includes two models with a radiative core. In each pair, the models differ slightly in mass to emulate the effect of accretion. 
 
 \begin{figure}
   \centering  
   \includegraphics[width=\textwidth,keepaspectratio]{toy_problem_entropy.pdf}
-  \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.82\,M_\odot$ models.} \label{fig:toy_problem_entropy}
+  \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.802\,M_\odot$ models.} \label{fig:toy_problem_entropy}
 \end{figure}
+
+
 
 \subsection{Dependence on Iben constant}
 \label{sec:initial_models}
@@ -693,7 +706,8 @@ Partial derivatives with respect to the other variables are derived similarly, c
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{ciben_mass_init.pdf}
-  \caption{Comparison of initial models computed with different Iben constants, for \texttt{Cesam2k20} stellar models with masses between $0.5$ and $2.5\,M_\odot$. The dot-dashed lines correspond to models with $c_\mr{iben} = 5\times10^{-4}$, the solid lines to models with $c_\mr{iben} = 5\times10^{-5}$, and the dashed lines to models with $c_\mr{iben} = 1\times10^{-5}$. The corresponding initial central temperatures for each Iben constant are listed in the table.} \label{fig:comp_iben}
+  \caption{Comparison of initial models computed with different Iben constants using \texttt{Cesam2k20}, for stellar masses between $0.5$ and $2.5\,M_\odot$. Non-accreting (classic) models are shown as faint solid lines for reference. The dot-dashed lines correspond to models with $c_\mr{iben} = 5\times10^{-4}$, the solid lines to models with $c_\mr{iben} = 5\times10^{-5}$, and the dashed lines to models with $c_\mr{iben} = 1\times10^{-5}$. The corresponding initial central temperatures for each Iben constant are listed in the table.} 
+  \label{fig:comp_iben}
 \end{figure}
 
 \subsection{The effect of different accretion rates}
@@ -705,8 +719,8 @@ Partial derivatives with respect to the other variables are derived similarly, c
   \caption{Comparisons of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $\mr{D/H} = 2.0\times 10^{-5}$.} \label{fig:comp_accrate}
 \end{figure}
 
-\subsection{The effect of different chemical compositions}
-\label{sec:chemical_composition}
+\subsection{Dependence on deuterium abundance}
+\label{sec:deuterium_abundance}
 
 \begin{outline}{gray}
   \item compare accreting models with and without deuterium accreted in the outer layers
@@ -751,11 +765,6 @@ Partial derivatives with respect to the other variables are derived similarly, c
   \end{itemize}
 \end{outline}
 
-% \newpage
-% to be done at the end
-% \begin{outline}{gray}
-%   \item replace pre-main sequence with PMS 
-% \end{outline}
 % \section*{Acknowledgements}
 % \label{sec:acknowledgements}
 
