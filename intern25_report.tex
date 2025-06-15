@@ -37,6 +37,7 @@
 \newcommand{\fird}[2][]{\frac{\mathrm{d}#1}{\mathrm{d}#2}} 
 \newcommand{\secd}[2][]{\frac{\mathrm{d}^2#1}{\mathrm{d}#2^2}}
 \newcommand{\pfird}[2][]{\frac{\partial#1}{\partial#2}} 
+\newcommand{\lpfird}[2][]{\partial#1/\partial#2}
 \newcommand{\pfirdat}[3][1]{\left(\frac{\partial#1}{\partial#2}\right)_{\!\!\!#3}} 
 \newcommand{\dd}[1]{\mathrm{d}#1}
 % vectors
@@ -50,6 +51,13 @@
 }{%
   \end{itemize}%
 }
+
+% to reduce fontsize in the toc
+% \makeatletter
+% \renewcommand{\l@subsubsection}[2]{%
+%   \@dottedtocline{3}{3.7em}{2.0em}{\small #1}{#2}%
+% }
+% \makeatother
 
 % questions
 \newcommand{\draft}[1]{\textcolor{gray}{#1}}
@@ -92,7 +100,7 @@
 
 
 \newpage
-% \vspace*{10em}
+\vspace*{-4em}
 {\hypersetup{hidelinks}\large
 \tableofcontents
 }
@@ -150,7 +158,7 @@ This study focuses on the later stages of the accretion process, after the forma
 
 A parallel branch of the original \texttt{CESAM} code, \textit{Code d'Évolution Planétaire Adaptatif et Modulaire} (\texttt{CEPAM}) \parencite{GuillotMorel1995}, has been developed for modeling planetary formation and evolution. A future unification of these two branches would provide a powerful framework for studying the coupled evolution of stars and their planetary systems.
 
-In the next section, I review the current understanding of pre-main sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main sequence evolution is modeled in stellar evolution codes. In Sec.\ref{sec:methods}, I begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. I then detail the implementation of accretion in the code. The results of my models are presented in Sec.\ref{sec:results}, where I explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
+In the next section, I review the current understanding of pre-main sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.~\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main sequence evolution is modeled in stellar evolution codes. In Sec.~\ref{sec:methods}, I begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. I then detail the implementation of accretion in the code. The results of my models are presented in Sec.~\ref{sec:results}, where I explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.~\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
 
 \section{Pre-main sequence accretion}
 \label{sec:background}
@@ -240,7 +248,7 @@ The initial phase of PMS evolution is characterized by a rapid decrease in both 
 
 The Hayashi track terminates at a minimum luminosity, where the central temperature becomes high enough for hydrogen to be fully ionized. This leads to a substantial drop in opacity in the central regions, making radiative transport more efficient, and a radiative core forms. The star then evolves toward higher effective temperatures while its luminosity remains approximately constant. This marks the beginning of the second phase of PMS evolution, where the star follows a more horizontal path in the HR diagram, known as the Henyey track, first described by \textcite{HenyeyEtAl1955}. During this stage, the star evolves with a radiative core while maintaining a convective envelope.
 
-This classic two-phase PMS evolution—first descending the vertical Hayashi track, then moving leftwards on the more horizontal Henyey track—is illustrated in Fig.~\ref{fig:hayashi_henyey_tracks}, which shows evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$, assuming initial composition $X \simeq 0.73$, $Y \simeq 0.25$ (see Sec.\ref{sec:cesam2k20} for details of the input physics). Arrows indicate the direction of stellar evolution, with mass labels marking the ends of each track. The nearly vertical portion corresponds to fully convective contraction (Hayashi track), while the more horizontal portion marks the emergence of a radiative core (Henyey track)..
+This classic two-phase PMS evolution—first descending the vertical Hayashi track, then moving leftwards on the more horizontal Henyey track—is illustrated in Fig.~\ref{fig:hayashi_henyey_tracks}, which shows evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$, assuming initial composition $X \simeq 0.73$, $Y \simeq 0.25$ (see Sec.~\ref{sec:cesam2k20} for details of the input physics). Arrows indicate the direction of stellar evolution, with mass labels marking the ends of each track. The nearly vertical portion corresponds to fully convective contraction (Hayashi track), while the more horizontal portion marks the emergence of a radiative core (Henyey track)..
 
 During PMS evolution, gravitational contraction remains the primary energy source, as the central temperature has not yet reached the threshold for hydrogen fusion. However, light elements such as deuterium and lithium can be burned at relatively low temperatures \parencite{KippenhahnEtAl2013}.
 
@@ -320,18 +328,18 @@ The gravitational energy released during the PMS phase contributes significantly
 
 The rate of gravitational energy release per unit mass is given by:
 \begin{equation}
-  \epsilon_g = -T\left.\pfird[s]{t}\right|_m, \label{eq:grav_energy}
+  \epsilon_\mr{g} = -T\left.\pfird[s]{t}\right|_m, \label{eq:grav_energy}
 \end{equation}
 where $s$ is the specific entropy.
 
 From the first law of thermodynamics, $\dd{q} = \dd{u} + p\dd{v}$, where $u$ is the specific internal energy and $v = 1/\rho$ is the specific volume, one can write:
 \begin{equation}
-  T\left.\pfird[s]{t}\right|_m = \pfird[q]{t} = \pfird[u]{t} + p\pfird[v]{t} = \pfird[u]{t} - \frac{p}{\rho^2}\pfird[\rho]{t}.
+  T\left.\pfird[s]{t}\right|_m = \left.\pfird[q]{t}\right|_m = \left.\pfird[u]{t}\right|_m + p\left.\pfird[v]{t}\right|_m = \left.\pfird[u]{t}\right|_m - \frac{p}{\rho^2}\left.\pfird[\rho]{t}\right|_m.
 \end{equation}
 
 In practice, the internal energy depends on the chemical composition and the equation of state, which complicates the calculation. However, for a chemically homogeneous star, we can use the Kippenhahn approximation \parencite{KippenhahnEtAl2013}, which instead expresses the entropy change as:
 \begin{equation}
-  T\left.\pfird[s]{t}\right|_m \simeq c_p\pfird[T]{t} - \frac{\delta}{\rho}\pfird[p]{t},
+  T\left.\pfird[s]{t}\right|_m \simeq c_p\left.\pfird[T]{t}\right|_m - \frac{\delta}{\rho}\left.\pfird[p]{t}\right|_m, \label{eq:grav_energy_kipp}
 \end{equation}
 where $c_p$ is the specific heat at constant pressure and $\delta = -\left(\partial \ln \rho / \partial \ln T\right)_p$. 
 
@@ -339,39 +347,39 @@ Since PMS stars are generally fully convective, chemical mixing is highly effici
 
 Substituting the Kippenhahn approximation into the energy conservation equation, Eq.~\eqref{eq:star_struct4} becomes:
 \begin{equation}
-  \pfird[l]{m} = \epsilon_\mr{nuc} - \epsilon_\nu - c_p\pfird[T]{t} + \frac{\delta}{\rho}\pfird[p]{t}. \label{eq:grav_energy_kipp}
+  \pfird[l]{m} = \epsilon_\mr{nuc} - \epsilon_\nu - \left.c_p\pfird[T]{t}\right|_m + \frac{\delta}{\rho}\left.\pfird[p]{t}\right|_m. \label{eq:star_struct4_kipp}
 \end{equation}
 
-However, applying Eq.~\eqref{eq:grav_energy_kipp} to evolving stellar models with accretion presents a complication: the thermodynamic and chemical properties of the accreted material are not provided directly by the stellar model. Estimating these properties requires special treatment, which is addressed in the next two sections.
+However, applying Eq.~\eqref{eq:star_struct4_kipp} to evolving stellar models with accretion presents a complication: the thermodynamic and chemical properties of the accreted material are not provided directly by the stellar model. Estimating these properties requires special treatment, which is addressed in the next two sections.
 
 \subsubsection{Coordinate transformation for accretion modeling}
 \label{sec:accretion_coords}
 
-To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mr{th} \simeq \Delta m, c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mr{acc} \simeq \Delta m / \dot{M}\mr{acc}$, is the time over which the mass is accreted. When $\tau\mr{th} \ll \tau_\mr{acc}$, the accreted material has time to thermally equilibrate with the stellar surface, thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mr{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
+To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mr{th} \simeq \Delta m, c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mr{acc} \simeq \Delta m / \dot{M}_\mr{acc}$, is the time over which the mass is accreted. When $\tau\mr{th} \ll \tau_\mr{acc}$, the accreted material has time to thermally equilibrate with the stellar surface, thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mr{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
 
 This assumption permits the use of fractional mass coordinates, defined as \parencite{SugimotoNomoto1975}
 \begin{equation}
-  q_m = \frac{m}{M_\star}.
+  q_m = \frac{m}{M_\star}. \label{eq:frac_mass_coord}
 \end{equation}
 
 Switching from the Lagrangian mass coordinate $m$ to the fractional mass coordinate $q_m$ modifies the form of time derivatives in the structure equations. For a generic function $f(m,t)$, the total differential can be expressed both in terms of $m$ and $q_m$:
 \begin{align}
   \dd{f} &= \left.\pfird[f]{t}\right|_{q_m} \dd{t} + \left.\pfird[f]{q_m}\right|_t\dd{q_m}\\ 
-  &= \left.\pfird[f]{t}\right|_{q_m} \dd{t} + \left.\pfird[f]{q_m}\right|_t\left(\left.\pfird[q_m]{t}\right|_m \dd{t} + \left.\pfird[q_m]{m}\right|_t \dd{m}\right)\\
+  &= \left.\pfird[f]{t}\right|_{q_m} \dd{t} + \left.\pfird[f]{q_m}\right|_t\left(\left.\pfird[q_m]{t}\right|_m \dd{t} + \left.\pfird[q_m]{m}\right|_t \dd{m}\right),\nonumber\\
   \dd{f} &= \left.\pfird[f]{t}\right|_m \dd{t} + \left.\pfird[f]{m}\right|_t \dd{m}
 \end{align}
 
 Equating the two expressions yields:
-\begin{equation}
-  \left.\pfird[f]{t}\right|_m = \left.\pfird[f]{t}\right|_{q_m} + \left.\pfird[f]{q_m}\right|_t \left.\pfird[q_m]{t}\right|_m
-  % &\left.\pfird[f]{m}\right|_t = \left.\pfird[f]{q_m}\right|_t\left.\pfird[q_m]{m}\right|_t.
-\end{equation}
+\begin{align}
+  &\left.\pfird[f]{t}\right|_m = \left.\pfird[f]{t}\right|_{q_m} + \left.\pfird[f]{q_m}\right|_t \left.\pfird[q_m]{t}\right|_m \label{eq:coord_transf1}\\
+  &\left.\pfird[f]{m}\right|_t = \left.\pfird[f]{q_m}\right|_t\left.\pfird[q_m]{m}\right|_t. \label{eq:coord_transf2}
+\end{align}
 
 Using this, Eq.~\eqref{eq:grav_energy} can be rewritten in terms of $q_m$ as:
 \begin{equation}
-   \epsilon_g = -T \left.\pfird[s]{t}\right|_{q_m} - T \left.\pfird[s]{q_m}\right|_t\left.\pfird[q_m]{t}\right|_m.
+   \epsilon_\mr{g} = -T \left.\pfird[s]{t}\right|_{q_m} - T \left.\pfird[s]{q_m}\right|_t\left.\pfird[q_m]{t}\right|_m.
 \end{equation}
-While the expressions for $\epsilon_g$ in Eq.~\eqref{eq:grav_energy} and its reformulation above are physically equivalent, the latter is more convenient when the time derivative at fixed mass coordinate is not readily available.
+While the expressions for $\epsilon_\mr{g}$ in Eq.~\eqref{eq:grav_energy} and its reformulation above are physically equivalent, the latter is more convenient when the time derivative at fixed mass coordinate is not readily available.
 
 \subsubsection{Deuterium from the accreted material}
 \label{sec:deuterium_burning}
@@ -409,9 +417,9 @@ The fractional surface area covered by accretion shock can influence the radiati
 
 Following the simplified treatment by \textcite{HartmannEtAl1998}, these considerations can be combined into an effective energy injection rate from the accreted material:
 \begin{equation}
-  L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}}{R_\star},
+  L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}_\mr{acc}}{R_\star},
 \end{equation}
-where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in \textcite[Eq.~(5)][]{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of accretion energy injected into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into angular momentum \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
+where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in Eq.~(5) of \textcite{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of accretion energy injected into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into angular momentum \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
 
 This heat injection can affect the evolution of accreting stars \parencite[e.g., ][]{KunitomoEtAl2017,AmardMatt2023}. A higher value of $\xi_\mathrm{add}$ causes the star to expand by adding thermal energy. However, for simplicity, heat injection during accretion is not included in this work. By neglecting this effect, I am effectively considering the case where $\xi_\mr{add} = 0$, which is a reasonable approximation for most PMS stars, as the majority of the accretion energy is expected to be radiated away before reaching the star \parencite{HartmannEtAl1998}.
 
@@ -425,13 +433,13 @@ We use the stellar evolution code \texttt{Cesam2k20} \parencite{MarquesEtAl2013,
 
 The system of equations in Eqns.~\eqref{eq:star_struct} encapsulates the fundamental physics governing stellar structure and evolution. However, in numerical implementation, these equations are often reformulated to improve stability and convergence. One effective approach, discussed by \textcite{Morel1997}, is to use the set of variables introduced by \textcite{Eggleton1971},
 \begin{equation*}
-\left(\frac{m}{M_\odot}\right)^{2/3},\quad \left(\frac{r}{R_\odot}\right)^2,\quad \left(\frac{l}{L_\odot}\right)^{2/3}, \quad l \geq 0
+  \left(\frac{m}{M_\odot}\right)^{2/3},\quad \left(\frac{r}{R_\odot}\right)^2,\quad \left(\frac{l}{L_\odot}\right)^{2/3}, \quad l \geq 0
 \end{equation*}
 This choice improves numerical precision and helps avoid singularities at the stellar center. In cases where $l < 0$—which can occur during late evolutionary stages—the variable $l/L_\odot$ is used instead. Since this project focuses on the pre-main sequence phase, where such cases do not arise, we adopt the Eggleton variables throughout.
 
 Additionally, because pressure and temperature can span several orders of magnitude in the stellar interior, it is numerically advantageous to work with their logarithms. Accordingly, the set of variables ultimately used in \texttt{Cesam2k20} is:
 \begin{equation}
-\xi = \ln P,\quad \eta = \ln T,\quad \zeta = \left(\frac{r}{R_\odot}\right)^2,\quad \lambda = \left(\frac{l}{L_\odot}\right)^{2/3},\quad \mu = \left(\frac{m}{M_\odot}\right)^{2/3}.
+  \xi = \ln p,\quad \eta = \ln T,\quad \zeta = \left(\frac{r}{R_\odot}\right)^2,\quad \lambda = \left(\frac{l}{L_\odot}\right)^{2/3},\quad \mu = \left(\frac{m}{M_\odot}\right)^{2/3}. \label{eq:cesam2k20_variables}
 \end{equation}
 
 \subsubsection{Automatic location of grid points}
@@ -475,7 +483,7 @@ The full set of structure and composition equations solved at each time step is:
     0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}, \label{eq:cesam_struct1}\\
     0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla, \label{eq:cesam_struct2}\\
     0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta}, \label{eq:cesam_struct3}\\
-    0 &= \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon  + \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta}, \label{eq:cesam_struct4}\\
+    0 &= \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon  - \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta}, \label{eq:cesam_struct4}\\
     0 &= \pfird[\mu]{q} - \frac{\psi}{\theta}, \label{eq:cesam_struct5}\\
     0 &= \pfird[\psi]{q}, \label{eq:cesam_struct6}\\
     0 &= \pfird[X_i]{t} + \frac{2}{3 M_\odot\mu^{1/2}}\pfird[F_i]{\mu} - \Psi_i(\xi, \eta, \bvec{X}), 1\leq i \leq n_\mr{elem}. \label{eq:cesam_struct7}
@@ -495,9 +503,9 @@ along with constitutive relations (e.g., equations of state, opacity laws) to ev
 \subsubsection{PMS initial models}
 \label{sec:pms_initial_models}
 
-At time $t = 0$, to begin the computation, the values of pressure $P(m, 0)$, temperature $T(m, 0)$, radius $R(m, 0)$, luminosity $L(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
+At time $t = 0$, to begin the computation, the values of pressure $p(m, 0)$, temperature $T(m, 0)$, radius $r(m, 0)$, luminosity $l(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
 
-This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior, except in the thin superadiabatic layers near the surface (see Fig.\ref{fig:toy_problem_entropy} and the corresponding discussion for details). In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
+This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior, except in the thin superadiabatic layers near the surface (see Fig.~\ref{fig:toy_problem_entropy} and the corresponding discussion for details). In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
 \begin{equation}
   \pfird[l]{m} = \epsilon_\mr{g} = -T\pfird[s]{t} = cT,
 \end{equation}
@@ -547,26 +555,92 @@ The input physics are summarized in Table \ref{tab:input_physics}. Building on t
 \subsection{Accretion in \texttt{Cesam2k20}}
 \label{sec:accretion_cesam2k20}
 
-Building on the general modeling of accretion described in Sec.\ref{sec:accretion_modeling} and the details of the stellar evolution code \texttt{Cesam2k20} in Sec.\ref{sec:cesam2k20}, this section outlines how key physical effects—particularly the treatment of gravitational energy and deuterium from accreted material—are implemented within the code.
+Building on the general modeling of accretion described in Sec.~\ref{sec:accretion_modeling} and the details of the stellar evolution code \texttt{Cesam2k20} in Sec.~\ref{sec:cesam2k20}, this section outlines how key physical effects—particularly the treatment of gravitational energy and deuterium from accreted material—are implemented within the code.
 
 \subsubsection{Homologous coordinates for \texttt{Cesam2k20}}
 \label{sec:homologous_coord_cesam}
 
+Since \texttt{Cesam2k20} uses dimensionless Eggleton variable $\mu \equiv \left(m/M_\odot\right)^{2/3}$ as the mass coordinate, the homologous coordinate defined in Eq.~\eqref{eq:frac_mass_coord} need to be adapted accordingly. Consider two stellar models: one at the previous time step with mass $M_1$, and another at the current time step with mass $M_2 = M_1 + \dot{M}_\mr{acc} \dd{t}$, where $\dd{t}$ is small. The goal is to choose a coordinate such that the thermodynamic properties of the accreted material can be retrieved from those of the surface in the previous model.
+
+I define the homologous coordinate as:
+\begin{equation}
+  \mu_x \equiv \left( \frac{m}{M_\star} \right)^{2/3},
+\end{equation}
+where $M_\star$ is either $M_1$ or $M_2$, depending on whether the quantity is evaluated at the previous or current time step.
+
+Then the time derivative $\left(\partial q_m/\partial t\right)_m$ in Eq.~\eqref{eq:coord_transf1}, with $\mu_x$ replaced by $q_m$ and $m$ replaced by $\mu$, evaluates to:
+\begin{equation}
+  \left.\pfird[\mu_x]{t}\right|_\mu = \mu\pfird[\left(M_\odot/M_2\right)^{2/3}]{t} = -\frac{2}{3}\mu\frac{M_\odot^{2/3}}{M_2^{5/3}}\dot{M}_\mr{acc} = -\frac{2}{3}\mu_x\frac{\dot{M}_\mr{acc}}{M_2}, \label{eq:dmux_dt_mu}
+\end{equation}
+where $\mu_x$ is substituted by $\mu\left(M_\odot/M_2\right)^{2/3}$. 
+
+The relation between the two coordinates, $\left(\partial q_m/\partial m\right)_t$ in Eq.~\eqref{eq:coord_transf2}, is more straightforward:
+\begin{equation}
+  \left.\pfird[\mu_x]{\mu}\right|_t = \left(\frac{M_\odot}{M_2}\right)^{2/3}. 
+\end{equation}
+These expressions will be useful later for computing the structure equation Eq.~\eqref{eq:cesam_struct4} and its partial derivatives in the next section.
+
+To map thermodynamic quantities from the previous to the current model, a table of physical variables as functions of $\mu_x = \mu \left(\frac{M_\odot}{M_1}\right)^{2/3}$ is constructed at the previous time step. At the current time step, for each grid point $\mu$, the corresponding homologous coordinate $\mu_x = \mu \left(\frac{M_\odot}{M_2}\right)^{2/3}$ is computed, and the thermodynamic properties are obtained by interpolating values stored in the table at this $\mu_x$. This procedure assumes that thermal properties remain identical at fixed $\mu_x$ between time steps, so the accreted material inherits the thermodynamic state of the surface layers from the previous model. The rest of the computation proceeds using the set of Eggleton variables defined in Eq.~\eqref{eq:cesam2k20_variables}.
 
 \subsubsection{Modifications to the structure equations}
 \label{sec:accretion_struct_eq}
 
-In \texttt{Cesam2k20}, the solution of the non-linear boundary problem is done by Newton-Raphson iterations, or known as the
-Henyey method \parencite{HenyeyEtAl1959} in context of stellar evolution. The structure equations are solved iteratively, with the Jacobian matrix of the system of equations being updated at each iteration. The Jacobian matrix contains the partial derivatives of the structure equations with respect to the variables, which are used to guide the convergence of the solution.
+In \texttt{Cesam2k20}, the nonlinear boundary value problem is solved using the Newton-Raphson method. In the context of stellar evolution modeling, this approach is commonly known as the Henyey method \parencite{HenyeyEtAl1959}. The structure equations are solved iteratively, with the Jacobian matrix of the system in Eqns.~\eqref{eq:cesam_struct1}-\eqref{eq:cesam_struct7} updated at each iteration. This matrix contains the partial derivatives of the structure equations with respect to the variables $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$. These derivatives guide the solution toward convergence.
 
-My main modification to the structure equations is in the energy equation, i.e., Eq.~\eqref{eq:cesam_struct4}, and then of course, the relevant partial derivatives in the Jacobian matrix. 
+The principal modifications introduced in this work concern the energy equation, Eq.~\eqref{eq:cesam_struct4}, specifically the gravitational energy generation term, $\epsilon_\mr{g}$. This term is revised to include the gravitational energy contributed by accreted material. Consequently, the corresponding partial derivatives in the Jacobian matrix are recalculated to account for this change.
 
- 
-\subsubsection{Limiting the maximum change in gravitational energy}
-\label{sec:limiting_grav_energy}
+Using the homologous coordinate $\mu_x$ and applying Eq.~\eqref{eq:coord_transf2} and Eq.~\eqref{eq:dmux_dt_mu}, the expression of $\epsilon_\mr{g}$ in Eq.~\eqref{eq:grav_energy_kipp} expands to:
+\begin{align}
+  T\left.\pfird[s]{t}\right|_\mu &= c_p\left.\pfird[T]{t}\right|_\mu - \frac{\delta}{\rho}\left.\pfird[p]{t}\right|_\mu, \nonumber\\
+  &= c_p\left.\pfird[T]{t}\right|_{\mu_x} - \frac{\delta}{\rho}\left.\pfird[p]{t}\right|_{\mu_x} - 
+  \frac{2}{3}\mu\frac{M_\odot^{2/3}}{M_2^{5/3}}\dot{M}_\mr{acc}\left.\pfird[\mu]{\mu_x}\right|_t\left(c_p\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left.\pfird[p]{\mu}\right|_t\right). \label{eq:grav_energy_kipp_mux}
+\end{align}
 
-\subsubsection{Limiting the maximum change in mass}
-\label{sec:limiting_mass_change}
+It is important to distinguish between spatial and temporal derivatives in this context, as they serve different purposes. Spatial derivatives are evaluated at the current time step using data from the equation of state and opacity tables and are used to solve the nonlinear boundary value problem. In contrast, temporal derivatives are involved in the evolution of the system, which is an initial value problem, and require data from the previous time step.
+
+More explicitly, the implementation of Eq.~\eqref{eq:grav_energy_kipp_mux} in \texttt{Cesam2k20} reads:
+\begin{equation}
+  T\left.\pfird[s]{t}\right|_\mu = c_p\frac{T_{\mu_x} - T_{\mu_x}^t}{\dd{t}} - \frac{\delta}{\rho}\frac{p_{\mu_x} - p_{\mu_x}^t}{\dd{t}} - \frac{2}{3}\mu\frac{M_\odot^{2/3}}{M_2^{5/3}}\dot{M}_\mr{acc}\left.\pfird[\mu]{\mu_x}\right|_t\left(c_p\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left.\pfird[p]{\mu}\right|_t\right),
+\end{equation}
+where $T_{\mu_x}$ and $p_{\mu_x}$ are the temperature and pressure at the current time step; $T_{\mu_x}^t$ and $p_{\mu_x}^t$ are those at the previous time step; all quantities are evaluated at the same coordinate $\mu_x$; and $\dd{t}$ is the time interval between the two models. 
+
+The next step is to compute the partial derivatives of the gravitational energy generation term, $\epsilon_\mr{g}$. Due to their complexity and length, the full expressions are provided in Appendix~\ref{app:jacobian}. Below is an example derivation of the partial derivative with respect to $\xi$.
+
+Using Eqns.~\eqref{eq:cesam_struct1} and \eqref{eq:cesam_struct2}, one can write: 
+\begin{align}
+  \left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\nabla,\\
+  \left.\pfird[p]{\mu}\right|_t &= \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right],
+\end{align}
+which shows that $\left(\partial T/\partial \mu\right)_t$ depends on $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$, while $\left(\partial p/\partial \mu\right)_t$ depends only on $\zeta$ and $\mu$.
+
+Then, 
+\begin{equation}
+  \pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t = e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(-e^{-\xi}\nabla + e^{-\xi}\pfird[\nabla]{\xi}\right),
+\end{equation}
+and 
+\begin{equation}
+  \pfird[]{\xi}\left.\pfird[p]{\mu}\right|_t = 0.
+\end{equation}
+
+Canceling the null terms, the full expression for the derivative of $T(\partial s/\partial t)$ with respect to $\xi$ is:
+\begin{align}
+  &\pfird[]{\xi}\left(T\pfird[s]{t}\right) = \left\{\pfird[c_p]{\xi}\left(T_{\mu_x} - T_{\mu_x}^t\right) - \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\xi} - \frac{1}{\rho^2}\pfird[\rho]{\xi}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  +\pfird[p_{\mu_x}]{\xi}\right]\right\}\frac{1}{\dd{t}}\\
+  &\quad-\frac{2}{3}\dot{M}_\mr{acc}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\xi}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left(\frac{1}{\delta}\pfird[\delta]{\xi} - \frac{1}{\rho}\pfird[\rho]{\xi}\right)\left.\pfird[p]{\mu}\right|_t\right\}
+\end{align}
+
+Partial derivatives with respect to the other variables are derived similarly, completing the necessary modifications to the structure equations.
+
+\subsubsection{Adding deuterium to the accreted material}
+\label{sec:accretion_deuterium}
+
+\subsubsection{Numerical constraints in accretion}
+\label{sec:numerical_constraints}
+
+% \subsubsection{Limiting the change in gravitational energy}
+% \label{sec:limiting_grav_energy}
+
+% \subsubsection{Limiting the change in mass}
+% \label{sec:limiting_mass_change}
 
 % \subsection{? Heat from accretion (kinetic energy)}
 
@@ -674,13 +748,18 @@ My main modification to the structure equations is in the energy equation, i.e.,
 \printbibliography[heading=bibintoc, title={References}]
 
 \newpage
+\newgeometry{top=2cm, bottom=2cm, left=1.5cm, right=1.5cm}
 \appendix
-\section{Appendix: The jacobian of the stellar structure equations}
-\label{sec:appendix_jacobian}
-% For simplicity, we will use the following notations:
-% \begin{equation*}
-%   \xi' \equiv \pfird[\xi]{q},\ \eta' \equiv \pfird[\eta]{q},\ \zeta' \equiv \pfird[\zeta]{q},\ \lambda' \equiv \pfird[\lambda]{q},\ \mu' \equiv \pfird[\mu]{q}
-% \end{equation*}
+
+\section*{The terms in the jacobian relevant to the energy equation}
+\label{app:jacobian}
+\renewcommand{\theequation}{A.\arabic{equation}}
+\setcounter{equation}{0}
+
+For simplicity, we will use the following notations:
+\begin{equation}
+  \xi' \equiv \pfird[\xi]{q},\ \eta' \equiv \pfird[\eta]{q},\ \zeta' \equiv \pfird[\zeta]{q},\ \lambda' \equiv \pfird[\lambda]{q},\ \mu' \equiv \pfird[\mu]{q}
+\end{equation}
 
 % Derivatives of be(1) with respect to the variables are:
 % \begin{align}
@@ -724,5 +803,105 @@ My main modification to the structure equations is in the energy equation, i.e.,
 %   \pfird[(3)]{\psi} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{1}{\theta}\\
 %   \pfird[(3)]{\xi'}& = 0,\ \pfird[(3)]{\eta'} = 0,\ \pfird[(3)]{\zeta'} = 1,\ \pfird[(3)]{\lambda'} = 0,\ \pfird[(3)]{\mu'} = 0,\ \pfird[(3)]{\psi'} = 0
 % \end{align}
+
+From the equation of state, we have:
+\begin{itemize}
+  \item $c_p = c_p(\xi, \eta, \not\zeta, \not\lambda, \mu)$
+  \item $\delta = \delta(\xi, \eta, \not\zeta, \not\lambda, \mu)$
+  \item $\rho = \rho(\xi, \eta, \not\zeta, \not\lambda, \mu)$
+\end{itemize}
+
+\noindent\textbf{term $\lpfird[T]{\mu}|_t$}
+
+\begin{align}
+  \left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\nabla \Rightarrow \left.\pfird[T]{\mu}\right|_t\left(\xi, \eta, \zeta, \lambda, \mu\right)
+\end{align}
+derivatives:
+\begin{align}
+  \pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(-e^{-\xi}\nabla + e^{-\xi}\pfird[\nabla]{\xi}\right)\\
+  \pfird[]{\eta}\left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(\pfird[\nabla]{\eta} + \nabla\right)\\
+  \pfird[]{\zeta}\left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(-2\frac{\mu^2}{\zeta^3}\right) + \frac{M_\odot}{4\pi R_\odot}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right) \Omega^2\right]e^{-\xi}\nabla\nonumber \\
+  &+ e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[\nabla]{\zeta}\\
+  \pfird[]{\lambda}\left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[\nabla]{\lambda}\\
+  \pfird[]{\mu}\left.\pfird[T]{\mu}\right|_t &= e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(2\frac{\mu}{\zeta^2}\right) + \frac{M_\odot}{4\pi R_\odot}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{3/2}}\right) \Omega^2\right]e^{-\xi}\nabla\nonumber \\
+  &+ e^\eta\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[\nabla]{\mu}
+\end{align}
+
+\textbf{term $\lpfird[p]{\mu}|_t$}
+\begin{align}
+  \left.\pfird[p]{\mu}\right|_t &= \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right] \Rightarrow \left.\pfird[p]{\mu}\right|_t\left(\zeta, \mu\right)
+\end{align}
+derivatives:
+\begin{align}
+  \pfird[]{\zeta}\left.\pfird[p]{\mu}\right|_t  &= \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(-2\frac{\mu^2}{\zeta^3}\right) + \frac{M_\odot}{4\pi R_\odot}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right) \Omega^2\right]\\
+  \pfird[]{\mu}\left.\pfird[p]{\mu}\right|_t  &= \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(2\frac{\mu}{\zeta^2}\right) + \frac{M_\odot}{4\pi R_\odot}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{1/2}}\right) \Omega^2\right]
+\end{align}
+
+\noindent\textbf{the derivatives of $T\lpfird[s]{t}$}
+
+\begin{itemize}
+  \item with respect to $\xi$
+  \begin{align}
+    &\pfird[]{\xi}\left(T\pfird[s]{t}\right) = \left\{\pfird[c_p]{\xi}\left(T_{\mu_x} - T_{\mu_x}^t\right) + c_p\left(\pfird[T_{\mu_x}]{\xi} - \pfird[T_{\mu_x}^t]{\xi}\right)\right.\nonumber\\
+    &\left.- \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\xi} - \frac{1}{\rho^2}\pfird[\rho]{\xi}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  + \left(\pfird[p_{\mu_x}]{\xi} - \pfird[p_{\mu_x}^t]{\xi}\right)\right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\xi}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t - \left(\frac{1}{\rho}\pfird[\delta]{\xi}\left.\pfird[p]{\mu}\right|_t - \frac{\delta}{\rho^2}\pfird[\rho]{\xi}\left.\pfird[p]{\mu}\right|_t + \frac{\delta}{\rho}\pfird[]{\xi}\left.\pfird[p]{\mu}\right|_t\right)\right\}\nonumber\\
+    =&\left\{\pfird[c_p]{\xi}\left(T_{\mu_x} - T_{\mu_x}^t\right) - \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\xi} - \frac{1}{\rho^2}\pfird[\rho]{\xi}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  +\pfird[p_{\mu_x}]{\xi}\right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\xi}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\xi}\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left(\frac{1}{\delta}\pfird[\delta]{\xi} - \frac{1}{\rho}\pfird[\rho]{\xi}\right)\left.\pfird[p]{\mu}\right|_t\right\}
+  \end{align}
+
+  \item with respect to $\eta$
+
+  \begin{align}
+    &\pfird[]{\eta}\left(T\pfird[s]{t}\right) = \left\{\pfird[c_p]{\eta}\left(T_{\mu_x} - T_{\mu_x}^t\right) + c_p\left(\pfird[T_{\mu_x}]{\eta} - \pfird[T_{\mu_x}^t]{\eta}\right)\right.\nonumber\\
+    &\left.- \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\eta} - \frac{1}{\rho^2}\pfird[\rho]{\eta}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  + \left(\pfird[p_{\mu_x}]{\eta} - \pfird[p_{\mu_x}^t]{\eta}\right)\right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\eta}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\eta}\left.\pfird[T]{\mu}\right|_t - \left(\frac{1}{\rho}\pfird[\delta]{\eta}\left.\pfird[p]{\mu}\right|_t - \frac{\delta}{\rho^2}\pfird[\rho]{\eta}\left.\pfird[p]{\mu}\right|_t + \frac{\delta}{\rho}\pfird[]{\eta}\left.\pfird[p]{\mu}\right|_t\right)\right\}\nonumber\\
+    =&\left\{\pfird[c_p]{\eta}\left(T_{\mu_x} - T_{\mu_x}^t\right) + c_p\pfird[T_{\mu_x}]{\eta} - \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\eta} - \frac{1}{\rho^2}\pfird[\rho]{\eta}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  \right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\eta}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\eta}\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left(\frac{1}{\delta}\pfird[\delta]{\eta} - \frac{1}{\rho}\pfird[\rho]{\eta}\right)\left.\pfird[p]{\mu}\right|_t\right\}
+  \end{align}
+
+  \item with respect to $\zeta$
+
+  \begin{align}
+    &\pfird[]{\zeta}\left(T\pfird[s]{t}\right) = \left\{\pfird[c_p]{\zeta}\left(T_{\mu_x} - T_{\mu_x}^t\right) + c_p\left(\pfird[T_{\mu_x}]{\zeta} - \pfird[T_{\mu_x}^t]{\zeta}\right)\right.\nonumber\\
+    &\left.- \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\zeta} - \frac{1}{\rho^2}\pfird[\rho]{\zeta}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  + \left(\pfird[p_{\mu_x}]{\zeta} - \pfird[p_{\mu_x}^t]{\zeta}\right)\right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\zeta}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\zeta}\left.\pfird[T]{\mu}\right|_t - \left(\frac{1}{\rho}\pfird[\delta]{\zeta}\left.\pfird[p]{\mu}\right|_t - \frac{\delta}{\rho^2}\pfird[\rho]{\zeta}\left.\pfird[p]{\mu}\right|_t + \frac{\delta}{\rho}\pfird[]{\zeta}\left.\pfird[p]{\mu}\right|_t\right)\right\}\nonumber\\
+    = -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{c_p\pfird[]{\zeta}\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\pfird[]{\zeta}\left.\pfird[p]{\mu}\right|_t\right\}
+  \end{align}
+
+  \item with respect to $\lambda$
+
+  \begin{align}
+    &\pfird[]{\lambda}\left(T\pfird[s]{t}\right) = \left\{\pfird[c_p]{\lambda}\left(T_{\mu_x} - T_{\mu_x}^t\right) + c_p\left(\pfird[T_{\mu_x}]{\lambda} - \pfird[T_{\mu_x}^t]{\lambda}\right)\right.\nonumber\\
+    &\left.- \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\lambda} - \frac{1}{\rho^2}\pfird[\rho]{\lambda}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  + \left(\pfird[p_{\mu_x}]{\lambda} - \pfird[p_{\mu_x}^t]{\lambda}\right)\right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\lambda}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\lambda}\left.\pfird[T]{\mu}\right|_t - \left(\frac{1}{\rho}\pfird[\delta]{\lambda}\left.\pfird[p]{\mu}\right|_t - \frac{\delta}{\rho^2}\pfird[\rho]{\lambda}\left.\pfird[p]{\mu}\right|_t + \frac{\delta}{\rho}\pfird[]{\lambda}\left.\pfird[p]{\mu}\right|_t\right)\right\}\nonumber\\
+    = -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{c_p\pfird[]{\lambda}\left.\pfird[T]{\mu}\right|_t \right\}
+  \end{align}
+
+  \item with respect to $\mu$
+
+  \begin{align}
+    &\pfird[]{\mu}\left(T\pfird[s]{t}\right) = \left\{\pfird[c_p]{\mu}\left(T_{\mu_x} - T_{\mu_x}^t\right) + c_p\left(\pfird[T_{\mu_x}]{\mu} - \pfird[T_{\mu_x}^t]{\mu}\right)\right.\nonumber\\
+    &\left.- \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\mu} - \frac{1}{\rho^2}\pfird[\rho]{\mu}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right)  + \left(\pfird[p_{\mu_x}]{\mu} - \pfird[p_{\mu_x}^t]{\mu}\right)\right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\mu}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\mu}\left.\pfird[T]{\mu}\right|_t - \left(\frac{1}{\rho}\pfird[\delta]{\mu}\left.\pfird[p]{\mu}\right|_t - \frac{\delta}{\rho^2}\pfird[\rho]{\mu}\left.\pfird[p]{\mu}\right|_t + \frac{\delta}{\rho}\pfird[]{\mu}\left.\pfird[p]{\mu}\right|_t\right)\right\}\nonumber\\
+    -\frac{2}{3}&\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\left.\pfird[\mu]{\mu_x}\right|_t\left(c_p\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left.\pfird[p]{\mu}\right|_t\right)\nonumber\\
+    =&\left\{\pfird[c_p]{\mu}\left(T_{\mu_x} - T_{\mu_x}^t\right) - c_p\pfird[T_{\mu_x}^t]{\mu} - \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\mu} - \frac{1}{\rho^2}\pfird[\rho]{\mu}\right)\left(p_{\mu_x} - p_{\mu_x}^t\right) - \pfird[p_{\mu_x}^t]{\mu}\right]\right\}\frac{1}{\dd{t}}\nonumber\\
+    -&\frac{2}{3}\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\mu\left.\pfird[\mu]{\mu_x}\right|_t\left\{\pfird[c_p]{\mu}\left.\pfird[T]{\mu}\right|_t + c_p\pfird[]{\mu}\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left[\left(\frac{1}{\delta}\pfird[\delta]{\mu} - \frac{1}{\rho}\pfird[\rho]{\mu}\right)\left.\pfird[p]{\mu}\right|_t + \pfird[]{\mu}\left.\pfird[p]{\mu}\right|_t\right]\right\}\nonumber\\
+    -&\frac{2}{3}\dot{M}\frac{M_\odot^{2/3}}{M_2^{5/3}}\left.\pfird[\mu]{\mu_x}\right|_t\left(c_p\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left.\pfird[p]{\mu}\right|_t\right)
+  \end{align}
+
+\end{itemize}
+
+% \begin{align}
+%   &\quad0 = \pfird[\lambda]{q} - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}(\epsilon - \epsilon_\nu + \epsilon_\mr{g})\frac{\psi}{\theta}\qquad\qquad \eqref{eq:cesam_struct4}\nonumber\\
+%   \pfird[\eqref{eq:cesam_struct4}]{\xi} = - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}&\left[(\pfird[\epsilon]{\xi} + \pfird[\epsilon_\mr{g}]{\xi})\frac{\psi}{\theta} + (\epsilon - \epsilon_\nu + \epsilon_\mr{g})\pfird[(\psi/\theta)]{\xi}\right]\\
+%   \pfird[\eqref{eq:cesam_struct4}]{\eta} = - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}&\left[(\pfird[\epsilon]{\eta} + \pfird[\epsilon_\mr{g}]{\eta})\frac{\psi}{\theta} + (\epsilon  + \epsilon_\nu - \epsilon_\mr{g})\pfird[(\psi/\theta)]{\eta}\right]\\
+%   \pfird[\eqref{eq:cesam_struct4}]{\zeta} = - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}&\left[\pfird[\epsilon_\mr{g}]{\zeta}\frac{\psi}{\theta} + (\epsilon  + \epsilon_\nu - \epsilon_\mr{g})\pfird[(\psi/\theta)]{\zeta}\right]\\
+%   \pfird[\eqref{eq:cesam_struct4}]{\lambda} = - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}&\left[\pfird[\epsilon_\mr{g}]{\lambda}\frac{\psi}{\theta} + (\epsilon  + \epsilon_\nu - \epsilon_\mr{g})\pfird[(\psi/\theta)]{\lambda}\right] - \frac{M_\odot}{L_\odot}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\lambda^{3/2}}\right)(\epsilon  + \epsilon_\nu - \epsilon_\mr{g})\frac{\psi}{\theta}\\
+%   \pfird[\eqref{eq:cesam_struct4}]{\mu} = - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}&\left[(\pfird[\epsilon]{\mu} + \pfird[\epsilon_\mr{g}]{\mu})\frac{\psi}{\theta} + (\epsilon  + \epsilon_\nu - \epsilon_\mr{g})\pfird[(\psi/\theta)]{\mu}\right] - \frac{M_\odot}{L_\odot}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\lambda^{1/2}}\right)(\epsilon  + \epsilon_\nu - \epsilon_\mr{g})\frac{\psi}{\theta}\\
+%   \pfird[\eqref{eq:cesam_struct4}]{\psi} = - \frac{M_\odot}{L_\odot}\left(\frac{\mu}{\lambda}\right)^{1/2}&(\epsilon  + \epsilon_\nu - \epsilon_\mr{g})\frac{1}{\theta}\\
+%   \pfird[(4)]{\xi'} = 0,&\ \pfird[(4)]{\eta'} = 0,\ \pfird[(4)]{\zeta'} = 0,\ \pfird[(4)]{\lambda'} = 1,\ \pfird[(4)]{\mu'} = 0,\ \pfird[(4)]{\psi'} = 0
+% \end{align}
+
+\restoregeometry
 
 \end{document}
