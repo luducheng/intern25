@@ -175,6 +175,8 @@ In this section, I will review the current understanding of stellar accretion, i
   \label{fig:magnetospheric_accretion}
 \end{figure}
 
+\qt{to be added: distiguish between the pms accretion and the main accretion phase (protostar)}\par
+
 Stellar magnetic fields play a crucial role in the accretion of pre-main sequence stars, through the mechanism known as magnetospheric accretion \parencite[See, for example,][for a review]{HartmannEtAl2016}. Fig.~\ref{fig:magnetospheric_accretion} is a schematic illustration of magnetospheric accretion onto young ($1 \lesssim t \lesssim 10,\mr{Myr}$), low-mass ($\lesssim 1 M_\odot$) stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. The dust disk is truncated slightly farther out than the gas disk, as dust in the inner disk sublimates due to heating by the stellar radiation field. The inner edge of the dust disk is responsible for most of the observed near-IR excess. Material from the disk is funneled onto the star along the magnetic field lines, where it is heated to approximately $10^4\,\mr{K}$, producing broad emission lines. The accretion flow is accelerated along the field lines, eventually reaching the stellar surface at nearly free-fall velocity. This process leads to the formation of an accretion shock at the stellar surface, where the gas is briefly halted and heated to very high temperatures, emitting X-rays. Most of these X-rays are absorbed and reradiated in the ultraviolet and optical continuum.
 
 Despite recent advances in the study of magnetospheric accretion, many aspects are still under debate. \textcite{Bouvier2014} summarizes several open issues regarding the physics of the magnetospheric accretion and ejection processes. One of the long-standing problems is the evolution of stellar rotation: while the angular momentum carried by accreting material should spin up the star, observations reveal that the rotation rates of PMS stars are lower than expected. This discrepancy suggests that some form of magnetic braking must be at work to regulate stellar spin \parencite[e.g.,][]{HerbstEtAl2007}.
@@ -234,7 +236,7 @@ With both central and surface boundary conditions specified, and the evolution e
 
 The solutions to the stellar structure equations yield key observable properties of stars, most notably their luminosity $L$ and effective surface temperature $T_\mr{eff}$. These two parameters define a star's position on the Hertzsprung-Russell (HR) diagram, a fundamental tool in astrophysics to understand and visualize stellar evolution. The HR diagram helps to reveal distinct evolutionary stages such as the pre-main sequence, main sequence, and giant branch, offering a simple way to compare models with observations.
 
-However, translating the underlying physics into stellar models is a complex task. In practice, stellar evolution codes can differ substantially in their model initialization methods. These differences can lead to notable variations during the early evolutionary stages, which will be discussed in the Sec.~\ref{sec:pms_evolution}. Furthermore, differences in formulations, assumptions, and adopted physical ingredients, such as the equation of state (EoS) and opacities, can substantially influence the predicted stellar properties, often resulting in discrepancies between models. Therefore, it is essential to carefully consider the specific implementations and assumptions of each code when interpreting stellar evolution results. One of the goals of this project is to benchmark our accretion models against those implemented in other stellar evolution codes. The details of our physical inputs will be discussed in Sec.~\ref{sec:cesam2k20}. 
+However, translating the underlying physics into stellar models is a complex task. In practice, stellar evolution codes can differ substantially in their model initialization methods. These differences can lead to notable variations during the early evolutionary stages, which will be discussed in the Sec.~\ref{sec:pms_evolution}. Furthermore, differences in formulations, assumptions, and adopted physical ingredients, such as the Equation of State (EoS) and opacities, can substantially influence the predicted stellar properties, often resulting in discrepancies between models. Therefore, it is essential to carefully consider the specific implementations and assumptions of each code when interpreting stellar evolution results. One of the goals of this project is to benchmark our accretion models against those implemented in other stellar evolution codes. The details of our physical inputs will be discussed in Sec.~\ref{sec:cesam2k20}. 
 
 \subsection{Pre-main sequence evolution}
 \label{sec:pms_evolution}
@@ -337,7 +339,7 @@ From the first law of thermodynamics, $\dd{q} = \dd{u} + p\dd{v}$, where $u$ is 
   T\left.\pfird[s]{t}\right|_m = \left.\pfird[q]{t}\right|_m = \left.\pfird[u]{t}\right|_m + p\left.\pfird[v]{t}\right|_m = \left.\pfird[u]{t}\right|_m - \frac{p}{\rho^2}\left.\pfird[\rho]{t}\right|_m.
 \end{equation}
 
-In practice, the internal energy depends on the chemical composition and the equation of state, which complicates the calculation. However, for a chemically homogeneous star, we can use the Kippenhahn approximation \parencite{KippenhahnEtAl2013}, which instead expresses the entropy change as:
+In practice, the internal energy depends on the chemical composition and the EoS, which complicates the calculation. However, for a chemically homogeneous star, we can use the Kippenhahn approximation \parencite{KippenhahnEtAl2013}, which instead expresses the entropy change as:
 \begin{equation}
   T\left.\pfird[s]{t}\right|_m \simeq c_p\left.\pfird[T]{t}\right|_m - \frac{\delta}{\rho}\left.\pfird[p]{t}\right|_m, \label{eq:grav_energy_kipp}
 \end{equation}
@@ -517,8 +519,9 @@ The Iben method proceeds by constructing two PMS models, labeled \#1 and \#2, wi
 \end{equation}
 where $L_1$, $R_1$ and $L_2$, $R_2$ are the luminosities and radii of models \#1 and \#2, respectively \parencite[cf. Eq.~(13)][]{Morel1997}. Evolution can then proceed using model \#2 and time step $\Delta t$.
 
-In \texttt{Cesam2k20}, the user provides an input value $c_1 = c$, the Iben constant, and the code sets $c_2 = 1.1\,c_1$. The appropriate range of values for $c$ depends on the stellar mass. At fixed mass, a lower Iben constant leads to lower luminosity and a higher central temperature. For example, $c = 0.02$ yields $T_c \sim 10^5\,\mr{K}$, while smaller values such as $c = 0.005$ and $c = 0.00008$ correspond to $T_c \sim 5 \times 10^5\,\mr{K}$ and $10^6\,\mr{K}$, respectively. Although these values are similar in order of magnitude across different stellar masses, each mass range requires its own acceptable interval of $c$ values to ensure convergence to a valid PMS model.
+In \texttt{Cesam2k20}, the user provides an input value $c_1 = c_\mr{iben}$, the Iben constant, and the code sets $c_2 = 1.1\,c_1$. The appropriate range of values for $c_\mr{iben}$ depends on the stellar mass. At fixed mass, a lower Iben constant leads to lower luminosity and a higher central temperature. For example, $c_\mr{iben} = 0.02$ yields $T_c \sim 10^5\,\mr{K}$, while smaller values such as $c_\mr{iben} = 0.005$ and $c_\mr{iben} = 0.00008$ correspond to $T_c \sim 5 \times 10^5\,\mr{K}$ and $10^6\,\mr{K}$, respectively. Although these values are similar in order of magnitude across different stellar masses, each mass range requires its own acceptable interval of $c_\mr{iben}$ values to ensure convergence to a valid PMS model.  
 
+In this project, I focus on the evolution of the second hydrostatic core, whose mass is on the order of a Jovian mass , $M_\mr{Jup} \sim 10^{-3}\,M_\odot$ \parencite[e.g.,][]{VaytetEtAl2013}. Previous studies, such as \textcite{KunitomoEtAl2017} and \textcite{AmardMatt2023}, have used a fiducial initial mass of $M_\mr{seed} = 0.01\,M_\odot$, which is slightly larger than the typical second core mass derived from radiative hydrodynamic simulations. One of the key challenges in modeling the second hydrostatic core is its very low temperature, where the standard EoS for stellar matter no longer applies. Due to the limitations in the available EoS tables implemented in \texttt{Cesam2k20}, I choose to initialize my models with a higher seed mass of $M_\mr{seed} = 0.1\,M_\odot$. Additionally, I compute initial models with $M_\mr{seed} = 1\,M_\odot$ to compare with the results of \textcite{PallaStahler1993}. I acknowledge that this choice is not ideal, but it is the best compromise given the constraints of the code and the available EoS. This study primarily focuses on modeling the accretion process, while the incorporation of a more realistic initial seed mass is deferred to future work.
 
 \subsubsection{Input physics}
 \label{sec:cesam2k20_input_physics}
@@ -527,7 +530,7 @@ Although \texttt{Cesam2k20} is capable of modeling rotation and diffusion, I kee
 
 Convection is modeled using the mixing-length theory (MLT) \parencite{CoxGiuli1968a}. It assumes that convective energy transport occurs via fluid elements moving from hotter to cooler regions over a characteristic distance-the mixing length—typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mr{MLT}$. We adopt a solar-calibrated value of $\alpha_\mr{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
 
-The equation of state (EoS) and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, $^{17}\mr{O}$.
+The EoS and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, $^{17}\mr{O}$.
 
 Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl1994} for plasma neutrinos and \textcite{Weigert1966} for photoneutrinos. The atmosphere is implemented using a Hopf $T(\tau)$ relation from \textcite{HubenyMihalas2015}, with the base of the atmosphere set at an optical depth of $\tau_{\max} = 20$, where the solution of the internal structure equations is matched to that of the atmosphere model.
 
@@ -596,7 +599,7 @@ Using the homologous coordinate $\mu_x$ and applying Eq.~\eqref{eq:coord_transf2
   \frac{2}{3}\mu\frac{M_\odot^{2/3}}{M_2^{5/3}}\dot{M}_\mr{acc}\left.\pfird[\mu]{\mu_x}\right|_t\left(c_p\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left.\pfird[p]{\mu}\right|_t\right). \label{eq:grav_energy_kipp_mux}
 \end{align}
 
-It is important to distinguish between spatial and temporal derivatives in this context, as they serve different purposes. Spatial derivatives are evaluated at the current time step using data from the equation of state and opacity tables and are used to solve the nonlinear boundary value problem. In contrast, temporal derivatives are involved in the evolution of the system, which is an initial value problem, and require data from the previous time step.
+It is important to distinguish between spatial and temporal derivatives in this context, as they serve different purposes. Spatial derivatives are evaluated at the current time step using data from the EoS and opacity tables and are used to solve the nonlinear boundary value problem. In contrast, temporal derivatives are involved in the evolution of the system, which is an initial value problem, and require data from the previous time step.
 
 More explicitly, the implementation of Eq.~\eqref{eq:grav_energy_kipp_mux} in \texttt{Cesam2k20} reads:
 \begin{equation}
@@ -678,8 +681,14 @@ Partial derivatives with respect to the other variables are derived similarly, c
   \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.82\,M_\odot$ models.} \label{fig:toy_problem_entropy}
 \end{figure}
 
-\subsection{The effect of different initial models}
+\subsection{Dependence on Iben constant}
 \label{sec:initial_models}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{ciben_mass_init.pdf}
+  \caption{Comparison of initial models computed with different Iben constants, for \texttt{Cesam2k20} stellar models with masses between $0.5$ and $2.5\,M_\odot$. The dot-dashed lines correspond to models with $c_\mr{iben} = 5\times10^{-4}$, the solid lines to models with $c_\mr{iben} = 5\times10^{-5}$, and the dashed lines to models with $c_\mr{iben} = 1\times10^{-5}$. The corresponding initial central temperatures for each Iben constant are listed in the table.} \label{fig:comp_iben}
+\end{figure}
 
 \subsection{The effect of different accretion rates}
 \label{sec:accretion_rate}
