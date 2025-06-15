@@ -279,7 +279,7 @@ The star is considered to have reached the main sequence once hydrogen fusion be
 
 The classic PMS evolution described above assumes that the star has already acquired its final mass at the beginning of contraction. However, as the observational evidence discussed in Sec.~\ref{sec:obs_evidence} indicates, many young stars continue to accrete material from their surrounding environment during the PMS phase. These stars experience a period of relaxation and thermal re-adjustment as they contract, before eventually settling onto a track that closely follows the constant-mass evolution \parencite{KippenhahnEtAl2013}.
 
-One physical quantity of importance in this context is the mass accretion rate $\dot{M}_\mr{acc}$,  defined as the rate at which mass is transferred from the surrounding cloud to the protostar. Estimates of $\dot{M}_\mr{acc}$ are often uncertain by factors of a few, due to their sensitivity to stellar parameters and extinction. These values are typically calculated from the accretion luminosity $L_\mr{acc}$ via:
+One physical quantity of importance in this context is the mass accretion rate $\dot{M}_\mr{acc}$, defined as the rate at which mass is transferred from the surrounding cloud to the protostar. Estimates of $\dot{M}_\mr{acc}$ are often uncertain by factors of a few, due to their sensitivity to stellar parameters and extinction. These values are typically calculated from the accretion luminosity $L_\mr{acc}$ via:
 \begin{equation}
   L_\mr{acc} = \frac{GM_\star \dot{M}_\mr{acc}}{R_\star}\left(1 - \frac{R_\star}{R_\mr{trunc}}\right),
 \end{equation}
@@ -548,20 +548,32 @@ Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl
 
 \begin{table}
     \hfill
+    % \begin{tabularx}{.8\textwidth}{|| c | c ||}
+    %     \cline{1-2}
+    %     Parameter Type & Description \\ \cline{1-2}\\[-1em]\cline{1-2}
+    %     Mass & accretion + no mass loss\\ \cline{1-2}
+    %     Chemical composition  & AGS09+S10\footnotemark[1]\\ \cline{1-2}
+    %     Convection & MLT\footnotemark[2] + No overshoot\\ \cline{1-2}
+    %     Diffusion & None \\ \cline{1-2}
+    %     EoS & OPAL2005\footnotemark[3] \\ \cline{1-2}
+    %     Opacity & OPAL and AF \footnotemark[4]\\ \cline{1-2}
+    %     Nuclear reaction & NACRE + LUNA\footnotemark[5]\\ \cline{1-2}
+    %     Atmosphere & Hopf\footnotemark[6], $\tau_{\max} = 20.0$\\ \cline{1-2}
+    % \end{tabularx}
+    % \caption{Input parameters for Cesam2k20 models. $^1$Solar mixture of \textcite{AsplundEtAl2009} following \textcite{SerenelliEtAl2009} recommendation. $^2$MLT: mixing-length theory \parencite{CoxGiuli1968a} $^3$OPAL2005:\textcite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}. $^4$AF: \textcite{FergusonEtAl2005} $^5$NACRE: \textcite{AikawaEtAl2006}; LUNA: \textcite{BrogginiEtAl2018}. $^6$: \textcite{HubenyMihalas2015}} \label{tab:input_physics}
     \begin{tabularx}{.8\textwidth}{|| c | c ||}
-        \cline{1-2}
-        Parameter Type & Description \\ \cline{1-2}\\[-1em]\cline{1-2}
-        Mass & accretion + no mass loss\\ \cline{1-2}
-        Chemical composition  & AGS09+S10\footnotemark[1]\\ \cline{1-2}
-        Convection & MLT\footnotemark[2] + No overshoot\\ \cline{1-2}
-        Diffusion & None \\ \cline{1-2}
-        EoS & OPAL2005\footnotemark[3] \\ \cline{1-2}
-        Opacity & OPAL and AF \footnotemark[4]\\ \cline{1-2}
-        Nuclear reaction & NACRE + LUNA\footnotemark[5]\\ \cline{1-2}
-        Atmosphere & Hopf\footnotemark[6], $\tau_{\max} = 20.0$\\ \cline{1-2}
+      \cline{1-2}
+      Parameter Type & Description \\ \cline{1-2}\\[-1em]\cline{1-2}
+      Mass & accretion + no mass loss\\ \cline{1-2}
+      Chemical composition  & AGS09+S10\\ \cline{1-2}
+      Convection & MLT + No overshoot\\ \cline{1-2}
+      Diffusion & None\\ \cline{1-2}
+      EoS & OPAL2005\\ \cline{1-2}
+      Opacity & OPAL and AF\\ \cline{1-2}
+      Nuclear reaction & NACRE + LUNA\\ \cline{1-2}
+      Atmosphere & Hopf, $\tau_{\max} = 20.0$\\ \cline{1-2}
     \end{tabularx}
     \caption{Summary of input parameters for Cesam2k20 models; refer to the text for more details.} \label{tab:input_physics}
-    % \caption{Input parameters for Cesam2k20 models. $^1$Solar mixture of \textcite{AsplundEtAl2009} following \textcite{SerenelliEtAl2009} recommendation. $^2$MLT: mixing-length theory \parencite{CoxGiuli1968a} $^3$OPAL2005:\textcite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}. $^4$AF: \textcite{FergusonEtAl2005} $^5$NACRE: \textcite{AikawaEtAl2006}; LUNA: \textcite{BrogginiEtAl2018}. $^6$: \textcite{HubenyMihalas2015}} \label{tab:input_physics}
     \hfill
 \end{table}
 
@@ -680,6 +692,7 @@ To account for a different composition in the accreted material, at the start of
 
 \section{Results}
 \label{sec:results}
+
 \subsection{The toy problem}
 \label{sec:toy_problem}
 % \begin{outline}{gray}
@@ -690,23 +703,56 @@ To account for a different composition in the accreted material, at the start of
 %   \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
 % \end{outline}
 
-Before plunging into the results of the accreting models, I first present a toy problem that illustrates the limitations of static models in capturing the effects of accretion and therefore necessitate the implementation of accretion in the actual evolution. This toy problem consists of two pairs of static stellar models. The first pair consists of two fully convective models, while the second pair includes two models with a radiative core. In each pair, the models differ slightly in mass to emulate the effect of accretion. 
+Before plunging into the results of the accreting models, I first present a toy problem that illustrates the limitations of static models in capturing the effects of accretion and therefore necessitate the implementation of accretion in the actual evolution. This toy problem consists of two pairs of static stellar models. The first pair consists of two fully convective models, while the second pair includes two models with a radiative core. In each pair, the models differ slightly in mass to emulate the effect of accretion. I require that the models in each pair have the same final central temperature, which is an important indicator of the evolution stage of the star.
 
 \begin{figure}
   \centering  
   \includegraphics[width=\textwidth,keepaspectratio]{toy_problem_entropy.pdf}
-  \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.802\,M_\odot$ models.} \label{fig:toy_problem_entropy}
+  \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.82\,M_\odot$ models.} \label{fig:toy_problem_entropy}
 \end{figure}
 
+I've discussed before that the primary modifications introduced in this work concern the treatment of gravitational energy, here I try to illustrate with the static models how this term can be problematic if not treated with care. With the static models, one has three different options to compuate the gravitational energy profile, or more specifically $T\lpfird[s]{t}$: (1) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu$, (2) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu_x$ , or (3) calculating $\lpfird[s]{t}$ with the entropy profile The first two methods yield similar results, while the third method yields a different profile. The gravitational energy profile of the two pairs of models is shown in %Fig.~\ref{fig:toy_problem_grav_energy}.
 
+\subsection{Accreting vs. Non-Accreting Stellar Models}
+\label{sec:accretion_vs_non_accretion}
 
-\subsection{Dependence on Iben constant}
+\begin{figure}
+  \centering
+  \includegraphics[width=.55\textwidth,keepaspectratio]{acce5_mp1m1_acc.pdf}
+  \includegraphics[width=.44\textwidth,keepaspectratio]{KunitomoEtAl2017_fig1.png}
+  \caption{Left panel: Radius (left axis) and mass (right axis) evolution of an accreting model. Right panel: Fig.~1 from \textcite{KunitomoEtAl2017}; the axes are in the same units as in the left panel. The model starts from a seed mass of $0.1\,M_\odot$ with an Iben constant of $c_\mr{iben} = 5\times10^{-5}$, and accretes up to $1 M_\odot$. It is computed with a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$ and an accretion rate of $10^{-5}\,M_\odot/\mr{yr}$. Radius is shown in red and mass in green. The five evolution phases are labeled as: (I) the contraction phase; (II) deuterium-burning phase; (III) second contraction phase until the end of accretion; (IV) swelling phase; and (V) main sequence. See text for more a detailed description of each phase.}
+  \label{fig:mass_radius_evol}
+\end{figure}
+
+Fig.~\ref{fig:mass_radius_evol} shows the evolution of the radius and mass of an accreting model. The model starts from a seed mass of $0.1\,M_\odot$ with an Iben constant of $c_\mr{iben} = 5\times10^{-5}$, and accretes up to $1\,M_\odot$ at a rate of $10^{-5}\,M_\odot/\mr{yr}$. It is computed with a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$. Following the classification of \textcite{KunitomoEtAl2017}, I mark five evolutionary phases:
+\begin{itemize}
+  \item (I) the contraction phase, where the star contracts and heats up as it accretes mass;
+  \item (II) the deuterium-burning phase, where the star reaches a central temperature of $\sim 10^6\,\mr{K}$ and starts burning deuterium, leading to a rapid expansion;
+  \item (III) the second contraction phase, where the deuterium supply becomes insufficient to maintain the expansion, the energy generation rate drops, and the star begins contracting again until the end of accretion;
+  \item (IV) the swelling phase, where the star expands slightly due to changes in its internal entropy profile; and
+  \item (V) the main sequence, where hydrogen burning begins and the star settles into a long-term stable evolution.
+\end{itemize}
+
+Although I adopt this naming convention, the behavior of my model differs notably in phase (IV). Unlike the swelling seen in Fig.~1 of \textcite{KunitomoEtAl2017}, my model shows no expansion during this phase. This difference arises because my initial model has a much larger radius, as the seed mass is $0.1\,M_\odot$ instead of their $0.01\,M_\odot$, which results in a higher initial entropy. Since the star is already relatively bloated, the entropy redistribution during phase (IV) is insufficient to drive further swelling.
+
+Despite this, the deuterium-burning phase (II) exhibits a comparable degree of expansion: in \textcite{KunitomoEtAl2017}, the radius increases from $\sim 0.6$ to $\sim 0.8\,R_\odot$ (a factor of 1.3), while my model expands from $\sim 1.7$ to $\sim 2.4\,R_\odot$, (a factor of 1.4). Similarly, the subsequent contraction (III) reduces the radius in both models to a value slightly above that prior to the deuterium burning phase.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth,keepaspectratio]{m1_cmp_acc.pdf}
+  \caption{Radius evolution (left panel) and HR diagram (right panel) of accreting and non-accreting stellar models. The accreting model is shown as solid red lines, and the non-accreting model as dashed black lines. The accreting model is same as in Fig.~\ref{fig:mass_radius_evol}}
+  \label{fig:comp_accrete_non_accrete}
+\end{figure}
+
+The radius evolution and HR diagram of the accreting model are compared with those of a non-accreting model in Fig.~\ref{fig:comp_accrete_non_accrete}.  
+
+\subsection{Dependence on the Iben constant}
 \label{sec:initial_models}
 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=\textwidth,keepaspectratio]{ciben_mass_init.pdf}
-  \caption{Comparison of initial models computed with different Iben constants using \texttt{Cesam2k20}, for stellar masses between $0.5$ and $2.5\,M_\odot$. Non-accreting (classic) models are shown as faint solid lines for reference. The dot-dashed lines correspond to models with $c_\mr{iben} = 5\times10^{-4}$, the solid lines to models with $c_\mr{iben} = 5\times10^{-5}$, and the dashed lines to models with $c_\mr{iben} = 1\times10^{-5}$. The corresponding initial central temperatures for each Iben constant are listed in the table.} 
+  \caption{Comparison of initial models computed with different Iben constants using \texttt{Cesam2k20}, for stellar masses between $0.5$ and $2.5\,M_\odot$. Non-accreting (classic) models are shown as faint solid lines for reference. The dot-dashed lines correspond to models with $c_\mr{iben} = 5\times10^{-4}$, the solid lines to models with $c_\mr{iben} = 5\times10^{-5}$, and the dashed lines to models with $c_\mr{iben} = 1\times10^{-5}$. The points mark the moment when accretion is completed. The corresponding initial central temperatures for each Iben constant are listed in the table.} 
   \label{fig:comp_iben}
 \end{figure}
 
@@ -715,8 +761,8 @@ Before plunging into the results of the accreting models, I first present a toy 
 
 \begin{figure}
   \centering  
-  \includegraphics[width=.65\textwidth,keepaspectratio]{comp_accrate.pdf}
-  \caption{Comparisons of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $\mr{D/H} = 2.0\times 10^{-5}$.} \label{fig:comp_accrate}
+  \includegraphics[width=.65\textwidth,keepaspectratio]{comp_accrete.pdf}
+  \caption{HR diagrams of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $\mr{D/H} = 2.0\times 10^{-5}$.} \label{fig:comp_accrete}
 \end{figure}
 
 \subsection{Dependence on deuterium abundance}
@@ -767,6 +813,10 @@ Before plunging into the results of the accreting models, I first present a toy 
 
 % \section*{Acknowledgements}
 % \label{sec:acknowledgements}
+
+% This internship is part of the \href{https://promethee-anr.github.io/}{PROMETHEE} project funded by the Agence Nationale de la Recherche (\href{https://anr.fr/en/}{ANR}) for the 2023-2026 period. I would like to thank my supervisors, Dr. Ludovic Petitedemange and Dr. João Marques, for their guidance and support throughout this project. I also benefited greatly from discussions with Dr. Louis Manchon, who provided valuable insights into the development of \texttt{Cesam2k20}. I am also grateful to Dr. Charly Pinçon for fruitful discussions during my visits at the Institut d'Astrophysique Spatiale (\href{https://www.ias.u-psud.fr/}{IAS}).
+
+% I would also like to thank the members of the \href{https://dynamos.obspm.fr/}{dynamos} team for their friendly support and encouragement during the internship. Finally, I am thankful to my colleagues at the Laboratory for Instrumentation and Research in Astrophysics (\href{https://lira.observatoiredeparis.psl.eu/}{LIRA}) and the Laboratory for the study of the Universe and eXtreme phenomena (\href{https://lux.observatoiredeparis.psl.eu/}{LUX})—many of whom kindly offered to accommodate me during a difficult period when I was without an office.
 
 \newpage
 \printbibliography[heading=bibintoc, title={References}]
