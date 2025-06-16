@@ -311,14 +311,14 @@ Theoretical birthlines can be compared with observations of TTSs to evaluate mod
 \subsection{The consequences of accretion}
 \label{sec:accretion_modeling}
 
-The most direct consequence of accretion onto a star is the increase in its mass. However, accretion also alters the stellar environment and affects the star's radiative output by delivering additional energy. It can also supply fresh deuterium, which contributes significantly to the star's energy budget through nuclear burning.
+The most direct consequence of accretion onto a star is the increase in its mass. However, accretion also alters the stellar environment and affects the star's bolometric luminosity by delivering additional energy. It can also supply fresh deuterium, which contributes significantly to the star's energy budget through nuclear burning.
 
 As discussed in Sec.~\ref{sec:magnetospheric_accretion}, accretion is a highly complex process involving various physical mechanisms, such as angular momentum transport from the disk to the star, magnetic fields, and outflows like jets and winds. To make the problem tractable in the context of stellar evolution, some simplifications are necessary. In this section, I describe how the consequences of accretion are incorporated into stellar evolution models, focusing on the treatment of gravitational energy, deuterium from accreted material, and the regimes of hot and cold accretion.
 
 Before moving into more details, it is important to note that gravitational energy associated with accretion comes from two distinct sources:
 \begin{enumerate}
-  \item The gravitational energy released (or absorbed) by the star due to contraction or expansion during its evolution, and
-	\item The gravitational potential energy of the material as it falls onto the star, which is partly converted into the thermal energy of the accreted material before it reaches the stellar surface.
+  \item work: the gravitational energy released (or absorbed) by the star due to contraction or expansion during its evolution, and
+	\item heat and radiation: the gravitational potential energy of the material as it falls onto the star, which is partly converted into the thermal energy of the accreted material before it reaches the stellar surface.
 \end{enumerate}
 
 The former affects the internal energy budget of the star itself, while the latter relates to how the infalling material delivers its energy upon impact, which depends on the nature of the accretion process (see Sec.~\ref{sec:hot_cold_accretion}).
@@ -343,26 +343,26 @@ In practice, the internal energy depends on the chemical composition and the EoS
 \begin{equation}
   T\left.\pfird[s]{t}\right|_m \simeq c_p\left.\pfird[T]{t}\right|_m - \frac{\delta}{\rho}\left.\pfird[p]{t}\right|_m, \label{eq:grav_energy_kipp}
 \end{equation}
-where $c_p$ is the specific heat at constant pressure and $\delta = -\left(\partial \ln \rho / \partial \ln T\right)_p$. 
-
-Since PMS stars are generally fully convective, chemical mixing is highly efficient throughout the interior, which makes the Kippenhahn approximation appropriate in this context of this project.
+where $c_p$ is the specific heat at constant pressure and $\delta = -\left(\partial \ln \rho / \partial \ln T\right)_p$. Since PMS stars are generally fully convective, chemical mixing is highly efficient throughout the interior, which makes the Kippenhahn approximation appropriate in this context of this project.
 
 Substituting the Kippenhahn approximation into the energy conservation equation, Eq.~\eqref{eq:star_struct4} becomes:
 \begin{equation}
   \pfird[l]{m} = \epsilon_\mr{nuc} - \epsilon_\nu - \left.c_p\pfird[T]{t}\right|_m + \frac{\delta}{\rho}\left.\pfird[p]{t}\right|_m. \label{eq:star_struct4_kipp}
 \end{equation}
 
-However, applying Eq.~\eqref{eq:star_struct4_kipp} to evolving stellar models with accretion presents a complication: the thermodynamic and chemical properties of the accreted material are not provided directly by the stellar model. Estimating these properties requires special treatment, which is addressed in the next two sections.
+However, applying Eq.~\eqref{eq:star_struct4_kipp} to evolving stellar models with accretion presents a complication: 
+the computation of time derivatives at a given mass requires knowledge of the thermodynamic and chemical properties of the accreted material, which are not directly available from the stellar model. Estimating these properties requires special treatment, which is addressed in the next two sections.
 
 \subsubsection{Coordinate transformation for accretion modeling}
 \label{sec:accretion_coords}
 
-To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mr{th} \simeq \Delta m, c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mr{acc} \simeq \Delta m / \dot{M}_\mr{acc}$, is the time over which the mass is accreted. When $\tau\mr{th} \ll \tau_\mr{acc}$, the accreted material has time to thermally equilibrate with the stellar surface, thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mr{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
+To incorporate accreted mass into the stellar model, its thermal and compositional properties must be specified. A common simplification for the thermal structure is to assume that the accreted material is homologous to the stellar surface—that is, it shares the same entropy. This assumption is justified by comparing characteristic timescales. The thermal timescale of a mass element, $\tau_\mr{th} \simeq \Delta m c_p T / L$, describes how quickly it reaches thermal equilibrium with its surroundings. The accretion timescale, $\tau_\mr{acc} \simeq \Delta m / \dot{M}_\mr{acc}$, is the time over which the mass is accreted. When $\tau_\mr{th} \ll \tau_\mr{acc}$, the accreted material has time to thermally equilibrate with the stellar surface, thereby justifying the use of the homologous assumption. This condition is equivalent to $\dot{M}_\mr{acc} c_p T \ll L$, which is typically satisfied near the stellar surface \parencite{SugimotoNomoto1975,PaxtonEtAl2015}. 
 
-This assumption permits the use of fractional mass coordinates, defined as \parencite{SugimotoNomoto1975}
+The homologous assumption permits the use of fractional mass coordinates, defined as \parencite{SugimotoNomoto1975}
 \begin{equation}
-  q_m = \frac{m}{M_\star}. \label{eq:frac_mass_coord}
+  q_m = \frac{m}{M_\star}, \label{eq:frac_mass_coord}
 \end{equation}
+to describe the geometry of the star.
 
 Switching from the Lagrangian mass coordinate $m$ to the fractional mass coordinate $q_m$ modifies the form of time derivatives in the structure equations. For a generic function $f(m,t)$, the total differential can be expressed both in terms of $m$ and $q_m$:
 \begin{align}
@@ -386,7 +386,7 @@ While the expressions for $\epsilon_\mr{g}$ in Eq.~\eqref{eq:grav_energy} and it
 \subsubsection{Deuterium from the accreted material}
 \label{sec:deuterium_burning}
 
-In contrast to the thermal properties, the chemical composition of the accreted material is not necessarily homologous to that of the stellar surface. In particular, the deuterium content of the accreted gas can differ significantly from that of the star. This difference arises because deuterium burning becomes extremely efficient once the central temperature exceeds a critical threshold. Since PMS stars are generally fully convective, efficient mixing ensures that the entire interior remains chemically homogeneous. As a result, deuterium can be depleted as fast as it is supplied, leaving the stellar interior nearly devoid of it, even while fresh deuterium continues to arrive from the surrounding environment.
+In contrast to the thermal properties, the chemical composition of the accreted material is not necessarily homologous to that of the stellar surface. In particular, the deuterium content of the accreted gas can differ significantly from that of the star. This difference arises because deuterium burning becomes extremely efficient once the central temperature exceeds a critical threshold $T_c \gtrsim 10^6\,\mr{K}$. Since PMS stars are generally fully convective, efficient mixing ensures that the entire interior remains chemically homogeneous. As a result, deuterium can be depleted as fast as it is supplied, leaving the stellar interior nearly devoid of it, even while fresh deuterium continues to arrive from the surrounding environment.
 
 The amount of deuterium in the accreted material can significantly affect the evolution of PMS stars \parencite[e.g.,][]{KunitomoEtAl2017,AmardMatt2023}. Deuterium burning provides a substantial amount of energy that can halt or even reverse the star's contraction, thereby influencing both its radius and luminosity. In this sense, deuterium acts as a thermostat: because the nuclear energy generation rate $\epsilon_\mr{D}$ is highly sensitive to temperature (as seen in the exponent $n_\mr{D} = 11.8$ in Eq.~\eqref{eq:deuterium_energy_prod_rate}), a rise in central temperature dramatically increases $\epsilon_\mr{D}$, causing the star to expand. This expansion reduces the central temperature, which in turn suppresses the burning rate \parencite{StahlerPalla2004}—a self-regulating feedback mechanism.
 
@@ -407,13 +407,13 @@ Due to these complications, in this study I do not account for the time evolutio
 \subsubsection{Hot and cold accretion}
 \label{sec:hot_cold_accretion}
 
-As material accretes onto a PMS star, it brings gravitational potential energy and possibly some internal (thermal) energy. How much of this energy is deposited into the star depends strongly on the nature of the accretion process. Two main factors influence the efficiency of energy deposition:
+As material accretes onto a PMS star,  a portion of its gravitational energy is converted into internal energy, either through work or heat, while the remainder is radiated away. How much of this energy is deposited into the star depends strongly on the nature of the accretion process. Two main factors influence the efficiency of energy deposition:
 \begin{enumerate}
   \item the geometry of the accretion flow (e.g., spherical or disk-like), and
   \item the radiative losses at the accretion shock and the stellar surface.
 \end{enumerate}
 
-Regarding the accretion geometry, each unit mass of accreted gas carries a gravitational potential energy of $-GM_\star/R_\star$ and internal energy $\beta GM_\star/R_\star$. The factor $\beta$ characterizes the physical nature of the accretion flow. For example, for gravitationally bound material, $\beta \leq 1$, while for thin-disk accretion from the equatorial region, typical values are $\beta \leq 0.5$ \parencite{PrialnikLivio1985,HartmannEtAl1998}.
+The geometry of the accretion flow influences the energy of the material as it arrives at the stellar surface. Each unit mass of accreted gas initially possesses a gravitational potential energy of $-GM_\star/R_\star$. During its infall onto the star, part of this energy is converted into macroscopic kinetic energy and radiation, which is then transferred to the star as work or heat when the gas hits the stellar surface. The fraction of energy deposited into the star can be expressed as $\beta GM_\star / R_\star$, where the factor $\beta$ characterizes the physical nature of the accretion flow. For example, for gravitationally bound material, $\beta \leq 1$, while for thin-disk accretion from the equatorial region, typical values are $\beta \leq 0.5$ \parencite{PrialnikLivio1985,HartmannEtAl1998}.
 
 The fractional surface area covered by accretion shock can influence the radiative efficiency, as the shocked region and the stellar photosphere have different radiative properties. Let $f_\mr{shock}$ denote the fraction of the stellar surface covered by the shock. The shocked area emits an accretion luminosity $L_\mr{acc} = 4\pi R_\star^2 f_\mr{shock} F_\mr{acc}$, where $F_\mr{acc}$ is the mean radiative flux over the accreting region. Meanwhile, the remaining stellar surface radiates at the star's intrinsic luminosity, $L_\mr{photo} = 4 \pi R_\star^2 (1 - f_\mr{shock}) T_\mr{eff}^4$. The total losses from the shock and the photosphere counteract the energy injection from the accreted material.
 
@@ -421,7 +421,7 @@ Following the simplified treatment by \textcite{HartmannEtAl1998}, these conside
 \begin{equation}
   L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}_\mr{acc}}{R_\star},
 \end{equation}
-where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in Eq.~(5) of \textcite{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of accretion energy injected into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into angular momentum \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
+where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in Eq.~(5) of \textcite{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of energy injected by the accreted material into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into rotational energy \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
 
 This heat injection can affect the evolution of accreting stars \parencite[e.g., ][]{KunitomoEtAl2017,AmardMatt2023}. A higher value of $\xi_\mathrm{add}$ causes the star to expand by adding thermal energy. However, for simplicity, heat injection during accretion is not included in this work. By neglecting this effect, I am effectively considering the case where $\xi_\mr{add} = 0$, which is a reasonable approximation for most PMS stars, as the majority of the accretion energy is expected to be radiated away before reaching the star \parencite{HartmannEtAl1998}.
 
@@ -635,11 +635,11 @@ It is important to distinguish between spatial and temporal derivatives in this 
 
 More explicitly, the implementation of Eq.~\eqref{eq:grav_energy_kipp_mux} in \texttt{Cesam2k20} reads:
 \begin{equation}
-  T\left.\pfird[s]{t}\right|_\mu = c_p\frac{T_{\mu_x} - T_{\mu_x}^t}{\dd{t}} - \frac{\delta}{\rho}\frac{p_{\mu_x} - p_{\mu_x}^t}{\dd{t}} - \frac{2}{3}\mu\frac{M_\odot^{2/3}}{M_2^{5/3}}\dot{M}_\mr{acc}\left.\pfird[\mu]{\mu_x}\right|_t\left(c_p\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left.\pfird[p]{\mu}\right|_t\right),
+  T\left.\pfird[s]{t}\right|_\mu = c_p\frac{T_{\mu_x} - T_{\mu_x}^t}{\dd{t}} - \frac{\delta}{\rho}\frac{p_{\mu_x} - p_{\mu_x}^t}{\dd{t}} - \frac{2}{3}\mu\frac{M_\odot^{2/3}}{M_2^{5/3}}\dot{M}_\mr{acc}\left.\pfird[\mu]{\mu_x}\right|_t\left(c_p\left.\pfird[T]{\mu}\right|_t - \frac{\delta}{\rho}\left.\pfird[p]{\mu}\right|_t\right), \label{eq:grav_energy_kipp_cesam}
 \end{equation}
 where $T_{\mu_x}$ and $p_{\mu_x}$ are the temperature and pressure at the current time step; $T_{\mu_x}^t$ and $p_{\mu_x}^t$ are those at the previous time step; all quantities are evaluated at the same coordinate $\mu_x$; and $\dd{t}$ is the time interval between the two models. 
 
-The next step is to compute the partial derivatives of the gravitational energy generation term, $\epsilon_\mr{g}$. Due to their complexity and length, the full expressions are provided in Appendix~\ref{app:jacobian}. Below is an example derivation of the partial derivative with respect to $\xi$.
+The next step is to compute the partial derivatives of the gravitational energy generation term, $\epsilon_\mr{g}$. Due to their complexity and length, the full expressions are provided in Appendix~\ref{app:jacobian}. Below is an example derivation of the partial derivative of Eq.~\eqref{grav_energy_kipp_cesam} with respect to $\xi = \ln P$.
 
 Using Eqns.~\eqref{eq:cesam_struct1} and \eqref{eq:cesam_struct2}, one can write: 
 \begin{align}
@@ -673,7 +673,7 @@ Partial derivatives with respect to the other variables are derived similarly, c
 
 As with thermodynamic properties, the chemical composition of the accreted material must be specified. However, because the accreted composition can differ significantly from that of the star (see Sec.~\ref{sec:deuterium_burning}), the homologous assumption used for thermodynamic quantities does not apply. Instead, the accreted material is treated as a separate layer with its own composition.
 
-The chemical composition is stored as a function of mass coordinate at each time step, and chemical transport is computed at the beginning of the next time step. During this computation, composition values at desired locations are obtained by interpolating the tables; when outside the range, the last stored point, i.e., the surface composition is used.
+The chemical composition is stored as a function of the mass coordinate, and chemical transport is computed at the beginning of the each time step. During this computation, composition values at desired locations are obtained by interpolating the tables; when outside the range, the last stored point, i.e., the surface composition is used.
 
 To account for a different composition in the accreted material, at the start of each time step I patch the chemical composition table from the previous step (defined up to mass $M_1$) to the new total mass $M_2$, assigning the additional layers the initial model's composition. This assumes that the initial model has the same composition as its accretion disk, which is generally valid since no thermonuclear reactions have occurred during the formation of the second hydrostatic core. For deuterium, a new free parameter $[\mr{D/H}]$ is introduced to vary its abundance, and the effects are presented in Sec.~\ref{sec:deuterium_abundance}.
 
@@ -703,7 +703,7 @@ To account for a different composition in the accreted material, at the start of
 %   \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
 % \end{outline}
 
-Before plunging into the results of the accreting models, I first present a toy problem that illustrates the limitations of static models in capturing the effects of accretion and therefore necessitate the implementation of accretion in the actual evolution. This toy problem consists of two pairs of static stellar models. The first pair consists of two fully convective models, while the second pair includes two models with a radiative core. In each pair, the models differ slightly in mass to emulate the effect of accretion. I require that the models in each pair have the same final central temperature, which is an important indicator of the evolution stage of the star.
+Before plunging into the results of the accreting models, I first present a toy problem that illustrates the limitations of static models in capturing the effects of accretion and therefore necessitate the implementation of accretion in the actual evolution. This toy problem consists of two pairs of static stellar models. The first pair includes of two fully convective models, while the second pair includes two models with a radiative core. In each pair, the models differ slightly in mass to emulate the effect of accretion. I require that the models in each pair have the same final central temperature, which is an important indicator of the evolution stage of the star.
 
 \begin{figure}
   \centering  
@@ -711,7 +711,7 @@ Before plunging into the results of the accreting models, I first present a toy 
   \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.82\,M_\odot$ models.} \label{fig:toy_problem_entropy}
 \end{figure}
 
-I've discussed before that the primary modifications introduced in this work concern the treatment of gravitational energy, here I try to illustrate with the static models how this term can be problematic if not treated with care. With the static models, one has three different options to compuate the gravitational energy profile, or more specifically $T\lpfird[s]{t}$: (1) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu$, (2) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu_x$ , or (3) calculating $\lpfird[s]{t}$ with the entropy profile The first two methods yield similar results, while the third method yields a different profile. The gravitational energy profile of the two pairs of models is shown in %Fig.~\ref{fig:toy_problem_grav_energy}.
+I've discussed before that the primary modifications introduced in this work concern the treatment of gravitational energy, here I try to illustrate with the static models how this term can be problematic if not treated with care. With the static models, one has three different options to compute the gravitational energy profile, or more specifically $T\lpfird[s]{t}$: (1) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu$, (2) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu_x$ , or (3) calculating $\lpfird[s]{t}$ with the entropy profile. The first two methods yield similar results, while the third method yields a different profile. The gravitational energy profile of the two pairs of models is shown in %Fig.~\ref{fig:toy_problem_grav_energy}.
 
 \subsection{Accreting vs. Non-Accreting Stellar Models}
 \label{sec:accretion_vs_non_accretion}
@@ -749,7 +749,7 @@ To better understand the evolution before the main sequence, Fig.~\ref{fig:mass_
   \centering
   \includegraphics[width=.55\textwidth,keepaspectratio]{acce5_mp1m1_acc.pdf}
   \includegraphics[width=.44\textwidth,keepaspectratio]{KunitomoEtAl2017_fig1.png}
-  \caption{Left panel: Radius (left axis) and mass (right axis) evolution of an accreting model. Right panel: Fig.~1 from \textcite{KunitomoEtAl2017}; the axes are in the same units as in the left panel. The accreting model is the same as in Fig.~\ref{fig:comp_accrete_m1}. Radius is shown in red and mass in green. The five evolution phases are labeled as: (I) the contraction phase; (II) deuterium-burning phase; (III) second contraction phase until the end of accretion; (IV) swelling phase; and (V) main sequence. See text for more a detailed description of each phase.}
+  \caption{Left panel: Radius (left axis) and mass (right axis) evolution of an accreting model. Right panel: Fig.~1 from \textcite{KunitomoEtAl2017}, showing a similar plot computed using MESA; the axes are in the same units as in the left panel. The accreting model is the same as in Fig.~\ref{fig:comp_accrete_m1}. Radius is shown in red and mass in green. The five evolution phases are labeled as: (I) the contraction phase; (II) deuterium-burning phase; (III) second contraction phase until the end of accretion; (IV) swelling phase; and (V) main sequence. See text for more a detailed description of each phase.}
   \label{fig:mass_radius_evol}
 \end{figure}
 
@@ -769,7 +769,7 @@ The Iben constant $c_\mr{iben}$ controls the initial central temperature of the 
   \label{fig:comp_iben}
 \end{figure}.
 
-The evolutionary tracks differ drastically with varying Iben constants. Models with lower $c_\mr{iben}$ start with lower initial central temperatures and thus begin their evolution from higher positions on the HR diagram, closer to the classical Hayashi and Henyey tracks. Ultimately, the models with the lowest Iben constant ($1 \times 10^{-5}$) converge with the non-accreting tracks the earliest, whereas those with the highest constant ($5 \times 10^{-4}$) remain below the non-accreting tracks for stellar masses above $1\,M_\odot$ for a more extended period, even after accretion ends.
+The evolutionary tracks differ drastically with varying Iben constants. Models with lower $c_\mr{iben}$ start with lower initial central temperatures and thus begin their evolution from a more luminous positions on the HR diagram, closer to the classical Hayashi and Henyey tracks. Ultimately, the models with the lowest Iben constant ($1 \times 10^{-5}$) converge with the non-accreting tracks the earliest, whereas those with the highest constant ($5 \times 10^{-4}$) remain below the non-accreting tracks for stellar masses above $1\,M_\odot$ for a more extended period, even after accretion ends.
 
 This behavior can be understood by examining the burning plots and central temperature evolution in Fig.~\ref{fig:comp_iben_burning}. Higher initial central temperatures lead to earlier onset of deuterium burning, which causes a greater expansion during the deuterium-burning phase. This expansion lowers the effective temperature, which explains the models' lower position on the HR diagram.
 
@@ -785,17 +785,17 @@ This behavior can be understood by examining the burning plots and central tempe
 
 \begin{figure}
   \centering  
-  \includegraphics[width=.85\textwidth,keepaspectratio]{cmp_accretionrate.pdf}
+  \includegraphics[width=.49\textwidth,keepaspectratio]{cmp_accretionrate.pdf}
   \caption{HR diagrams of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$. The open squares and circles indicate the end of the accretion phases, for models with $\dot{M}_\mr{acc} = 10^{-5} M_\odot/\mr{yr}$ and $\dot{M}_\mr{acc} = 10^{-4} M_\odot/\mr{yr}$, respectively.} \label{fig:comp_acc_rate}
 \end{figure}
 
-Fig.~\ref{fig:comp_acc_rate} presents a comparison between models with two different constant accretion rates: $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $10^{-4}\,M_\odot/\mr{yr}$. The differences between them are moderate. A higher accretion rate results in slightly higher luminosities, as the increased mass influx accelerates contraction and raises the central temperature. This trend is illustrated more clearly in Fig.~\ref{fig:comp_acc_rate_m1p5}, which shows the evolution of radius and central temperature for $1.5\,M_\odot$ models.
+Fig.~\ref{fig:comp_acc_rate} presents a comparison between models with two different constant accretion rates: $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $10^{-4}\,M_\odot/\mr{yr}$. The differences between them are moderate. A higher accretion rate results in slightly higher luminosities, as the increased mass and energy influx accelerates the contraction, thereby raising the central temperature more rapidly. This trend is illustrated more clearly in Fig.~\ref{fig:comp_acc_rate_m1p5}, which shows the evolution of radius and central temperature for $1.5\,M_\odot$ models. 
 
 These modest differences between different accretion rates are consistent with the findings of \textcite{HosokawaEtAl2011} and \textcite{KunitomoEtAl2017}, who also reported that the accretion rate plays a relatively minor role in determining the overall evolutionary path.
 
 \begin{figure}
   \centering  
-  \includegraphics[width=.95\textwidth,keepaspectratio]{acc_rate_m1p5.pdf}
+  \includegraphics[width=.98\textwidth,keepaspectratio]{acc_rate_m1p5.pdf}
   \caption{Radius (left panel) and central temperature (right panel) evolution of accreting models of final mass $M_\mr{final} = 1.5\,M_\odot$ with different accretion rates. The blue lines correspond to the model with an accretion rate of $10^{-4}\,M_\odot/\mr{yr}$, while the orange lines correspond to the model with an accretion rate of $10^{-5} M_\odot/\mr{yr}$. Both models start from a seed mass of $0.1 M_\odot$ and have a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$.}
   \label{fig:comp_acc_rate_m1p5}
 \end{figure}
@@ -803,16 +803,35 @@ These modest differences between different accretion rates are consistent with t
 \subsection{Dependence on deuterium abundance}
 \label{sec:deuterium_abundance}
 
-\begin{outline}{gray}
-  \item compare accreting models with and without deuterium accreted in the outer layers
-  \item can try to vary the abundance of deuterium in the accreted material
-\end{outline}
+\begin{figure}
+  \centering
+  \includegraphics[width=.98\textwidth,keepaspectratio]{cmp_deuterium.pdf}
+  \caption{HR diagrams of accreting models with different deuterium abundances in the accreted material. Left panel: models with an accretion rate of $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$. Right panel: models with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$. Solid and dashed lines correspond to deuterium abundances of $2.5 \times 10^{-5}$ and $2.0 \times 10^{-5}$, respectively. The end of the accretion phase is marked by open circles for higher and open squares for lower deuterium abundances. Two models could not finish due to convergence issues: the $1\,M_\odot$ model with $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $[\mr{D/H}]=2.5\times10^{-5}$ (red solid line, left panel); the $1.5\,M_\odot$ model with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$ and $[\mr{D/H}]=2.5\times10^{-5}$ (green solid line, right panel).} \label{fig:comp_deuterium} 
+\end{figure}
+
+The deuterium content in the accreted material has a stronger influence on the evolution of accreting protostars than the accretion rate. Fig.~\ref{fig:comp_deuterium} compares models with two different deuterium abundances: $[\mr{D/H}] = 2.0 \times 10^{-5}$ and $[\mr{D/H}] = 2.5 \times 10^{-5}$. The left panel shows models with an accretion rate of $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$, while the right panel shows models with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$. The resulting evolution of stellar radius and central temperature for accreting models with final mass $M_\mr{final} = 2\,M_\odot$ is shown in Fig.~\ref{fig:comp_deuterium_radius_tc}.
+
+The contraction phases of the accreting models with different deuterium abundances show no visible difference. However, once deuterium is ignited, the model with higher deuterium abundance expands to a greater extent. This larger radius is maintained during the subsequent second contraction phase and the swelling phase, only disappearing as the star approaches the main sequence. The radius difference is also reflected in the central temperatures (shown on the right axis of Fig.~\ref{fig:comp_deuterium_radius_tc}): during the deuterium-burning, second contraction, and swelling phases, the model with higher deuterium abundance exhibits lower central temperatures than the model with lower deuterium abundance.
+
+Models with higher deuterium abundance have higher luminosities and expand more prominently early on due to the richer deuterium supply, providing more energy to counteract gravitational contraction during the initial phases. In contrast, models with lower deuterium abundances contract faster, as evidenced by the more rapid increase in central temperature. The differences in luminosity and radius evolution are more pronounced for models with lower accretion rates, where deuterium burning plays a more significant role in opposing gravitational contraction.
+
+The models with a higher deuterium abundance have a higher luminosity and expands more pronoucedly in the beginning due to a rich supply of deuterium, and therefore more energy to conteract the gravitational contraction in the earlier phases. This faster contraction of the model widh lower deuterium abundances is also recogniable from the faster increase of the central temperature of that of the models with higher deuterium abundance. The difference in luminosity and radius evolution is more pronounced for the model with a lower accretion rate, as the energy from deuterium burning plays a more significant role in counteracting gravitational contraction.
+
+Models with higher deuterium abundance exhibit larger radii and higher luminosities early in the evolution due to the greater energy input from deuterium burning, which more effectively counteracts gravitational contraction. In contrast, models with lower deuterium abundances contract more rapidly, as indicated by a faster rise in central temperature in the right axes of Fig.~\ref{fig:comp_deuterium_radius_tc}. 
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.98\textwidth,keepaspectratio]{cmp_deuterium_radius_tc.pdf}
+  \caption{Evolution of stellar radius ($R/R_\odot$, blue) and central temperature ($T_c$, orange) as a function of age for accreting protostars with final mass $M_\mr{final} = 2\,M_\odot$ with two different deuterium abundances: $[\mr{D/H}] = 2.5 \times 10^{-5}$ (solid lines) and $[\mr{D/H}] = 2.0 \times 10^{-5}$ (dashed lines). Left panel: models with an accretion rate of $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$. Right panel: models with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$. Blue and orange curves correspond to stellar radius and central temperature, respectively, plotted on separate y-axes.}
+  \label{fig:comp_deuterium_radius_tc}
+\end{figure}
 
 \subsection{Comparison with Palla \& Stahler (1993)}
 \label{sec:comp_palla_stahler}
 
 \begin{outline}{gray}
   \item try to reproduce a similar plot of Palla \& Stahler (1992) mass-radius relation, or Fig 20.3 in Maeder book
+  \item introduce MESA somewhere?
 \end{outline}
 
 \begin{figure}
