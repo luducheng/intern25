@@ -7,6 +7,7 @@
 % \usepackage{mathptmx}
 \usepackage{fontspec}
 \setmainfont{Times New Roman}
+\usepackage[font=small]{caption}
 
 % images, table and colors
 \usepackage[dvipsnames]{xcolor}
@@ -160,18 +161,20 @@ A parallel branch of the original \texttt{CESAM} code, \textit{Code d'Évolution
 
 In the next section, I review the current understanding of pre-main sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.~\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main sequence evolution is modeled in stellar evolution codes. In Sec.~\ref{sec:methods}, I begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. I then detail the implementation of accretion in the code. The results of my models are presented in Sec.~\ref{sec:results}, where I explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.~\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
 
-\section{Pre-main sequence accretion}
+\qt{To do: rewrite introduction, mention MESA}
+\section{Pre-main sequence magnetospheric accretion}
 \label{sec:background}
 
 In this section, I will review the current understanding of stellar accretion, including the mechanisms of magnetospheric accretion and the observational evidence for accretion in pre-main sequence stars. 
 
-\subsection{Pre-main sequence magnetospheric accretion}
+\subsection{Magnetospheric accretion paradigm}
 \label{sec:magnetospheric_accretion}
 
 \begin{figure}
   \centering
   \includegraphics[width=.8\textwidth]{HartmannEtAl2016_magnetospheric_accretion.png}
-  \caption{Schematic illustration of magnetospheric accretion onto young low-mass stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. Accreting material is channeled along the magnetic field lines and impacts the stellar surface, forming an accretion shock. Jets and disk winds may also play a role in the star-disk interaction. The exact mechanisms for mass and angular momentum transport in the star-disk system remain uncertain. The figure is reproduced from Fig.~1 of \textcite{HartmannEtAl2016}.}
+  % \caption{Schematic illustration of magnetospheric accretion onto young low-mass stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. Accreting material is channeled along the magnetic field lines and impacts the stellar surface, forming an accretion shock. Jets and disk winds may also play a role in the star-disk interaction. The exact mechanisms for mass and angular momentum transport in the star-disk system remain uncertain. The figure is reproduced from Fig.~1 of \textcite{HartmannEtAl2016}.}
+  \caption{Schematic illustration of magnetospheric accretion onto young low-mass stars.The figure is reproduced from Fig.~1 of \textcite{HartmannEtAl2016}. See main text for details.}
   \label{fig:magnetospheric_accretion}
 \end{figure}
 
@@ -288,22 +291,22 @@ assuming the material falls freely from the truncation radius $R_\mr{trunc}$ to 
 \begin{figure}[htbp]
   \centering
   \includegraphics[width=.85\textwidth]{StahlerPalla2004_fig4p9.png}
-  \caption{HR diagrams for four stellar associations. In panels (a)-(c), closed circles represent CTTSs, while open circles are WTTSs. In panel (d), the sample includes CTTSs, Herbig Ae/Be stars, and main sequence objects. The thin upper curves are the theoretical birthlines; the thick lower curves are the ZAMS. Reproduced from Fig.~4.9 of \textcite{StahlerPalla2004}.} \label{fig:obs_birthline} 
+  \caption{HR diagrams for four star forming regions. In panels (a)-(c), closed circles represent CTTSs, while open circles are WTTSs. In panel (d), the sample includes CTTSs, Herbig Ae/Be stars, and main sequence objects. The thin upper curves are the theoretical birthlines; the thick lower curves are the ZAMS. Reproduced from Fig.~4.9 of \textcite{StahlerPalla2004}.} \label{fig:obs_birthline} 
 \end{figure}
 
 Observational studies reveal a correlation between accretion rates and stellar mass, with more massive stars accreting at higher rates \parencite[e.g.,][]{MuzerolleEtAl2003,ManaraEtAl2017,RugelEtAl2018,LanzafameEtAl2023}. Models of viscous disk evolution predict a declining $\dot{M}_\mr{acc}$ with stellar age as the circumstellar disk becomes depleted \parencite[e.g.,][]{HartmannEtAl1998,GortiHollenbach2009}.  Despite this, the precise functional form of the mass and time dependence remains under debate. For this study, a constant accretion rate $\dot{M}_\mr{acc}$ is adopted for simplicity.
 
 Deuterium plays a more prominent role in accreting PMS stars than in non-accreting ones, as the accretion flow continuously supplies fresh deuterium. In contrast, non-accreting stars can deplete their initial deuterium rapidly. This deuterium contributes to energy generation through nuclear burning at a rate given by
 \begin{equation}
-  \epsilon_\mr{D} = \left[\mr{D/H}\right]\epsilon_\mr{D,0} \left(\frac{\rho}{1,\mr{g,cm^{-3}}}\right) \left(\frac{T}{1 \times 10^6,\mr{K}}\right)^{n_D}, \label{eq:deuterium_energy_prod_rate}
+  \epsilon_\mr{D} = \left[\mr{D/H}\right]\epsilon_\mr{D,0} \left(\frac{\rho}{1\,\mr{g\,cm^{-3}}}\right) \left(\frac{T}{10^6\,\mr{K}}\right)^{n_\mr{D}}, \label{eq:deuterium_energy_prod_rate}
 \end{equation}
-where $\epsilon_\mr{D,0} = 4.19 \times 10^7,\mr{erg,g^{-1},s^{-1}}$, $n_D = 11.8$, and $\left[\mr{D/H}\right]$ is the number density of deuterium relative to hydrogen in the environment \parencite[cf. Eq.~11.27 in][]{StahlerPalla2004}.
+where $\epsilon_\mr{D,0} = 4.19 \times 10^7\,\mr{erg\,g^{-1}\,s^{-1}}$, $n_\mr{D} = 11.8$, and $[\mr{D/H}]$ is the number abundance of deuterium relative to hydrogen, i.e., the ratio of deuterium nuclei to hydrogen nuclei in the environment \parencite[cf. Eq.~11.27 in][]{StahlerPalla2004}.
 
-The amount of deuterium in the accreted material can strongly influence PMS evolution. High deuterium abundance leads to significant stellar expansion during accretion, while low abundance results in a smaller size of the star throughout evolution toward the main sequence \parencite{KunitomoEtAl2017}.
+The amount of deuterium in the accreted material can strongly influence PMS evolution. A high deuterium abundance provides more nuclear energy during accretion, leading to greater stellar expansion, while a lower abundance results in a more compact star throughout its evolution toward the main sequence \parencite{KunitomoEtAl2017}.
 
 When the main accretion phase ends, the circumstellar disk has mostly been dissipated and become optically thin, allowing the star to appear as a visible object. The locus in the HR diagram where PMS stars of different masses first become visible is known as the birthline \parencite{Stahler1983}. Its position is sensitive to the star's accretion history, initial mass, and chemical composition.
 
-Theoretical birthlines can be compared with observations of TTSs to evaluate models of PMS evolution. Moreover, the birthline provides insights into the environments in which stars are formed. In Fig.~\ref{fig:obs_birthline}, observations of four stellar associations with active star formation are plotted alongside the theoretical birthline and the ZAMS. Stars located below the birthline have recently dispersed their circumstellar envelopes, whereas younger, still-embedded stars cannot yet be placed on the HR diagram due to difficulties in measuring their effective temperatures.
+Theoretical birthlines can be compared with observations of TTSs to evaluate models of PMS evolution. Moreover, the birthline provides insights into the environments in which stars are formed. In Fig.~\ref{fig:obs_birthline}, observations of four star forming regions with active star formation are plotted alongside the theoretical birthline and the ZAMS. Stars located below the birthline have recently dispersed their circumstellar envelopes, whereas younger, still-embedded stars cannot yet be placed on the HR diagram due to difficulties in measuring their effective temperatures.
 
 \section{Methods}
 \label{sec:methods}
@@ -421,9 +424,10 @@ Following the simplified treatment by \textcite{HartmannEtAl1998}, these conside
 \begin{equation}
   L_\mr{add} = \xi_\mr{add}\frac{GM_\star \dot{M}_\mr{acc}}{R_\star},
 \end{equation}
-where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in Eq.~(5) of \textcite{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of energy injected by the accreted material into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into rotational energy \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to  as cold accretion, as in this case no heat is injected into the stellar interior.
+where $\xi_\mr{add}$\footnote{My $\xi_\mr{add}$ is equivalent to $\alpha$ in Eq.~(5) of \textcite{HartmannEtAl1998}.} is a dimensionless parameter to quantity the fraction of energy injected by the accreted material into the star. The value of $\xi_\mr{add}$ depends on both factors mentioned above. Radiative transfer calculations by \textcite{StahlerEtAl1980} show that $\xi_\mr{add} \leq 3/4$, while for disk accretion the upper limit is typically $\xi_\mr{add} \simeq 0.5$. This value can be further reduced by stellar rotation, which converts some of the accretion energy into rotational energy \parencite{KunitomoEtAl2017}. The case of $\xi_\mr{add} = 0.5$ is referred to as hot accretion, while $\xi_\mr{add} = 0$ is referred to as cold accretion, where no heat is injected into the stellar interior (though the added mass and entropy still modify the star's hydrostatic equilibrium).
 
 This heat injection can affect the evolution of accreting stars \parencite[e.g., ][]{KunitomoEtAl2017,AmardMatt2023}. A higher value of $\xi_\mathrm{add}$ causes the star to expand by adding thermal energy. However, for simplicity, heat injection during accretion is not included in this work. By neglecting this effect, I am effectively considering the case where $\xi_\mr{add} = 0$, which is a reasonable approximation for most PMS stars, as the majority of the accretion energy is expected to be radiated away before reaching the star \parencite{HartmannEtAl1998}.
+
 
 % uniform deposition of energy  in the convective zone:
 % \begin{equation}
@@ -540,7 +544,7 @@ In this project, I focus on the evolution of the second hydrostatic core, whose 
 
 Although \texttt{Cesam2k20} is capable of modeling rotation and diffusion, I keep the input physics simple at this stage to focus on the impact of accretion on stellar structure. The interactions of accretion with rotation and diffusion will be an important aspect in future work. The models are computed for 1D, single stars without rotation, magnetic fields, or diffusion. Mass loss is not considered; the only mechanism that alters the stellar mass is accretion. The initial chemical composition follows the solar mixture of \textcite{AsplundEtAl2009}, with meteoritic determination for non-volatile elements as recommended by \textcite{SerenelliEtAl2009}. The isotopic ratios follow the solar composition by \textcite{AsplundEtAl2021}, except for the deuterium abundance, which is varied to explore its impact on accreting stars.
 
-Convection is modeled using the mixing-length theory (MLT) \parencite{CoxGiuli1968a}. It assumes that convective energy transport occurs via fluid elements moving from hotter to cooler regions over a characteristic distance-the mixing length—typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mr{MLT}$. We adopt a solar-calibrated value of $\alpha_\mr{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
+Convection is modeled using the mixing-length theory \parencite[MLT;][]{CoxGiuli1968a}, which describes convective energy transport occurs via the motion of fluid elements over a characteristic distance, the mixing length, before dissolving into their surroundings. This length is typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mr{MLT}$. We adopt a solar-calibrated value of $\alpha_\mr{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
 
 The EoS and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, $^{17}\mr{O}$.
 
@@ -767,7 +771,7 @@ The Iben constant $c_\mr{iben}$ controls the initial central temperature of the 
   \includegraphics[width=\textwidth,keepaspectratio]{ciben_mass_init.pdf}
   \caption{Comparison of initial models computed with different Iben constants using \texttt{Cesam2k20}, for stellar masses between $0.5$ and $2.5\,M_\odot$. Non-accreting (classic) models are shown as faint solid lines for reference. The dot-dashed lines correspond to models with $c_\mr{iben} = 5\times10^{-4}$, the solid lines to models with $c_\mr{iben} = 5\times10^{-5}$, and the dashed lines to models with $c_\mr{iben} = 1\times10^{-5}$. Solid circles mark the moment when accretion is completed. Corresponding initial central temperatures are listed in the table.} 
   \label{fig:comp_iben}
-\end{figure}.
+\end{figure}
 
 The evolutionary tracks differ drastically with varying Iben constants. Models with lower $c_\mr{iben}$ start with lower initial central temperatures and thus begin their evolution from a more luminous positions on the HR diagram, closer to the classical Hayashi and Henyey tracks. Ultimately, the models with the lowest Iben constant ($1 \times 10^{-5}$) converge with the non-accreting tracks the earliest, whereas those with the highest constant ($5 \times 10^{-4}$) remain below the non-accreting tracks for stellar masses above $1\,M_\odot$ for a more extended period, even after accretion ends.
 
@@ -783,13 +787,13 @@ This behavior can be understood by examining the burning plots and central tempe
 \subsection{Dependence on accretion rates}
 \label{sec:accretion_rate}
 
+Fig.~\ref{fig:comp_acc_rate} presents a comparison between models with two different constant accretion rates: $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $10^{-4}\,M_\odot/\mr{yr}$. The differences between them are moderate. A higher accretion rate results in slightly higher luminosities, as the increased mass and energy influx accelerates the contraction, thereby raising the central temperature more rapidly. This trend is illustrated more clearly in Fig.~\ref{fig:comp_acc_rate_m1p5}, which shows the evolution of radius and central temperature for $1.5\,M_\odot$ models. 
+
 \begin{figure}
   \centering  
   \includegraphics[width=.49\textwidth,keepaspectratio]{cmp_accretionrate.pdf}
   \caption{HR diagrams of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$. The open squares and circles indicate the end of the accretion phases, for models with $\dot{M}_\mr{acc} = 10^{-5} M_\odot/\mr{yr}$ and $\dot{M}_\mr{acc} = 10^{-4} M_\odot/\mr{yr}$, respectively.} \label{fig:comp_acc_rate}
 \end{figure}
-
-Fig.~\ref{fig:comp_acc_rate} presents a comparison between models with two different constant accretion rates: $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $10^{-4}\,M_\odot/\mr{yr}$. The differences between them are moderate. A higher accretion rate results in slightly higher luminosities, as the increased mass and energy influx accelerates the contraction, thereby raising the central temperature more rapidly. This trend is illustrated more clearly in Fig.~\ref{fig:comp_acc_rate_m1p5}, which shows the evolution of radius and central temperature for $1.5\,M_\odot$ models. 
 
 These modest differences between different accretion rates are consistent with the findings of \textcite{HosokawaEtAl2011} and \textcite{KunitomoEtAl2017}, who also reported that the accretion rate plays a relatively minor role in determining the overall evolutionary path.
 
@@ -826,18 +830,16 @@ Models with higher deuterium abundance exhibit larger radii and higher luminosit
   \label{fig:comp_deuterium_radius_tc}
 \end{figure}
 
+% \subsection{Stellar birthlines}
 \subsection{Comparison with Palla \& Stahler (1993)}
 \label{sec:comp_palla_stahler}
 
-\begin{outline}{gray}
-  \item try to reproduce a similar plot of Palla \& Stahler (1992) mass-radius relation, or Fig 20.3 in Maeder book
-  \item introduce MESA somewhere?
-\end{outline}
+As discussed in Sec.~\ref{sec:pms_accretion}, the birthline is an important tool for understanding the early evolution of accreting protostars. In this section, I compare with the birthline computed by \textcite{PallaStahler1993}. 
 
 \begin{figure}
   \centering  
   \includegraphics[width=.65\textwidth,keepaspectratio]{birthline_acce5.pdf}
-  \caption{Birthline of accreting stars, with an accretion rate of $10^{-5} M_\odot/\mr{yr}$.} \label{fig:birthline_acce5}
+  \caption{Birthline of accreting stars, with an accretion rate of $10^{-5}\,M_\odot/\mr{yr}$. The models are computed using the } \label{fig:birthline_acce5}
 \end{figure}
 
 % \subsection{The effect of different initial stellar masses}
