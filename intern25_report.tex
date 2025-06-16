@@ -12,7 +12,8 @@
 % images, table and colors
 \usepackage[dvipsnames]{xcolor}
 \usepackage{graphicx} 
-\graphicspath{ {./figures/} } 
+\graphicspath{ {./figures/}, {/Users/luducheng/Documents/templates/},
+{/Users/luducheng/Documents/templates/logos/OBSPM/Logo Observatoire de Paris - PSL/RGB/Noir_Sideral/PDF/} } 
 \usepackage{tabularx, makecell}
 \usepackage{caption}
 \usepackage{subcaption}
@@ -153,19 +154,18 @@ Accretion also impacts long-term stellar evolution by setting the initial condit
 
 Finally, accretion history plays a critical role in understanding young stellar clusters. It can influence the shape of the initial mass function, contribute to the observed luminosity spread among cluster members, and affect the positioning of stars on theoretical isochrones \parencite{BaraffeEtAl2009,BaraffeEtAl2012,HosokawaEtAl2011}. Accurate modeling of accretion is therefore important for interpreting observed features of young clusters.
 
-In this project, I investigate the impact of accretion on stellar structure and evolution using the \texttt{Cesam2k20} version of the 1D stellar evolution code \textit{Code d'Évolution Stellaire Adaptatif et Modulaire} (\texttt{CESAM}) \parencite{Morel1997,MorelLebreton2008,MarquesEtAl2013}. Our goal is to implement accretion in \texttt{Cesam2k20}, which will allow us to examine its effects on stellar evolution and structure, and to compare the results with theoretical predictions and other stellar evolution models.
+In this project, I investigate the impact of accretion on stellar structure and evolution using the \texttt{Cesam2k20} version of the 1D stellar evolution code \textit{Code d'Évolution Stellaire Adaptatif et Modulaire} \parencite[\texttt{CESAM}; ][]{Morel1997,MorelLebreton2008,MarquesEtAl2013}. Our goal is to implement accretion in \texttt{Cesam2k20}, which will allow us to examine its effects on stellar evolution and structure, and to compare the results with theoretical predictions and other stellar evolution models.
 
 This study focuses on the later stages of the accretion process, after the formation of a hydrostatic core. We restrict our analysis to low-mass stars, as accretion in high-mass stars remains less constrained and falls outside the scope of this work.
 
-A parallel branch of the original \texttt{CESAM} code, \textit{Code d'Évolution Planétaire Adaptatif et Modulaire} (\texttt{CEPAM}) \parencite{GuillotMorel1995}, has been developed for modeling planetary formation and evolution. A future unification of these two branches would provide a powerful framework for studying the coupled evolution of stars and their planetary systems.
-
 In the next section, I review the current understanding of pre-main sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.~\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main sequence evolution is modeled in stellar evolution codes. In Sec.~\ref{sec:methods}, I begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. I then detail the implementation of accretion in the code. The results of my models are presented in Sec.~\ref{sec:results}, where I explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.~\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
 
-\qt{To do: rewrite introduction, mention MESA}
+\qt{To do: rewrite introduction, mention MESA, distiguish between the pms accretion and the main accretion phase (protostar)}
 \section{Pre-main sequence magnetospheric accretion}
 \label{sec:background}
 
-In this section, I will review the current understanding of stellar accretion, including the mechanisms of magnetospheric accretion and the observational evidence for accretion in pre-main sequence stars. 
+In this section, I will review the current understanding of stellar accretion, including the mechanisms of magnetospheric accretion and its observational signatures. I first introduce the magnetospheric accretion paradigm, which underpins the interpretation of the observational evidence discussed in the following subsection.
+
 
 \subsection{Magnetospheric accretion paradigm}
 \label{sec:magnetospheric_accretion}
@@ -177,8 +177,6 @@ In this section, I will review the current understanding of stellar accretion, i
   \caption{Schematic illustration of magnetospheric accretion onto young low-mass stars.The figure is reproduced from Fig.~1 of \textcite{HartmannEtAl2016}. See main text for details.}
   \label{fig:magnetospheric_accretion}
 \end{figure}
-
-\qt{to be added: distiguish between the pms accretion and the main accretion phase (protostar)}\par
 
 Stellar magnetic fields play a crucial role in the accretion of pre-main sequence stars, through the mechanism known as magnetospheric accretion \parencite[See, for example,][for a review]{HartmannEtAl2016}. Fig.~\ref{fig:magnetospheric_accretion} is a schematic illustration of magnetospheric accretion onto young ($1 \lesssim t \lesssim 10,\mr{Myr}$), low-mass ($\lesssim 1 M_\odot$) stars. The strong stellar magnetic field truncates the circumstellar disk at a few stellar radii. The dust disk is truncated slightly farther out than the gas disk, as dust in the inner disk sublimates due to heating by the stellar radiation field. The inner edge of the dust disk is responsible for most of the observed near-IR excess. Material from the disk is funneled onto the star along the magnetic field lines, where it is heated to approximately $10^4\,\mr{K}$, producing broad emission lines. The accretion flow is accelerated along the field lines, eventually reaching the stellar surface at nearly free-fall velocity. This process leads to the formation of an accretion shock at the stellar surface, where the gas is briefly halted and heated to very high temperatures, emitting X-rays. Most of these X-rays are absorbed and reradiated in the ultraviolet and optical continuum.
 
@@ -546,7 +544,7 @@ Although \texttt{Cesam2k20} is capable of modeling rotation and diffusion, I kee
 
 Convection is modeled using the mixing-length theory \parencite[MLT;][]{CoxGiuli1968a}, which describes convective energy transport occurs via the motion of fluid elements over a characteristic distance, the mixing length, before dissolving into their surroundings. This length is typically taken to be proportional to the pressure scale height. This proportionality is set by the mixing-length parameter, $\alpha_\mr{MLT}$. We adopt a solar-calibrated value of $\alpha_\mr{MLT} = 1.64$. Convective boundaries are determined using the Schwarzschild criterion, with no convective overshooting.
 
-The EoS and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, $^{17}\mr{O}$.
+The EoS and opacity are interpolated from the OPAL2005 tables \parencite{RogersIglesias1992,IglesiasRogers1996,RogersNayfonov2002}, and supplemented at low temperatures by the AF opacity tables \parencite{FergusonEtAl2005}. Nuclear reaction rates are based on NACRE \parencite{AikawaEtAl2006} and LUNA \parencite{BrogginiEtAl2018} tables. The models include the full PP and CNO cycles, tracking the evolution of abundances for $^{1}\mr{H}$, $^{2}\mr{H}$, $^{3}\mr{He}$, $^{4}\mr{He}$, $^{7}\mr{Li}$, $^{7}\mr{Be}$, $^{12}\mr{C}$, $^{13}\mr{C}$, $^{14}\mr{N}$, $^{15}\mr{N}$, $^{16}\mr{O}$, and $^{17}\mr{O}$.
 
 Neutrino energy losses are treated using the prescriptions of \textcite{HaftEtAl1994} for plasma neutrinos and \textcite{Weigert1966} for photoneutrinos. The atmosphere is implemented using a Hopf $T(\tau)$ relation from \textcite{HubenyMihalas2015}, with the base of the atmosphere set at an optical depth of $\tau_{\max} = 20$, where the solution of the internal structure equations is matched to that of the atmosphere model.
 
@@ -611,7 +609,7 @@ The relation between the two coordinates, $\left(\partial q_m/\partial m\right)_
 \end{equation}
 These expressions will be useful later for computing the structure equation Eq.~\eqref{eq:cesam_struct4} and its partial derivatives in the next section.
 
-To map thermodynamic quantities from the previous to the current model, a table of physical variables as functions of $\mu_x = \mu \left(\frac{M_\odot}{M_1}\right)^{2/3}$ is constructed at the previous time step. At the current time step, for each grid point $\mu$, the corresponding homologous coordinate $\mu_x = \mu \left(\frac{M_\odot}{M_2}\right)^{2/3}$ is computed, and the thermodynamic properties are obtained by interpolating values stored in the table at this $\mu_x$. 
+To map thermodynamic quantities from the previous to the current model, a table of physical variables as functions of $\mu_{x,1} = \mu_1 \left(\frac{M_\odot}{M_1}\right)^{2/3}$ is constructed at the previous time step. At the current time step, for each grid point $\mu_2$, the corresponding homologous coordinate $\mu_{x,2} = \mu_2 \left(\frac{M_\odot}{M_2}\right)^{2/3}$ is computed, and the thermodynamic properties are obtained by interpolating values stored in the table at this $\mu_{x,2}$. 
 
 This mapping is illustrated in Fig.~\ref{fig:mapping_coordinates}, which shows how mass shells at the same $\mu$ correspond to different $\mu_x$ values as the total stellar mass increases from $M_1$ to $M_2$. This procedure assumes that thermal properties remain identical at fixed $\mu_x$ between time steps, so the accreted material inherits the thermodynamic state of the surface layers from the previous model. The rest of the computation proceeds using the set of Eggleton variables defined in Eq.~\eqref{eq:cesam2k20_variables}.
 
@@ -624,7 +622,7 @@ This mapping is illustrated in Fig.~\ref{fig:mapping_coordinates}, which shows h
 \subsubsection{Modifications to the structure equations}
 \label{sec:accretion_struct_eq}
 
-In \texttt{Cesam2k20}, the nonlinear boundary value problem is solved using the Newton-Raphson method. In the context of stellar evolution modeling, this approach is commonly known as the Henyey method \parencite{HenyeyEtAl1959}. The structure equations are solved iteratively, with the Jacobian matrix of the system in Eqns.~\eqref{eq:cesam_struct1}-\eqref{eq:cesam_struct7} updated at each iteration. This matrix contains the partial derivatives of the structure equations with respect to the variables $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$, which guide the solution toward convergence. Following the standard Henyey scheme, each time step is split into two substeps: first, the chemical composition is updated while the structural variables ($\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$) are held fixed; second, the structure is recomputed to restore quasi-static equilibrium with the updated composition. I focus here on the modifications introduced in the quasi-static equilibrium step, and discuss changes to the treatment of chemical evolution in the next section.
+In \texttt{Cesam2k20}, the nonlinear boundary value problem is solved using the Newton-Raphson method \parencite{PressEtAl1992}. In the context of stellar evolution modeling, this approach is commonly known as the Henyey method \parencite{HenyeyEtAl1959}. The structure equations are solved iteratively, with the Jacobian matrix of the system in Eqns.~\eqref{eq:cesam_struct1}-\eqref{eq:cesam_struct7} updated at each iteration. This matrix contains the partial derivatives of the structure equations with respect to the variables $\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$, which guide the solution toward convergence. Following the standard Henyey scheme, each time step is split into two substeps: first, the chemical composition is updated while the structural variables ($\xi$, $\eta$, $\zeta$, $\lambda$, and $\mu$) are held fixed; second, the structure is recomputed to restore quasi-static equilibrium with the updated composition. I focus here on the modifications introduced in the quasi-static equilibrium step, and discuss changes to the treatment of chemical evolution in the next section.
 
 The principal modifications introduced in this work concern the energy equation, Eq.~\eqref{eq:cesam_struct4}, specifically the gravitational energy generation term, $\epsilon_\mr{g}$. This term is revised to include the gravitational energy contributed by accreted material. Consequently, the corresponding partial derivatives in the Jacobian matrix are recalculated to account for this change.
 
@@ -643,7 +641,7 @@ More explicitly, the implementation of Eq.~\eqref{eq:grav_energy_kipp_mux} in \t
 \end{equation}
 where $T_{\mu_x}$ and $p_{\mu_x}$ are the temperature and pressure at the current time step; $T_{\mu_x}^t$ and $p_{\mu_x}^t$ are those at the previous time step; all quantities are evaluated at the same coordinate $\mu_x$; and $\dd{t}$ is the time interval between the two models. 
 
-The next step is to compute the partial derivatives of the gravitational energy generation term, $\epsilon_\mr{g}$. Due to their complexity and length, the full expressions are provided in Appendix~\ref{app:jacobian}. Below is an example derivation of the partial derivative of Eq.~\eqref{grav_energy_kipp_cesam} with respect to $\xi = \ln P$.
+The next step is to compute the partial derivatives of the gravitational energy generation term, $\epsilon_\mr{g}$. Due to their complexity and length, the full expressions are provided in Appendix~\ref{app:jacobian}. Below is an example derivation of the partial derivative of Eq.~\eqref{eq:grav_energy_kipp_cesam} with respect to $\xi = \ln P$.
 
 Using Eqns.~\eqref{eq:cesam_struct1} and \eqref{eq:cesam_struct2}, one can write: 
 \begin{align}
@@ -694,7 +692,7 @@ To account for a different composition in the accreted material, at the start of
 % \subsubsection{Limiting the change in mass}
 % \label{sec:limiting_mass_change}
 
-\section{Results}
+\section{Results and discussions}
 \label{sec:results}
 
 \subsection{The toy problem}
@@ -717,7 +715,7 @@ Before plunging into the results of the accreting models, I first present a toy 
 
 I've discussed before that the primary modifications introduced in this work concern the treatment of gravitational energy, here I try to illustrate with the static models how this term can be problematic if not treated with care. With the static models, one has three different options to compute the gravitational energy profile, or more specifically $T\lpfird[s]{t}$: (1) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu$, (2) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu_x$ , or (3) calculating $\lpfird[s]{t}$ with the entropy profile. The first two methods yield similar results, while the third method yields a different profile. The gravitational energy profile of the two pairs of models is shown in %Fig.~\ref{fig:toy_problem_grav_energy}.
 
-\subsection{Accreting vs. Non-Accreting Stellar Models}
+\subsection{Accreting vs. non-accreting stellar models}
 \label{sec:accretion_vs_non_accretion}
 
 \begin{figure}
@@ -775,27 +773,30 @@ The Iben constant $c_\mr{iben}$ controls the initial central temperature of the 
 
 The evolutionary tracks differ drastically with varying Iben constants. Models with lower $c_\mr{iben}$ start with lower initial central temperatures and thus begin their evolution from a more luminous positions on the HR diagram, closer to the classical Hayashi and Henyey tracks. Ultimately, the models with the lowest Iben constant ($1 \times 10^{-5}$) converge with the non-accreting tracks the earliest, whereas those with the highest constant ($5 \times 10^{-4}$) remain below the non-accreting tracks for stellar masses above $1\,M_\odot$ for a more extended period, even after accretion ends.
 
-This behavior can be understood by examining the burning plots and central temperature evolution in Fig.~\ref{fig:comp_iben_burning}. Higher initial central temperatures lead to earlier onset of deuterium burning, which causes a greater expansion during the deuterium-burning phase. This expansion lowers the effective temperature, which explains the models' lower position on the HR diagram.
-
-\begin{figure}
+\begin{figure}[htbp]
   \centering
-  \includegraphics[width=.98\textwidth,keepaspectratio]{ciben_burning.pdf}
+  \includegraphics[width=.95\textwidth,keepaspectratio]{ciben_burning.pdf}
   \caption{Panels (1)-(3): Burning plots of accreting models with a final mass $M_\mr{final} = 2\,M_\odot$, and Iben constants $c_\mr{iben} =  5\times10^{-4}$, $5\times10^{-5}$, and $1\times10^{-5}$, respectively. The color scale shows the logarithm of the energy generation rate in $\mr{erg\,g^{-1}\,s^{-1}}$. The dashed regions mark convective zones. Panel (4): Central temperature evolution of the non-accreting model and accreting models with different Iben constants. Age is shown on a logarithmic scale to highlight the early evolution.}
   \label{fig:comp_iben_burning}
 \end{figure}
+
+This behavior can be understood by examining the burning plots and central temperature evolution in Fig.~\ref{fig:comp_iben_burning}. Higher initial central temperatures lead to earlier onset of deuterium burning, which causes a greater expansion during the deuterium-burning phase. This expansion lowers the effective temperature, which explains the models' lower position on the HR diagram.
 
 \subsection{Dependence on accretion rates}
 \label{sec:accretion_rate}
 
 Fig.~\ref{fig:comp_acc_rate} presents a comparison between models with two different constant accretion rates: $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $10^{-4}\,M_\odot/\mr{yr}$. The differences between them are moderate. A higher accretion rate results in slightly higher luminosities, as the increased mass and energy influx accelerates the contraction, thereby raising the central temperature more rapidly. This trend is illustrated more clearly in Fig.~\ref{fig:comp_acc_rate_m1p5}, which shows the evolution of radius and central temperature for $1.5\,M_\odot$ models. 
 
-\begin{figure}
+These modest differences between different accretion rates are consistent with the findings of \textcite{HosokawaEtAl2011} and \textcite{KunitomoEtAl2017}, who also reported that the accretion rate plays a relatively minor role in determining the overall evolutionary path.
+
+\begin{figure}[htbp]
   \centering  
   \includegraphics[width=.49\textwidth,keepaspectratio]{cmp_accretionrate.pdf}
   \caption{HR diagrams of low-mass accreting models with accretion rates of $10^{-5} M_\odot/\mr{yr}$ (wide, solid lines) and $10^{-4} M_\odot/\mr{yr}$ (thin, dashed lines). The models are initialized with a seed mass of $0.1 M_\odot$ and a deuterium abundance of $[\mr{D/H}] = 2.0\times 10^{-5}$. The open squares and circles indicate the end of the accretion phases, for models with $\dot{M}_\mr{acc} = 10^{-5} M_\odot/\mr{yr}$ and $\dot{M}_\mr{acc} = 10^{-4} M_\odot/\mr{yr}$, respectively.} \label{fig:comp_acc_rate}
 \end{figure}
 
-These modest differences between different accretion rates are consistent with the findings of \textcite{HosokawaEtAl2011} and \textcite{KunitomoEtAl2017}, who also reported that the accretion rate plays a relatively minor role in determining the overall evolutionary path.
+\subsection{Dependence on deuterium abundance}
+\label{sec:deuterium_abundance}
 
 \begin{figure}
   \centering  
@@ -804,24 +805,17 @@ These modest differences between different accretion rates are consistent with t
   \label{fig:comp_acc_rate_m1p5}
 \end{figure}
 
-\subsection{Dependence on deuterium abundance}
-\label{sec:deuterium_abundance}
-
 \begin{figure}
   \centering
   \includegraphics[width=.98\textwidth,keepaspectratio]{cmp_deuterium.pdf}
-  \caption{HR diagrams of accreting models with different deuterium abundances in the accreted material. Left panel: models with an accretion rate of $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$. Right panel: models with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$. Solid and dashed lines correspond to deuterium abundances of $2.5 \times 10^{-5}$ and $2.0 \times 10^{-5}$, respectively. The end of the accretion phase is marked by open circles for higher and open squares for lower deuterium abundances. Two models could not finish due to convergence issues: the $1\,M_\odot$ model with $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $[\mr{D/H}]=2.5\times10^{-5}$ (red solid line, left panel); the $1.5\,M_\odot$ model with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$ and $[\mr{D/H}]=2.5\times10^{-5}$ (green solid line, right panel).} \label{fig:comp_deuterium} 
+  \caption{HR diagrams of accreting models with different deuterium abundances in the accreted material. Left panel: models with an accretion rate of $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$. Right panel: models with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$. Solid and dashed lines correspond to deuterium abundances of $2.5 \times 10^{-5}$ and $2.0 \times 10^{-5}$, respectively. The end of the accretion phase is marked by open circles for higher and open squares for lower deuterium abundances. Two models could not finish due to convergence issues: the $1\,M_\odot$ model with $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$ and $[\mr{D/H}] = 2.5 \times 10^{-5}$ (red solid line, left panel); the $1.5\,M_\odot$ model with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$ and $[\mr{D/H}]=2.5 \times 10^{-5}$ (green solid line, right panel).} \label{fig:comp_deuterium} 
 \end{figure}
 
 The deuterium content in the accreted material has a stronger influence on the evolution of accreting protostars than the accretion rate. Fig.~\ref{fig:comp_deuterium} compares models with two different deuterium abundances: $[\mr{D/H}] = 2.0 \times 10^{-5}$ and $[\mr{D/H}] = 2.5 \times 10^{-5}$. The left panel shows models with an accretion rate of $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$, while the right panel shows models with $\dot{M}_\mr{acc} = 10^{-4}\,M_\odot/\mr{yr}$. The resulting evolution of stellar radius and central temperature for accreting models with final mass $M_\mr{final} = 2\,M_\odot$ is shown in Fig.~\ref{fig:comp_deuterium_radius_tc}.
 
 The contraction phases of the accreting models with different deuterium abundances show no visible difference. However, once deuterium is ignited, the model with higher deuterium abundance expands to a greater extent. This larger radius is maintained during the subsequent second contraction phase and the swelling phase, only disappearing as the star approaches the main sequence. The radius difference is also reflected in the central temperatures (shown on the right axis of Fig.~\ref{fig:comp_deuterium_radius_tc}): during the deuterium-burning, second contraction, and swelling phases, the model with higher deuterium abundance exhibits lower central temperatures than the model with lower deuterium abundance.
 
-Models with higher deuterium abundance have higher luminosities and expand more prominently early on due to the richer deuterium supply, providing more energy to counteract gravitational contraction during the initial phases. In contrast, models with lower deuterium abundances contract faster, as evidenced by the more rapid increase in central temperature. The differences in luminosity and radius evolution are more pronounced for models with lower accretion rates, where deuterium burning plays a more significant role in opposing gravitational contraction.
-
-The models with a higher deuterium abundance have a higher luminosity and expands more pronoucedly in the beginning due to a rich supply of deuterium, and therefore more energy to conteract the gravitational contraction in the earlier phases. This faster contraction of the model widh lower deuterium abundances is also recogniable from the faster increase of the central temperature of that of the models with higher deuterium abundance. The difference in luminosity and radius evolution is more pronounced for the model with a lower accretion rate, as the energy from deuterium burning plays a more significant role in counteracting gravitational contraction.
-
-Models with higher deuterium abundance exhibit larger radii and higher luminosities early in the evolution due to the greater energy input from deuterium burning, which more effectively counteracts gravitational contraction. In contrast, models with lower deuterium abundances contract more rapidly, as indicated by a faster rise in central temperature in the right axes of Fig.~\ref{fig:comp_deuterium_radius_tc}. 
+Models with higher deuterium abundances exhibit larger radii and higher luminosities during the early phases of evolution. This behavior stems from the enhanced energy production via deuterium burning, which more effectively counteracts gravitational contraction. In contrast, models with lower deuterium abundances contract more rapidly, as indicated by a steeper rise in central temperature in the right axes of Fig.~\ref{fig:comp_deuterium_radius_tc}. The expansion of radius is more visible in models with higher accretion rates, where the rapid supply of deuterium leads to a higher energy production rate from deuterium burning, more effectively resisting gravitational contraction.
 
 \begin{figure}
   \centering
@@ -830,47 +824,79 @@ Models with higher deuterium abundance exhibit larger radii and higher luminosit
   \label{fig:comp_deuterium_radius_tc}
 \end{figure}
 
-% \subsection{Stellar birthlines}
 \subsection{Comparison with Palla \& Stahler (1993)}
 \label{sec:comp_palla_stahler}
 
-As discussed in Sec.~\ref{sec:pms_accretion}, the birthline is an important tool for understanding the early evolution of accreting protostars. In this section, I compare with the birthline computed by \textcite{PallaStahler1993}. 
+As discussed in Sec.~\ref{sec:pms_accretion}, the birthline serves as a key diagnostic for understanding the early evolution of accreting protostars. In the left panel Fig.~\ref{fig:birthline_acce5}, I present a reproduction with \texttt{Cesam2k20} of the birthline originally computed by \textcite{PallaStahler1993}.
+
+To ensure consistency with their setup, I adopt a seed mass of $M_\mr{seed} = 1\,M_\odot$ (instead of the $0.1\,M_\odot$ used elsewhere in this work), an initial central temperature of $T_c \sim 5 \times 10^5\,\mr{K}$, and a deuterium abundance of $[\mr{D/H}] = 2.5 \times 10^{-5}$. These parameters are consistent with those used in their study. The birthline is constructed by identifying the position in the HR diagram where accretion ceases, i.e., where the star reaches its target final mass $M_\mr{final}$.
 
 \begin{figure}
   \centering  
-  \includegraphics[width=.65\textwidth,keepaspectratio]{birthline_acce5.pdf}
-  \caption{Birthline of accreting stars, with an accretion rate of $10^{-5}\,M_\odot/\mr{yr}$. The models are computed using the } \label{fig:birthline_acce5}
+  \includegraphics[width=.49\textwidth,keepaspectratio]{birthline_acce5.pdf}
+  % \includegraphics[width=.49\textwidth,keepaspectratio]{mass_radius_acce5_evol.pdf}
+  \caption{Left panel: HR diagram of accreting stars of different final masses (solid lines) and the birthline (black dashed line), with an accretion rate of $10^{-5}\,M_\odot/\mr{yr}$. Right panel: The mass-radius relation. The accreting models start with $M_\mr{seed} = 1\,M_\odot$ and $T_c \sim 5 \times 10^5\,\mr{K}$. The deuterium abundance is $[\mr{D/H}] = 2.5 \times 10^{-5}$. Each evolutionary tracks begins at the birthline and terminates at ZAMS.} \label{fig:birthline_acce5}
 \end{figure}
 
-% \subsection{The effect of different initial stellar masses}
-% \label{sec:initial_mass}
+Since the publication of \textcite{PallaStahler1993}, both observational constraints and stellar modeling techniques have evolved significantly. Consequently, my models differ in several physical ingredients, for example, the equation of state, opacity tables, nuclear reaction rates, and initial chemical composition. These updates lead to some deviations between the two birthlines.
 
-% \subsection{The effect of different heat injection models}
-% \label{sec:heat_injection}
+The most noticeable differences appear at the lower-mass end, particularly for the $1.5\,M_\odot$, $2.0\,M_\odot$, and $2.5\,M_\odot$ models, which in my results lie at higher luminosities than in the original \textcite{PallaStahler1993} birthline. This discrepancy likely arises from the relatively small mass difference between the seed and final masses in these models. As discussed in Sec.~\ref{sec:initial_models}, using a larger seed mass in \texttt{Cesam2k20} tends to shift the early evolutionary track toward higher luminosities in the HR diagram.
 
-% \subsection{Comparison with \texttt{MESA}}
-% \label{sec:mesa_comparison}
+To further examine this effect, Fig.~\ref{fig:cmp_birthline_radius_tc} presents the radius and central temperature evolution of accreting models with $M_\mr{final} = 1.5$ to $4.5\,M_\odot$. Although all models start from the same central temperature, higher-mass models quickly reach higher central temperatures and reach the main sequence earlier, reflecting their more rapid evolution.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=.98\textwidth,keepaspectratio]{cmp_birthline_radius_tc.pdf}
+  \caption{Radius (left panel) and central temperature (right panel) evolution for accreting protostars from $M_\mr{seed} = 1\,M_\odot$ to final mass $M_\mr{final} = 1.5-4.5\,M_\odot$ with an accretion rate of $\dot{M}_\mr{acc} = 10^{-5}\,M_\odot/\mr{yr}$. The models are computed with a deuterium abundance of $[\mr{D/H}] = 2.0 \times 10^{-5}$.}
+  \label{fig:cmp_birthline_radius_tc}
+\end{figure}
+
+% \begin{figure}
+%   \centering
+%   \includegraphics[width=.49\textwidth,keepaspectratio]{mass_radius_acce5_evol.pdf}
+%   \caption{The protostar mass-radius relation.}
+%   \label{fig:mass_radius_acce5_evol}
+% \end{figure}
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-\begin{outline}{gray}
-  \item summarize the main findings of the project
-  \item discuss the limitations and prospects of this research
-  \item limitations of the current implementation
-  \begin{itemize}
-    \item the seed mass is $0.1 M_\odot$ can be smaller
-    \item angular momentum is not considered
-    \item variable accretion rate
-    \item numeircal treatment of convective-radiative boundary
-    \item hot/cold accretion
-  \end{itemize}
-\end{outline}
+In this work, I investigated the impact of accretion on the PMS evolution of low-mass protostars using the stellar evolution code \texttt{Cesam2k20}. To this end, I implemented accretion in \texttt{Cesam2k20} by modifying the structure equations to acount for both mass and energy input from the accreted material. A central element of this implementation was a revised treatment of the gravitational energy term in the energy equation, which ensures the energy contribution of the accreted matter is properly included. Additionally, I modified the treatment of chemical composition to incorporate the deuterium abundance in the accreted material, which can differ significantly from that of the protostar.
+
+With accretion implemented, I computed a series of accreting stellar models with varying final masses, accretion rates, and deuterium abundances, and compared their evolution to that of classical non-accreting models. I also reproduced the protostellar birthline originally calculated by \textcite{PallaStahler1993}, using updated input physics.
+
+The main findings of this study can be summarized as follows:
+
+\textbf{Accreting vs. non-accreting models:} Accreting protostars follow markedly different evolutionary tracks from non-accreting stars, particularly during the early stages. While non-accreting models undergo monotonic gravitational contraction, accreting protostars undergo alternating phases of expansion and contraction due to the interplay between gravitation and the counteracting effects of deuterium burning and changes in internal entropy. The choice of seed mass also affects the evolution: my models, initialized with higher seed masses ($0.1,M_\odot$), start with more entropy and larger radii, likely contributing to differences in the swelling phase relative to previous studies using smaller seed masses ($0.01\,M_\odot$).
+
+\textbf{Dependence on initial central temperature:} The initial central temperature, controlled by the Iben constant, significantly affects early evolution. Models with higher Iben constants begin with lower central temperatures and larger radii, placing them closer to the classical Hayashi or Henyey tracks on the HR diagram. In contrast, models with lower Iben constants start with higher central temperatures, allowing them to ignite deuterium earlier and undergo more pronounced expansion during the deuterium-burning phase. Models with higher Iben constants approach the non-accreting tracks sooner, while those with lower constants remain below the non-accreting tracks for a longer period.
+
+\textbf{Dependence on accretion rate:} The accretion rate has a relatively minor impact on the evolutionary track. Models with higher accretion rates exhibit slightly higher luminosities and smaller radii, as the increased mass and energy influx accelerate the contraction and raise the central temperature more rapidly. However, the differences are not as significant as those arising from variations in deuterium abundance or initial central temperature.
+
+\textbf{Dependence on deuterium abundance:} The deuterium abundance in the accreted material strongly influences protostellar evolution. Higher deuterium abundances supply more energy via nuclear burning, inflating the star and increasing its luminosity during early phases. This expansion is more visible at higher accretion rates, where the larger influx of deuterium provides more energy to oppose gravitational contraction.
+
+\textbf{Comparison with Palla \& Stahler (1993):} I reproduced the birthline, with deviations at the low-mass end where my models are more luminous. This may reflect the choice of seed mass: although nominally similar to that used in the original study, a smaller seed mass might be needed in \texttt{Cesam2k20} to fully capture the impact of accretion. Additional differences may stem from updated physical ingredients such as the equation of state, opacity tables, and nuclear reaction rates.
+
+Together, these results highlight the importance of incorporating realistic accretion physics when modeling early stellar evolution. While the current implementation omits several physical processes, my work with \texttt{Cesam2k20} establishes a solid foundation for future studies of PMS evolution.
+
+Several limitations in the current implementation of accretion in \texttt{Cesam2k20} should be addressed in future work:
+
+\textbf{seed mass:} The use of a relatively large seed mass ($0.1,M_\odot$) is imposed by the available equation of state and opacity tables. Lower seed masses, as used in prior studies (e.g., \textcite{KunitomoEtAl2017}), may produce more pronounced accretion effects and merit exploration.
+
+\textbf{hot/cold accretion:} The current model assumes the extreme case of cold accretion, where all thermal energy is radiated away before the material is accreted. In reality, accretion likely lies somewhere between the extreme cases of hot and cold accretion. Accounting for this heat injection \parencite[e.g.,][]{HosokawaEtAl2011,KunitomoEtAl2017,AmardMatt2023} would offer a more realistic picture.
+
+\textbf{angular momentum:} Rotation is currently neglected. Including angular momentum transport could significantly alter the structure and evolution of young stars, with implications for the spin-down problem \parencite[e.g., ][]{TakasaoEtAl2025} and dynamo action \parencite[e.g.,][]{StelzerNeuhauser2001}.
+
+\textbf{accretion rate:} A constant accretion rate is used in all models, whereas observed protostars often show highly variable accretion. Episodic accretion can leave lasting imprints on the stellar structure and should be investigated in future work \parencite[e.g.,][]{BaraffeEtAl2009,BaraffeChabrier2010}.
+
+\textbf{convective-radiative boundary:} Some models encountered numerical instabilities near the convective-radiative boundary during rapid structural changes. Improving the treatment of this interface is a key focus of my PhD research and will be addressed in future work.
+
+Finally, I note that a parallel branch of the original \texttt{CESAM} code, \textit{Code d'Évolution Planétaire Adaptatif et Modulaire} \parencite[\texttt{CEPAM}; ][]{GuillotMorel1995}, has been developed for modeling planetary formation and evolution. A future unification of \texttt{Cesam2k20} and \texttt{CEPAM} would provide a powerful framework for studying the coupled evolution of young stars and their planetary systems.
 
 % \section*{Acknowledgements}
 % \label{sec:acknowledgements}
 
-% This internship is part of the \href{https://promethee-anr.github.io/}{PROMETHEE} project funded by the Agence Nationale de la Recherche (\href{https://anr.fr/en/}{ANR}) for the 2023-2026 period. I would like to thank my supervisors, Dr. Ludovic Petitedemange and Dr. João Marques, for their guidance and support throughout this project. I also benefited greatly from discussions with Dr. Louis Manchon, who provided valuable insights into the development of \texttt{Cesam2k20}. I am also grateful to Dr. Charly Pinçon for fruitful discussions during my visits at the Institut d'Astrophysique Spatiale (\href{https://www.ias.u-psud.fr/}{IAS}).
+% This internship is part of the \href{https://promethee-anr.github.io/}{PROMETHEE} project funded by the Agence Nationale de la Recherche (\href{https://anr.fr/en/}{ANR}) for the 2023-2026 period. I would like to thank my supervisors, Dr. Ludovic Petitedemange and Dr. João Marques, for their guidance and support throughout this project. I also benefited greatly from discussions with Dr. Louis Manchon, who provided valuable insights into the development of \texttt{Cesam2k20}. I am also grateful to Dr. Charly Pinçon for fruitful discussions during my visits at the Institut d'Astrophysique Spatiale (\href{https://www.ias.u-psud.fr/}{IAS}). I would also like to thank my office mates, Arthur and Maxime, and the PhD students Virgin, Alexandre, Maxime, for their company during the internship.
 
 % I would also like to thank the members of the \href{https://dynamos.obspm.fr/}{dynamos} team for their friendly support and encouragement during the internship. Finally, I am thankful to my colleagues at the Laboratory for Instrumentation and Research in Astrophysics (\href{https://lira.observatoiredeparis.psl.eu/}{LIRA}) and the Laboratory for the study of the Universe and eXtreme phenomena (\href{https://lux.observatoiredeparis.psl.eu/}{LUX})—many of whom kindly offered to accommodate me during a difficult period when I was without an office.
 
@@ -903,49 +929,6 @@ For simplicity, I will adopt the following notations:
 \begin{equation}
   \xi' \equiv \pfird[\xi]{q},\ \eta' \equiv \pfird[\eta]{q},\ \zeta' \equiv \pfird[\zeta]{q},\ \lambda' \equiv \pfird[\lambda]{q},\ \mu' \equiv \pfird[\mu]{q}.
 \end{equation}
-
-% Derivatives of be(1) with respect to the variables are:
-% \begin{align}
-%   \text{be(1)}\quad0 &= \pfird[\xi]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\\
-%   \pfird[\text{(1)}]{\xi} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(-e^{-\xi}\frac{\psi}{\theta}+e^{-\xi}\pfird[(\psi/\theta)]{\xi}\right)\\
-%   \pfird[\text{(1)}]{\eta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\eta}\\
-%   \pfird[\text{(1)}]{\zeta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\zeta}\\
-%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(-2\frac{\mu^2}{\zeta^3}\right) + \frac{M_\odot}{4\pi R_\odot}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right) \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\\
-%   \pfird[\text{(1)}]{\lambda} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\lambda}\\
-%   \pfird[\text{(1)}]{\mu} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\pfird[(\psi/\theta)]{\mu}\\
-%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(2\frac{\mu}{\zeta^2}\right) + \frac{M_\odot}{4\pi R_\odot}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{1/2}}\right) \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\\
-%   &\pfird[\text{(1)}]{\xi'} = 1,\ \pfird[\text{(1)}]{\eta'} = 0,\ \pfird[\text{(1)}]{\zeta'} = 0,\ \pfird[\text{(1)}]{\lambda'} = 0,\ \pfird[\text{(1)}]{\mu'} = 0,\ \pfird[\text{(1)}]{\psi'} = 0
-% \end{align}
-
-% Derivatives of be(2) with respect to the variables are:
-% \begin{align}
-%   \text{be(2)}\quad0 &= \pfird[\eta]{q} - \left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\frac{\psi}{\theta}\nabla\\
-%   \pfird[\text{(2)}]{\xi} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]\left(e^{-\xi}\nabla\pfird[(\psi/\theta)]{\xi}-e^{-\xi}\nabla\frac{\psi}{\theta} + e^{-\xi}\pfird[\nabla]{\xi}\frac{\psi}{\theta}\right)\\
-%   \pfird[\text{(2)}]{\eta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
-%   \nabla\pfird[(\psi/\theta)]{\eta}+\pfird[\nabla]{\eta}\frac{\psi}{\theta}\right)\\
-%   \pfird[\text{(2)}]{\zeta} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
-%   \nabla\pfird[(\psi/\theta)]{\zeta}+\pfird[\nabla]{\zeta}\frac{\psi}{\theta}\right)\\
-%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(-2\frac{\mu^2}{\zeta^3}\right)+ \frac{M_\odot}{4\pi R_\odot}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right) \Omega^2\right]e^{-\xi}\nabla\frac{\psi}{\theta}\\
-%   \pfird[\text{(2)}]{\lambda} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
-%   \nabla\pfird[(\psi/\theta)]{\lambda}+\pfird[\nabla]{\lambda}\frac{\psi}{\theta}\right)\\
-%   \pfird[\text{(2)}]{\mu} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\left(
-%   \nabla\pfird[(\psi/\theta)]{\mu}+\pfird[\nabla]{\mu}\frac{\psi}{\theta}\right)\\
-%   &\quad -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(2\frac{\mu}{\zeta^2}\right)+ \frac{M_\odot}{4\pi R_\odot}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{1/2}}\right) \Omega^2\right]e^{-\xi}\nabla\frac{\psi}{\theta}\\
-%   \pfird[\text{(2)}]{\psi} &= -\left[-\frac{3G}{8\pi}\left(\frac{M_\odot}{R_\odot}\right)^2\left(\frac{\mu}{\zeta}\right)^2 + \frac{M_\odot}{4\pi R_\odot}\left(\frac{\mu}{\zeta}\right)^{1/2} \Omega^2\right]e^{-\xi}\nabla\frac{1}{\theta}\\
-%   &\pfird[\text{(2)}]{\xi'} = 0,\ \pfird[\text{(2)}]{\eta'} = 1,\ \pfird[\text{(2)}]{\zeta'} = 0,\ \pfird[\text{(2)}]{\lambda'} = 0,\ \pfird[\text{(2)}]{\mu'} = 0,\ \pfird[\text{(2)}]{\psi'} = 0
-% \end{align}
-
-% Derivatives of be(3) with respect to the variables are:
-% \begin{align}
-%   \text{be(3)}\quad0 &= \pfird[\zeta]{q} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{\psi}{\theta}\\
-%   \pfird[\text{(3)}]{\xi} &= - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\left(\frac{\mu}{\zeta}\right)^{1/2}\left(\frac{1}{\rho}\pfird[(\psi/\theta)]{\xi} - \frac{1}{\rho^2}\pfird[\rho]{\xi}\frac{\psi}{\theta}\right)\\
-%   \pfird[\text{(3)}]{\eta} &= - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\left(\frac{\mu}{\zeta}\right)^{1/2}\left(\frac{1}{\rho}\pfird[(\psi/\theta)]{\eta} - \frac{1}{\rho^2}\pfird[\rho]{\eta}\frac{\psi}{\theta}\right)\\
-%   \pfird[\text{(3)}]{\zeta} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\pfird[(\psi/\theta)]{\zeta} - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(-\frac{1}{2}\frac{\mu^{1/2}}{\zeta^{3/2}}\right)\frac{\psi}{\theta}\\
-%   \pfird[\text{(3)}]{\lambda} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\pfird[(\psi/\theta)]{\lambda}\\
-%   \pfird[\text{(3)}]{\mu} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\left(\frac{\mu}{\zeta}\right)^{1/2}\left(\frac{1}{\rho}\pfird[(\psi/\theta)]{\mu} - \frac{1}{\rho^2}\pfird[\rho]{\mu}\frac{\psi}{\theta}\right) - \frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{1}{2}\frac{\mu^{-1/2}}{\zeta^{3/2}}\right)\frac{\psi}{\theta}\\
-%   \pfird[(3)]{\psi} &= -\frac{3}{4\pi}\frac{M_\odot}{R_\odot^3}\frac{1}{\rho}\left(\frac{\mu}{\zeta}\right)^{1/2}\frac{1}{\theta}\\
-%   \pfird[(3)]{\xi'}& = 0,\ \pfird[(3)]{\eta'} = 0,\ \pfird[(3)]{\zeta'} = 1,\ \pfird[(3)]{\lambda'} = 0,\ \pfird[(3)]{\mu'} = 0,\ \pfird[(3)]{\psi'} = 0
-% \end{align}
 
 From the equation of state, we have:
 \begin{itemize}
