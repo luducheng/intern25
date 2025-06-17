@@ -72,7 +72,14 @@
 \begin{document}
 
 \thispagestyle{empty}
-
+\begin{center}
+  \raisebox{.6\height}{\includegraphics[width=0.7\textwidth]{logo_lira.pdf}} \hspace{.5em}
+  \includegraphics[width=0.17\textwidth]{ias_logo.jpg}
+  % \begin{minipage}[b]{2em}
+  %   \includegraphics[width=2em]{logo_cnrs.png} \\
+  %   \includegraphics[width=2em]{logo_upsud.png}
+  % \end{minipage}
+\end{center}
 \vspace*{7em}
 \begin{center}
   \rule{\textwidth}{2pt}
@@ -113,24 +120,30 @@
 \begin{abstract}
 \normalsize
 
-\textit{Context.} 
+\textit{Context.} Stars form from a small seed that grows by accreting material from its surrounding disk. Evolutions of pre-main sequence (PMS) stars are strongly influenced by accretion, which brings mass, energy, and chemicals to the star. Accretion processes are complex and not fully understood, necessitating a study of their impact on stellar evolution.
 
-\textit{Aim.} 
+\textit{Aim.} This project aims to investigate how accretion affects the structure and evolution of low-mass pre-main sequence stars by implementing accretion into the 1D stellar evolution code \texttt{Cesam2k20}.
 
-\textit{Methods.} 
+\textit{Methods.} I implemented accretion by modifying stellar structure equations to include mass, energy, and fresh deuterium from the accreted material. Stellar models were computed with varying final masses, initial central temperatures, accretion rates, and deuterium abundances, and the results were compared with non-accreting models and previous studies.
 
-\textit{Results.} 
+\textit{Results.} Accreting protostars show evolutionary tracks distinct from non-accreting models, with early development strongly influenced by initial central temperature and deuterium abundance, while accretion rate has a minor effect. The study reproduces the protostellar birthline with some deviations linked to seed mass and input physics.
+
+\textit{Conclusion.} Implementing accretion highlights the importance of realistic modeling in understanding PMS evolution, laying groundwork for future improvements such as heat injection, variable accretion rates, and angular momentum.
+
 \end{abstract}
 
 \begin{abstract}
 \normalsize
-\textit{Contexte.} 
+\textit{Contexte.} Les étoiles se forment à partir d'une petite graine qui croît par accrétion de matière provenant du disque environnant. L'évolution des étoiles pré-séquence principale (PMS) est fortement influencée par l'accrétion, qui apporte masse, énergie et composés chimiques à l'étoile. Les processus d'accrétion sont complexes et mal compris, ce qui nécessite une étude de leur impact sur l'évolution stellaire.
 
-\textit{Objectif.} 
+\textit{Objectif.} Ce projet vise à étudier comment l'accrétion affecte la structure et l'évolution des étoiles de faible masse de la séquence pré-principale en implémentant l'accrétion dans le code d'évolution stellaire 1D \texttt{Cesam2k20}.
 
-\textit{Méthodes.} 
+\textit{Méthodes.} J'ai implémenté l'accrétion en modifiant les équations de structure stellaire pour inclure la masse, l'énergie et le deutérium neuf provenant du matériau accrété. Des modèles stellaires ont été calculés avec des masses finales, des températures centrales initiales, des taux d'accrétion et des abondances en deutérium variables, puis les résultats ont été comparés à des modèles sans accrétion et à des études antérieures.
 
-\textit{Résultats.} 
+\textit{Résultats.} Les protoétoiles accrétantes suivent des trajectoires évolutives distinctes, influencées principalement par la température centrale initiale et l'abondance en deutérium, le taux d'accrétion jouant un rôle plus modéré. La ligne de naissance protostellaire est reproduite, avec quelques écarts liés à la masse initiale et aux paramètres physiques.
+
+\textit{Conclusion.} La mise en œuvre de l'accrétion montre l'importance d'un modèle réaliste pour comprendre l'évolution PMS, posant les bases d'amélio-rations futures comme l'injection de chaleur, les taux variables et le moment cinétique.
+
 \end{abstract}
 
 \newpage
@@ -138,9 +151,9 @@
 \section{Introduction}
 \label{sec:intro}
 
-Stars form through the gravitational collapse of dense regions within molecular clouds. When the self-gravity of such a region overcomes the opposing pressure and magnetic support, collapse begins. This process is typically nonhomologous, with the central regions collapsing more rapidly than the outer ones.
+The formation of a low-mass star begins with the gravitational collapse of a cold dense region in a molecular cloud. When the self-gravity of such a region overcomes the opposing pressure and magnetic support, collapse begins \parencite{Larson1969}. This process is typically nonhomologous, with the central regions collapsing more rapidly than the outer ones.
 
-Initially, the collapse is isothermal, as radiation efficiently maintains the thermal equilibrium of the system. As the density increases, the central region becomes increasingly opaque to radiation, inhibiting its escape from the core while still allowing it from the outer layers. This growing opacity leads to an adiabatic collapse of the center, during which the temperature and pressure rise until a hydrostatic core, or a protostar, is formed \parencite[e.g., ][]{StahlerPalla2004}. The protostar then accretes material from the surrounding cloud, a process that can continue for several million years.
+Initially, the collapse is isothermal, as radiation efficiently maintains the thermal equilibrium of the system. As the density increases, the central region becomes increasingly opaque to radiation, inhibiting its escape from the core while still allowing it from the outer layers. This growing opacity leads to an adiabatic collapse of the center, during which the temperature and pressure rise until a first hydrostatic core is formed. Continued contraction raises the temperature until hydrogen molecules dissociate around $2000\,\mr{K}$, triggering a second, rapid collapse. This ends with the formation of a denser, more compact hydrostatic object, or the protostar \parencite[e.g., ][]{StahlerPalla2004}. The protostar then accretes material from the surrounding cloud, a process that can continue for several million years. 
 
 Once most of the surrounding material has been accreted, the protostar enters the pre-main sequence (PMS) phase and becomes visible as a T Tauri star (TTS). TTSs are cold PMS stars that serve as precursors to low-mass main-sequence stars of spectral types F, G, K, and M. Classical T Tauri stars (CTTSs) are characterized by strong infrared (IR) emission from their optically thick accretion disks. As accretion declines due to the depletion of material in the inner disk, the IR emission weakens, and the stars are then observed as weak T Tauri stars (WTTSs). Similarly, young massive stars are also expected to undergo accretion during their early evolution and are observed as Herbig Ae/Be stars—hotter and more luminous than TTSs. However, the accretion processes for these higher-mass stars remain poorly understood.
 
@@ -154,18 +167,18 @@ Accretion also impacts long-term stellar evolution by setting the initial condit
 
 Finally, accretion history plays a critical role in understanding young stellar clusters. It can influence the shape of the initial mass function, contribute to the observed luminosity spread among cluster members, and affect the positioning of stars on theoretical isochrones \parencite{BaraffeEtAl2009,BaraffeEtAl2012,HosokawaEtAl2011}. Accurate modeling of accretion is therefore important for interpreting observed features of young clusters.
 
-In this project, I investigate the impact of accretion on stellar structure and evolution using the \texttt{Cesam2k20} version of the 1D stellar evolution code \textit{Code d'Évolution Stellaire Adaptatif et Modulaire} \parencite[\texttt{CESAM}; ][]{Morel1997,MorelLebreton2008,MarquesEtAl2013}. Our goal is to implement accretion in \texttt{Cesam2k20}, which will allow us to examine its effects on stellar evolution and structure, and to compare the results with theoretical predictions and other stellar evolution models.
+In this project, I investigate the impact of accretion on stellar structure and evolution using the \texttt{Cesam2k20} version of the 1D stellar evolution code \textit{Code d'Évolution Stellaire Adaptatif et Modulaire} \parencite[\texttt{CESAM}; ][]{Morel1997,MorelLebreton2008,MarquesEtAl2013}. The goal is to implement accretion in \texttt{Cesam2k20} in order to study its influence on stellar evolution and internal structure, and to compare the results with theoretical predictions and previous studies using other stellar evolution models, such as\texttt{MESA} \parencite{KunitomoEtAl2017} and \texttt{STAREVOL} \parencite{AmardMatt2023}.
+% For example, the study by \textcite{KunitomoEtAl2017} using the Modules for Experiments in Stellar Astrophysics \parencite[\texttt{MESA}; ][]{PaxtonEtAl2011,PaxtonEtAl2013,PaxtonEtAl2015,PaxtonEtAl2018,PaxtonEtAl2019} and the study by \textcite{AmardMatt2023} using the \texttt{STAREVOL} code \parencite{SiessEtAl2000,PalaciosEtAl2006,LagardeEtAl2012,AmardEtAl2019}. This will allow us to benchmark with previous studies on accretion and explore the interaction between accretion and other physical processes.
 
-This study focuses on the later stages of the accretion process, after the formation of a hydrostatic core. We restrict our analysis to low-mass stars, as accretion in high-mass stars remains less constrained and falls outside the scope of this work.
+This study focuses on the later stages of the accretion process, after the formation of the second hydrostatic core. I restrict my analysis to low-mass stars, as the accretion process in high-mass stars remains more uncertain and lies beyond the scope of this work.
 
 In the next section, I review the current understanding of pre-main sequence accretion, including the mechanisms of magnetospheric accretion and a brief overview of the observational evidence supporting it. Sec.~\ref{sec:stellar_evol} presents the fundamental equations governing stellar structure and outlines how pre-main sequence evolution is modeled in stellar evolution codes. In Sec.~\ref{sec:methods}, I begin by discussing the modeling of the consequences of accretion, followed by a description of the \texttt{Cesam2k20} code, including its numerical structure and input physics. I then detail the implementation of accretion in the code. The results of my models are presented in Sec.~\ref{sec:results}, where I explore the effects of different accretion rates and deuterium abundances, and compare our findings with previous work by \textcite{PallaStahler1993}. Finally, Sec.~\ref{sec:conclusion} summarizes our main findings, discusses the limitations of the current work, and outlines future prospects.
 
-\qt{To do: rewrite introduction, mention MESA, distiguish between the pms accretion and the main accretion phase (protostar)}
+% \qt{To do: rewrite introduction, mention MESA, distiguish between the pms accretion and the main accretion phase (protostar)}
 \section{Pre-main sequence magnetospheric accretion}
 \label{sec:background}
 
 In this section, I will review the current understanding of stellar accretion, including the mechanisms of magnetospheric accretion and its observational signatures. I first introduce the magnetospheric accretion paradigm, which underpins the interpretation of the observational evidence discussed in the following subsection.
-
 
 \subsection{Magnetospheric accretion paradigm}
 \label{sec:magnetospheric_accretion}
@@ -247,9 +260,10 @@ However, translating the underlying physics into stellar models is a complex tas
 
 Classically, the modeling of PMS evolution begins with a fully convective star of large radius and luminosity. As the star contracts under gravity, the release of gravitational energy heats the stellar interior. This contraction continues until the central temperature becomes high enough to slow down the contraction and trigger the formation of a radiative core.
 
-The initial phase of PMS evolution is characterized by a rapid decrease in both radius and luminosity, while the effective temperature remains nearly constant. This phase, known as the Hayashi track \parencite{Hayashi1961}, defines the locus in the HR diagram of fully convective stars of a given mass and composition. Energy transport is dominated by convection during this phase. The precise location and slope of the Hayashi track is also sensitive to the treatment of convection, typically modeled using the mixing-length theory \parencite{CoxGiuli1968a}. As the star contracts, its density increases, which in turn increases the opacity of the stellar material. The resulting decrease in radiative efficiency causes a reduction in luminosity. The Hayashi tracks appear on the far right of the HR diagram and follow a steep, nearly vertical path.
+The initial phase of PMS evolution is characterized by a rapid decrease in both radius and luminosity, while the effective temperature remains nearly constant. This phase, known as the Hayashi track \parencite{Hayashi1961}, defines the locus in the HR diagram of fully convective stars of a given mass and composition. Energy transport is dominated by convection during this phase. The precise location and slope of the Hayashi track is also sensitive to the treatment of convection, typically modeled using the mixing-length theory \parencite{CoxGiuli1968a}. As the star contracts, its internal temperature rises, leading to a quick increase in the opacity of the stellar matter, since at this temperature range the opacity $\kappa$ scales steeply with temperature, $\kappa \sim T^9$ \parencite{Maeder2009}. This, in turn, limits the temperature increase. This feedback mechanism maintains the effective temperature approximately constant, so the star evolve with decreasing radius but a constant effective temperature. As a result, the Hayashi tracks appear on the far right of the HR diagram and follow a steep, nearly vertical path.
 
-The Hayashi track terminates at a minimum luminosity, where the central temperature becomes high enough for hydrogen to be fully ionized. This leads to a substantial drop in opacity in the central regions, making radiative transport more efficient, and a radiative core forms. The star then evolves toward higher effective temperatures while its luminosity remains approximately constant. This marks the beginning of the second phase of PMS evolution, where the star follows a more horizontal path in the HR diagram, known as the Henyey track, first described by \textcite{HenyeyEtAl1955}. During this stage, the star evolves with a radiative core while maintaining a convective envelope.
+
+The Hayashi track ends at a minimum luminosity, where the central temperature becomes sufficiently high to cause a significant decrease in opacity in the stellar interior. As a result, radiative energy transport becomes more efficient, and a radiative core begins to develop. The star then evolves toward higher effective temperatures while its luminosity remains approximately constant. This marks the beginning of the second phase of PMS evolution, where the star follows a more horizontal path in the HR diagram, known as the Henyey track, first described by \textcite{HenyeyEtAl1955}. During this stage, the star evolves with a radiative core while maintaining a convective envelope.
 
 This classic two-phase PMS evolution—first descending the vertical Hayashi track, then moving leftwards on the more horizontal Henyey track—is illustrated in Fig.~\ref{fig:hayashi_henyey_tracks}, which shows evolutionary tracks for \texttt{Cesam2k20} models with masses between $1$ and $5,M_\odot$, assuming initial composition $X \simeq 0.73$, $Y \simeq 0.25$ (see Sec.~\ref{sec:cesam2k20} for details of the input physics). Arrows indicate the direction of stellar evolution, with mass labels marking the ends of each track. The nearly vertical portion corresponds to fully convective contraction (Hayashi track), while the more horizontal portion marks the emergence of a radiative core (Henyey track)..
 
@@ -521,7 +535,7 @@ along with constitutive relations (e.g., equations of state, opacity laws) to ev
 
 At time $t = 0$, to begin the computation, the values of pressure $p(m, 0)$, temperature $T(m, 0)$, radius $r(m, 0)$, luminosity $l(m, 0)$, and chemical abundances $\bvec{X}(m, 0)$ must be specified for $m \in [0, M_\star(t=0)]$. In \texttt{Cesam2k20}, these values are taken from precomputed tables of a homogeneous PMS stellar model. \texttt{Cesam2k20} also has the capacity to start from a ZAMS initial model, or continue the evolution of a previous model. However, for the purpose of this project, I need to start from a PMS model, therefore I will not go into the details of these two other methods of initialization. 
 
-This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior, except in the thin superadiabatic layers near the surface (see Fig.~\ref{fig:toy_problem_entropy} and the corresponding discussion for details). In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
+This initialization method from a PMS model is based on the work of \textcite{Iben1965a}. At the zero-age of the PMS phase, the star's only energy source is gravitational contraction, with no contribution from nuclear burning or neutrino losses, i.e., $\epsilon = 0$ and $\epsilon_\nu = 0$. Furthermore, the star is fully convective, so it has a constant entropy profile throughout its interior, except in the thin superadiabatic layers near the surface \parencite{Iben1965a}. In this regime, the energy equation (Eq.~\eqref{eq:star_struct4}) simplifies to:
 \begin{equation}
   \pfird[l]{m} = \epsilon_\mr{g} = -T\pfird[s]{t} = cT,
 \end{equation}
@@ -695,8 +709,8 @@ To account for a different composition in the accreted material, at the start of
 \section{Results and discussions}
 \label{sec:results}
 
-\subsection{The toy problem}
-\label{sec:toy_problem}
+% \subsection{The toy problem}
+% \label{sec:toy_problem}
 % \begin{outline}{gray}
 %   \item the toy problem of static models, without accretion but differe slightly in mass to emulate the effect of accretion
 %   \item one with full convective stars and the other with radiative core
@@ -705,15 +719,15 @@ To account for a different composition in the accreted material, at the start of
 %   \item can also show the entropy profile inside to star to illustrate the problem of discountinuity
 % \end{outline}
 
-Before plunging into the results of the accreting models, I first present a toy problem that illustrates the limitations of static models in capturing the effects of accretion and therefore necessitate the implementation of accretion in the actual evolution. This toy problem consists of two pairs of static stellar models. The first pair includes of two fully convective models, while the second pair includes two models with a radiative core. In each pair, the models differ slightly in mass to emulate the effect of accretion. I require that the models in each pair have the same final central temperature, which is an important indicator of the evolution stage of the star.
+% Before plunging into the results of the accreting models, I first present a toy problem that illustrates the limitations of static models in capturing the effects of accretion and therefore necessitate the implementation of accretion in the actual evolution. This toy problem consists of two pairs of static stellar models. The first pair includes of two fully convective models, while the second pair includes two models with a radiative core. In each pair, the models differ slightly in mass to emulate the effect of accretion. I require that the models in each pair have the same final central temperature, which is an important indicator of the evolution stage of the star.
 
-\begin{figure}
-  \centering  
-  \includegraphics[width=\textwidth,keepaspectratio]{toy_problem_entropy.pdf}
-  \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.82\,M_\odot$ models.} \label{fig:toy_problem_entropy}
-\end{figure}
+% \begin{figure}
+%   \centering  
+%   \includegraphics[width=\textwidth,keepaspectratio]{toy_problem_entropy.pdf}
+%   \caption{Entropy profiles of the static models. The left panel shows the entropy profiles of the two fully convective models, while the right panel shows those of the two models with a radiative core. In both panels, the blue lines correspond to the $0.8\,M_\odot$ models, and the orange lines correspond to the $0.82\,M_\odot$ models.} \label{fig:toy_problem_entropy}
+% \end{figure}
 
-I've discussed before that the primary modifications introduced in this work concern the treatment of gravitational energy, here I try to illustrate with the static models how this term can be problematic if not treated with care. With the static models, one has three different options to compute the gravitational energy profile, or more specifically $T\lpfird[s]{t}$: (1) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu$, (2) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu_x$ , or (3) calculating $\lpfird[s]{t}$ with the entropy profile. The first two methods yield similar results, while the third method yields a different profile. The gravitational energy profile of the two pairs of models is shown in %Fig.~\ref{fig:toy_problem_grav_energy}.
+% I've discussed before that the primary modifications introduced in this work concern the treatment of gravitational energy, here I try to illustrate with the static models how this term can be problematic if not treated with care. With the static models, one has three different options to compute the gravitational energy profile, or more specifically $T\lpfird[s]{t}$: (1) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu$, (2) using the Kippenhahn approximation, with pressure and temperature of the extra mass interpolated from the same $\mu_x$ , or (3) calculating $\lpfird[s]{t}$ with the entropy profile. The first two methods yield similar results, while the third method yields a different profile. The gravitational energy profile of the two pairs of models is shown in %Fig.~\ref{fig:toy_problem_grav_energy}.
 
 \subsection{Accreting vs. non-accreting stellar models}
 \label{sec:accretion_vs_non_accretion}
@@ -824,7 +838,7 @@ Models with higher deuterium abundances exhibit larger radii and higher luminosi
   \label{fig:comp_deuterium_radius_tc}
 \end{figure}
 
-\subsection{Comparison with Palla \& Stahler (1993)}
+\subsection{The birthline}
 \label{sec:comp_palla_stahler}
 
 As discussed in Sec.~\ref{sec:pms_accretion}, the birthline serves as a key diagnostic for understanding the early evolution of accreting protostars. In the left panel Fig.~\ref{fig:birthline_acce5}, I present a reproduction with \texttt{Cesam2k20} of the birthline originally computed by \textcite{PallaStahler1993}.
@@ -875,7 +889,7 @@ The main findings of this study can be summarized as follows:
 
 \textbf{Dependence on deuterium abundance:} The deuterium abundance in the accreted material strongly influences protostellar evolution. Higher deuterium abundances supply more energy via nuclear burning, inflating the star and increasing its luminosity during early phases. This expansion is more visible at higher accretion rates, where the larger influx of deuterium provides more energy to oppose gravitational contraction.
 
-\textbf{Comparison with Palla \& Stahler (1993):} I reproduced the birthline, with deviations at the low-mass end where my models are more luminous. This may reflect the choice of seed mass: although nominally similar to that used in the original study, a smaller seed mass might be needed in \texttt{Cesam2k20} to fully capture the impact of accretion. Additional differences may stem from updated physical ingredients such as the equation of state, opacity tables, and nuclear reaction rates.
+\textbf{The birthline:} I reproduced the birthline computed by \textcite{PallaStahler1993}, with deviations at the low-mass end where my models are more luminous. This may reflect the choice of seed mass: although nominally similar to that used in the original study, a smaller seed mass might be needed in \texttt{Cesam2k20} to fully capture the impact of accretion. Additional differences may stem from updated physical ingredients such as the equation of state, opacity tables, and nuclear reaction rates.
 
 Together, these results highlight the importance of incorporating realistic accretion physics when modeling early stellar evolution. While the current implementation omits several physical processes, my work with \texttt{Cesam2k20} establishes a solid foundation for future studies of PMS evolution.
 
@@ -893,12 +907,11 @@ Several limitations in the current implementation of accretion in \texttt{Cesam2
 
 Finally, I note that a parallel branch of the original \texttt{CESAM} code, \textit{Code d'Évolution Planétaire Adaptatif et Modulaire} \parencite[\texttt{CEPAM}; ][]{GuillotMorel1995}, has been developed for modeling planetary formation and evolution. A future unification of \texttt{Cesam2k20} and \texttt{CEPAM} would provide a powerful framework for studying the coupled evolution of young stars and their planetary systems.
 
-% \section*{Acknowledgements}
-% \label{sec:acknowledgements}
+\vskip5em
+\section*{Acknowledgements}
+\label{sec:acknowledgements}
 
-% This internship is part of the \href{https://promethee-anr.github.io/}{PROMETHEE} project funded by the Agence Nationale de la Recherche (\href{https://anr.fr/en/}{ANR}) for the 2023-2026 period. I would like to thank my supervisors, Dr. Ludovic Petitedemange and Dr. João Marques, for their guidance and support throughout this project. I also benefited greatly from discussions with Dr. Louis Manchon, who provided valuable insights into the development of \texttt{Cesam2k20}. I am also grateful to Dr. Charly Pinçon for fruitful discussions during my visits at the Institut d'Astrophysique Spatiale (\href{https://www.ias.u-psud.fr/}{IAS}). I would also like to thank my office mates, Arthur and Maxime, and the PhD students Virgin, Alexandre, Maxime, for their company during the internship.
-
-% I would also like to thank the members of the \href{https://dynamos.obspm.fr/}{dynamos} team for their friendly support and encouragement during the internship. Finally, I am thankful to my colleagues at the Laboratory for Instrumentation and Research in Astrophysics (\href{https://lira.observatoiredeparis.psl.eu/}{LIRA}) and the Laboratory for the study of the Universe and eXtreme phenomena (\href{https://lux.observatoiredeparis.psl.eu/}{LUX})—many of whom kindly offered to accommodate me during a difficult period when I was without an office.
+This internship is part of the \href{https://promethee-anr.github.io/}{PROMETHEE} project funded by the Agence Nationale de la Recherche (\href{https://anr.fr/en/}{ANR}) for the 2023-2026 period. I would like to thank my supervisors, Dr. Ludovic Petitedemange and Dr. João Marques, for their guidance and support throughout this project. I also benefited greatly from discussions with Dr. Louis Manchon, who provided valuable insights into the development of \texttt{Cesam2k20}. I am also grateful to Dr. Charly Pinçon for fruitful discussions during my visits at the IAS. I would also like to thank my office mates, Arthur and Maxime, and the PhD students Virgin, Alexandre, Maxime, and Nathan for their company during the internship. I would also like to thank the members of the \href{https://dynamos.obspm.fr/}{dynamos} team for their friendly support and encouragement. Finally, I am thankful to my colleagues at LIRA and LUX—many of whom kindly offered to accommodate me during a difficult period when I was without an office.
 
 \newpage
 \printbibliography[heading=bibintoc, title={References}]
